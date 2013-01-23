@@ -1,0 +1,46 @@
+
+2577 - V0105  - Módulo Produto : Produto -  O sistema  não está ordenando os dados  da combo "Grupo Tributação do Produto". -- OK
+2769 - Módulo Operação - Calendário - A execução de datas não está respeitando o especificado na RN8 de recorrência ---------- OK
+2878 - V0105 - Módulo Negociação : CineSemana -  Considerar a  data fim para o ano de referência quando o ano virar.---------- OK
+2927 - Módulo Produto - Produto por Estabelecimento - o campo de busca da coluna de Produto não traz palavras acentuadas e M&Ms -- OK Não Comitado
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2531 - Filtro 
+ Não consegui reproduzir erro 
+ verifiquei estava correto
+
+select e.Nome ,en.Bairro ,es.Sigla
+from Estabelecimento	e
+join Endereco			en  on e.Endereco_Codigo = en.Codigo 
+join Cidade				c	on en.Cidade_Codigo = c.Codigo 
+Join Estado				es  on c.Estado_Codigo = es.Codigo
+where es.Sigla  in('AM','BA')
+order by c.Nome	
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2554 - v0105 - Módulo Produto - Situação Inventario : O sistema está permitindo excluir produto situação unidade em um inventário em andamento.
+A tabela InventarioDetalhe esta vazia
+select * 
+from Produto					p
+join ProdutoFornecedorUnidade	pfu on p.Codigo = pfu.Produto_Codigo
+join ProdutoSituacaoUnidade		psu on pfu.Codigo =  psu.ProdFornecedorUnidade_Codigo
+join InventarioDetalhe			iv	on psu.Codigo = iv.ProdutoSituacaoUnidade_Codigo 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2575 -  Imposto sobre Serviços 
+		Imposto Sob Serviço
+	
+update Tributacao
+set Nome = 'Imposto Sob Serviço' 
+where Codigo = 1
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2784 - O produto do grupo Guardanapo deve ser selecionado
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2844 - 	Erro. - Existe um registro em branco na combo 
+		Erro de configuração: Ingresso de referência não foi selecionado
+		Ingresso Base *:
+
+
+

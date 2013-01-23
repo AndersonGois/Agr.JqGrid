@@ -1,0 +1,25 @@
+
+Arquivos Alterados
+
+
+
+
+select * from ConfiguracaoVendaProduto
+select * from CalendarioVendaProdutoClasse
+select * from Produto
+select * from RemarcacaoPreco
+select * from RemarcacaoPrecoCalendario
+select * from Calendario
+
+select rp.*,c.* from Produto		p
+join ConfiguracaoVendaProduto		conf	on	p.Codigo			= conf.Produto_Codigo
+join CalendarioVendaProdutoClasse	cal		on conf.Codigo			= cal.ConfVendaProduto_Codigo
+join RemarcacaoPrecoCalendario		rem		on cal.Codigo			= rem.CalendVendaProdClasse_Codigo
+join RemarcacaoPreco				rp		on rem.RemarcacaoPreco_Codigo = rp.Codigo
+join Calendario						c		on rp.Calendario_Codigo = c.Codigo
+where p.Codigo = 1292
+
+ Dim Teste = (From vaE In paEntidadeAtual.ConfiguracaoVendaProduto
+                From vaC In vaE.CalendarioVendaProdutoClasse
+                Join vaR In vaRemarcacaoPrecoCalendarioRepository.Listar On vaC.Codigo Equals vaR.CalendarioVendaProdutoClasse_Codigo
+                Select vaR)

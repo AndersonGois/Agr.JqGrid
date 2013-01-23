@@ -1,0 +1,46 @@
+        Public Shared Function FimdoMes(ByVal strData As Date) As Date
+
+            Dim strAno As Integer
+            Dim strMes As Integer
+            Dim strDia As Integer
+
+            strAno = strData.Year
+            strMes = strData.Month
+
+            ' Pega a data e o mes atual
+            '
+            Select Case strMes
+                Case 4, 6, 9, 11
+                    strDia = 30
+
+                Case 2
+                    If Bissexto(Val(strAno)) Then
+                        strDia = 29
+                    Else
+                        strDia = 28
+                    End If
+
+                Case Else
+                    strDia = 31
+            End Select
+
+            FimdoMes = New Date(strAno, strMes, strDia)
+        End Function
+        Public Shared Function Bissexto(ByVal intAno As Integer) As Boolean
+            '
+            ' verifica se um ano é bissexto
+            '
+            Bissexto = False
+
+            If intAno Mod 4 = 0 Then
+                If intAno Mod 100 = 0 Then
+                    If intAno Mod 400 = 0 Then
+                        Bissexto = True
+                    End If
+                Else
+                    Bissexto = True
+                End If
+            End If
+
+        End Function
+
