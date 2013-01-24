@@ -4,24 +4,28 @@
         var qtdVigenciaCodigoNovo = -100;
 
 //Grid/////////////////{
-         
-		   // linha do grid
-            linha =  $('#gridCliente').jqGrid('getRowData',rowid );
+	//Recarregar o grid
+    $("#txtsistema").jqGrid('clearGridData').trigger("reloadGrid");
+	// linha do grid
+    linha =  $('#gridCliente').jqGrid('getRowData',rowid );
            
-           // campo do grid
-           var codigo = $('#gridCliente').getCell(rowid, 'codigo');
+     // campo do grid
+     var codigo = $('#gridCliente').getCell(rowid, 'codigo');
            
-           // todos ids selecionados do grid
-           var s = jQuery("#gridCliente").jqGrid('getGridParam','selarrrow'); 
-       
-           // todos os ids do grid
-           var rowIds = $('#gridCliente').jqGrid('getDataIDs');
+     // todos ids selecionados do grid
+     var s = jQuery("#gridCliente").jqGrid('getGridParam','selarrrow'); 
+			
+	//Selecionar  linha no multiselect
+	jQuery("#gridCliente2").jqGrid('setSelection',"2");
+	   
+    // todos os ids do grid
+    var rowIds = $('#gridCliente').jqGrid('getDataIDs');
 		 
-         // Excluir Linha no grid 
-        var excluirVigencia = function(codigo) { var su = jQuery('#gridCliente').jqGrid('delRowData', codigo); };
+    // Excluir Linha no grid 
+    var excluirVigencia = function(codigo) { var su = jQuery('#gridCliente').jqGrid('delRowData', codigo); };
 
-        // Inserir Linha no Grid
-        InserirLinhaGrid = function(){
+    // Inserir Linha no Grid
+    InserirLinhaGrid = function(){
             qtdVigenciaCodigoNovo = qtdVigenciaCodigoNovo - 1;
             var datarow = {
                             Codigo: '' + qtdVigenciaCodigoNovo,
@@ -31,18 +35,18 @@
             var su = jQuery('#gridCliente').jqGrid('addRowData', "" + qtdVigenciaCodigoNovo, datarow);
         }
 
-        // Atualizar Grid
-        var atualizarGrid = function () {
-                    gridClienteTeste.trigger("reloadGrid");
-        }
+    // Atualizar Grid
+    var atualizarGrid = function () {
+    gridClienteTeste.trigger("reloadGrid");
+    }
 
-        //grid
-        var definirGrid = function(){
-            var ColNamesClienteTeste =['Codigo','Nome',''];
-            var ColModelClienteTeste =[ { name:'Codigo',index: 'Codigo'},
-                                        { name:'Nome',index:'Nome',width:'130',align:'left'},
-                                        { name: 'operacaoExcluir', index: 'operacaoExcluir', width: 16, align: 'center', sortable: false, hidden: false }
-                                      ];
+    //grid
+    var definirGrid = function(){
+    var ColNamesClienteTeste =['Codigo','Nome',''];
+    var ColModelClienteTeste =[ { name:'Codigo',index: 'Codigo'},
+                                 { name:'Nome',index:'Nome',width:'130',align:'left'},
+                                 { name: 'operacaoExcluir', index: 'operacaoExcluir', width: 16, align: 'center', sortable: false, hidden: false }
+                              ];
 
             gridClienteTeste = $(gridNome).jqGrid({
             url: gridUrl,

@@ -6,16 +6,16 @@
     <script type="text/javascript">
         var entidade = '<%=ViewData("EntidadeNome")%>';
         var UrlEntidade = '<%= Url.Action("/", ViewData("EntidadeNome"), New With {.area = ViewData("EntidadeArea")})%>';
+        var vaCampos = ["txtcodigo", "txtnome"];
+        var vaAlterar = 0;
 
         function limparForm() {
-            var vaCampos = ["txtcodigo", "txtnome"];
             limpaCampos(vaCampos);
             Ingresso.dropdown.clear($("#tipoLeituraSelecionada"));
+            $("#gridCliente2").jqGrid('clearGridData').trigger("reloadGrid");
             definirElementoSelecionado();
             carregarListaTipoLeitura()
         }
-
-                      
     </script>
     <script type="text/javascript" src="<%= Url.Content("~/Scripts/sistema/crud.js") %>"></script>
     <script type="text/javascript">
@@ -25,21 +25,41 @@
         var gridUrl = UrlEntidade + "ListarClienteTeste";
         var qtdVigenciaCodigoNovo = -100;
          
-         
          // Excluir Linha no grid 
-        var excluirVigencia = function(codigo) { var su = jQuery('#gridCliente').jqGrid('delRowData', codigo); };
+        var excluirVigencia = function(codigo) { var su = jQuery('#gridCliente2').jqGrid('delRowData', codigo); };
 
         // Inserir Linha no Grid
         InserirLinhaGrid = function(){
             qtdVigenciaCodigoNovo = qtdVigenciaCodigoNovo - 1;
+            var vaCodigo = $("#txtcodigo").val();
+            var  vaNome =$("#txtnome").val();
+            var vatipoLeitura = $("#tipoLeituraSelecionada").val();
+
+            if(vaNome == ''){
+               return exibirMensagemErro("Campo '[Nome]' obrigatório."); 
+                
+            }
+            if(vatipoLeitura == 0){
+               return exibirMensagemErro("Campo '[Tipo de Leitura]' obrigatório."); 
+            }
             var datarow = {
-                            Codigo: '' + qtdVigenciaCodigoNovo,
+                            Codigo: vaCodigo == ''? '' + qtdVigenciaCodigoNovo : vaCodigo,
                             Nome: $("#txtnome").val(),
                             TipoLeituraNome: $("#tipoLeituraSelecionada option:selected").text(),
                              TipoLeituraCodigo: $("#tipoLeituraSelecionada option:selected").val(),
-                            operacaoExcluir:"<a href=\"javascript:excluirVigencia('" + "" + qtdVigenciaCodigoNovo +  "')\" class=\"operacaoExcluir\"><img src=\"<%= Url.Content("~/Content/img/_IcoExcluir.png")%>\" border=\"0\"></a>"
+                            operacaoExcluir: vaAlterar == 0 ? "<a href=\"javascript:excluirVigencia('" + "" + qtdVigenciaCodigoNovo +  "')\" class=\"operacaoExcluir\"><img src=\"<%= Url.Content("~/Content/img/_IcoExcluir.png")%>\" border=\"0\"></a>":''
                           };
-            var su = jQuery('#gridCliente').jqGrid('addRowData', "" + qtdVigenciaCodigoNovo, datarow);
+            var su = jQuery('#gridCliente2').jqGrid('addRowData', "" + qtdVigenciaCodigoNovo, datarow);
+
+            if(vaAlterar == 1){
+                RemoverincluirLinhaGrid(); 
+                jQuery("#gridCliente2").jqGrid('setSelection',qtdVigenciaCodigoNovo);
+                }
+            else           
+                CarregarIncluirLinhaGrid(); 
+                jQuery("#gridCliente2").jqGrid('setSelection',qtdVigenciaCodigoNovo);
+                limpaCampos(vaCampos);
+                selectTipoLeitura(0);
         }
 
         // Atualizar Grid
@@ -49,12 +69,11 @@
 
         //grid
         var definirGrid = function(){
-            var ColNamesClienteTeste =['Codigo','TipoLeituraCodigo','Nome','Tipo de Leitura',''];
+            var ColNamesClienteTeste =['Codigo','TipoLeituraCodigo','Nome','Tipo de Leitura'];
             var ColModelClienteTeste =[ { name:'Codigo',index: 'Codigo',hidden: true},
                                         { name:'TipoLeituraCodigo',index:'Nome',width:'130',align:'left',hidden: true},
                                         { name:'Nome',index:'Nome',width:'130',align:'left'},
                                         { name:'TipoLeituraNome',index:'Nome',width:'130',align:'left'},
-                                        { name: 'operacaoExcluir', index: 'operacaoExcluir', width: 16, align: 'center', sortable: false, hidden: false }
                                       ];
 
             gridClienteTeste = $(gridNome).jqGrid({
@@ -68,22 +87,52 @@
                     rowNum: 1000,
                     sortname: 'Nome', sortorder: "asc",
                     caption: "Clientes",
+                    multiselect: false,
+                    onSelectRow: function (id, status) {}
+            });
+        }
+          var atualizarGrid = function () {
+                    gridClienteTeste.trigger("reloadGrid");
+        }
+
+        //grid
+        var definirGrid2 = function(){
+
+            var ColNamesClienteTeste =['Codigo','TipoLeituraCodigo','Nome','Tipo de Leitura',''];
+            var ColModelClienteTeste =[ { name:'Codigo',index: 'Codigo',hidden: true},
+                                        { name:'TipoLeituraCodigo',index:'Nome',width:'130',align:'left',hidden: true},
+                                        { name:'Nome',index:'Nome',width:'130',align:'left'},
+                                        { name:'TipoLeituraNome',index:'Nome',width:'130',align:'left'},
+                                        { name: 'operacaoExcluir', index: 'operacaoExcluir', width: 16, align: 'center', sortable: false, hidden: false }
+                                      ];
+
+            gridClienteTeste2 = $("#gridCliente2").jqGrid({
+                    datatype: "local",
+                    mtype: "get", 
+                    colNames: ColNamesClienteTeste, 
+                    colModel: ColModelClienteTeste,
+                    height: '100%',
+                    viewrecords: true, 
+                    multiselect: false,
+                    rowNum: 1000,
+                    sortname: 'Nome', sortorder: "asc",
+                    caption: "Clientes",
                     multiselect: true,
                     onSelectRow: function (id, status) {}
             });
         }
-       
+
         var incluirListaCliente = function(rowid,status){
               var retorno = [];
               var li;
            // todos ids selecionados do grid
-           var s = jQuery("#gridCliente").jqGrid('getGridParam','selarrrow'); 
+           var s = jQuery("#gridCliente2").jqGrid('getGridParam','selarrrow'); 
                      
             for (var i = 0; i < s.length; i++) {
 
               var linha = { Codigo: null,Nome: null,TipoLeitura:{ Codigo: null,Nome: null }};
 
-              li =  $('#gridCliente').jqGrid('getRowData',s[i] );
+              li =  $('#gridCliente2').jqGrid('getRowData',s[i] );
 
               with (linha) {
                         Nome = li.Nome;
@@ -114,13 +163,28 @@
 		        });
         }
         
+        var RemoverincluirLinhaGrid = function(){
+            $("#txtnome").attr('readonly', true);
+            $("#tipoLeituraSelecionada").attr('disabled',true);
+            $("#incluirCliente").hide();
+        }
+
+        var CarregarIncluirLinhaGrid = function() {
+            $("#txtnome").attr('readonly', false);
+            $("#tipoLeituraSelecionada").attr('disabled',false);
+            $("#incluirCliente").show();
+          
+        }
+        
         // Elementos de Dados de Apresentação: Grids, tabelas dinamicas...
         var onSelectRow = function (rowid, status) {
             
             definirGrid(); 
+            definirGrid2(); 
             atualizarGrid();
             blockCarregando();
-            
+            CarregarIncluirLinhaGrid();
+            vaAlterar = 1;
             var codigo = $('#grid').getCell(rowid, 'codigo');
 	        
 	        $.getJSON(UrlEntidade + 'Selecionar/' + codigo, function (data) {
@@ -149,9 +213,11 @@
 	        $('#txtcodigo').attr('readonly', true);
 	        $("#operacao").val(constantes.operacao.Incluir);
 	        unblockDireito();
-            definirGrid(); 
+            definirGrid();
+            definirGrid2();  
 	        carregarListaTipoLeitura();
-
+             CarregarIncluirLinhaGrid();
+             vaAlterar = 0;
 	        limparForm()  
 	        //
             definirElementoSelecionado("<%: Html.Traduzir(ViewData("EntidadeCriar"))%>");
@@ -159,6 +225,7 @@
 
         //salvar Operacao
         var salvarOperacao = function (operacao, codigo) {
+          CarregarIncluirLinhaGrid() 
         var vaEntidade;
         if (operacao == constantes.crud.Excluir) { vaEntidade = new Ingresso.ObjetoListavel(codigo); } 
             else { 
@@ -176,7 +243,8 @@
 
             $("#incluirCliente").click(function(){
                 InserirLinhaGrid()
-                limparForm()
+                
+
             })
         });
 
@@ -230,18 +298,6 @@
                                 </select>
                             </span>
                         </label>
-                    </fieldset>
-                </div>
-            </div>
-        </div>
-        <div id="tabs-2">
-            <!-- Accordion -->
-            <div id="accordionCliente">
-                <div>
-                    <h3>
-                        <a id="infoGeral2" href="#">
-                            <%: Html.Traduzir("Grid Cliente")%></a></h3>
-                    <fieldset>
                         <div class="w100 inputselect" id="lstCliente">
                             <table border="0" cellspacing="10" cellpadding="10">
                                 <tr>
@@ -257,9 +313,9 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <table id="gridCliente" class="scroll" cellpadding="0" cellspacing="0">
+                                        <table id="gridCliente2" class="scroll" cellpadding="0" cellspacing="0">
                                         </table>
-                                        <div id="gridClientepager">
+                                        <div id="gridClientepager2">
                                         </div>
                                     </td>
                                 </tr>
@@ -267,16 +323,29 @@
                         </div>
                     </fieldset>
                 </div>
+            </div>
+        </div>
+        <div id="tabs-2">
+            <!-- Accordion -->
+            <div id="accordionCliente">
                 <div>
                     <h3>
-                        <a id="dfd" href="#">
-                            <%: Html.Traduzir("Teste")%></a></h3>
+                        <a id="infoGeral2" href="#">
+                            <%: Html.Traduzir("Clientes")%></a></h3>
                     <fieldset>
-                    <label>anderson</label>
+                        <table border="0" cellspacing="10" cellpadding="10">
+                            <tr>
+                                <td>
+                                    <table id="gridCliente" class="scroll" cellpadding="0" cellspacing="0">
+                                    </table>
+                                    <div id="gridClientepager">
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </fieldset>
                 </div>
             </div>
-            
         </div>
         <% End Using%>
     </div>
