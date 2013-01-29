@@ -149,8 +149,8 @@
                             TipoLeitura.Nome =   $("#tipoLeituraSelecionada option:selected").text();
                             }
                     }
-
-            postJson(UrlEntidade, operacao, vaEntidade);
+			// Crud
+            postJson(UrlEntidade, operacao, vaEntidade); 
 
             atualizarGrid()
         }
@@ -164,6 +164,31 @@
             Ingresso.dropdown.clear($("#Nome"));
             definirElementoSelecionado();
         }
+		
+		//Para o grid do lado esquerdo  script minimo
+		
+		  <script type="text/javascript">
+          var entidade = '<%=ViewData("EntidadeNome")%>';
+          var UrlEntidade = '<%= Url.Action("/", ViewData("EntidadeNome"), New With {.area = ViewData("EntidadeArea")})%>';
+          var vaCampos = ["txtcodigo", "txtnome"];
+          function limparForm() {
+              limpaCampos(vaCampos);
+              definirElementoSelecionado();
+          }
+    </script>
+    <script type="text/javascript" src="<%= Url.Content("~/Scripts/sistema/crud.js") %>"></script>
+    <script type="text/javascript">
+
+
+        var onSelectRow = function (rowid, status) {
+        }
+
+        $(document).ready(function () {
+            configForm(colPadraoNames, colPadraoModel, onSelectRow);
+        });
+
+    </script>
+		
 //Sistema fim/////////}
         $(document).ready(function () {
 
@@ -173,3 +198,48 @@
                 InserirLinhaGrid()
             })
         });
+
+//Json
+{		
+//Data		
+{
+
+//Convert data to json 
+{
+        function convertendoStringEmUTC( data )
+        {
+                
+            if( !data ){
+                return "";
+            }
+
+            var novaDataArr = data.split("/");
+               
+            var mes = (parseInt(novaDataArr[1],10)-1);
+
+            return "\/Date(" +  Date.UTC( novaDataArr[2],mes,novaDataArr[0])+ ")\/"
+        }
+//
+}
+//Converte data em json para data 
+{
+	var dateString = "\/Date(1334514600000)\/".substr(6);
+	var currentTime = new Date(parseInt(dateString ));
+	var month = currentTime.getMonth() + 1;
+	var day = currentTime.getDate();
+	var year = currentTime.getFullYear();
+	var date = day + "/" + month + "/" + year;
+	alert(date);
+
+}
+
+}
+
+var str = window.JSON.stringify({myDate:new Date()});
+// str == "{"myDate":"2010-12-27T11:59:18.119Z"}"
+var obj = window.JSON.parse(str);
+// obj.myDate == "2010-12-27T11:59:18.119Z"
+
+
+
+}
