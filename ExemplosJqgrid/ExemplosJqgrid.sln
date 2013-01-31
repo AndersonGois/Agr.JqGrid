@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ExemplosJqgridMvc", "ExemplosJqgridMvc\ExemplosJqgridMvc.vbproj", "{061D8BAB-A8E9-43B6-917F-1AEAA0296CCC}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "AGR.Controller", "AGR.Controller\AGR.Controller.vbproj", "{D9687394-ADEC-4556-BADB-534DB326ADF3}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "AGR.Domain", "AGR.Domain\AGR.Domain.vbproj", "{8B45344F-6F89-4833-8694-F552B681F377}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +17,14 @@ Global
 		{061D8BAB-A8E9-43B6-917F-1AEAA0296CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{061D8BAB-A8E9-43B6-917F-1AEAA0296CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{061D8BAB-A8E9-43B6-917F-1AEAA0296CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9687394-ADEC-4556-BADB-534DB326ADF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9687394-ADEC-4556-BADB-534DB326ADF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9687394-ADEC-4556-BADB-534DB326ADF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9687394-ADEC-4556-BADB-534DB326ADF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B45344F-6F89-4833-8694-F552B681F377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B45344F-6F89-4833-8694-F552B681F377}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B45344F-6F89-4833-8694-F552B681F377}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B45344F-6F89-4833-8694-F552B681F377}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,6 +17,8 @@
     <OptionStrict>Off</OptionStrict>
     <OptionInfer>On</OptionInfer>
     <MvcBuildViews>false</MvcBuildViews>
+    <SilverlightApplicationList>
+    </SilverlightApplicationList>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -203,6 +205,9 @@
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.1.custom.min.js" />
     <Content Include="Scripts\jquery.jqGrid-4.4.1.min.js" />
+    <Content Include="Silverlight.js" />
+    <Content Include="SilverlightProject1TestPage.aspx" />
+    <Content Include="SilverlightProject1TestPage.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -224,6 +229,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ClientBin\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AGR.Controller\AGR.Controller.vbproj">
+      <Project>{D9687394-ADEC-4556-BADB-534DB326ADF3}</Project>
+      <Name>AGR.Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AGR.Domain\AGR.Domain.vbproj">
+      <Project>{8B45344F-6F89-4833-8694-F552B681F377}</Project>
+      <Name>AGR.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
