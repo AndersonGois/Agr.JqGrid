@@ -33,7 +33,8 @@ join InventarioDetalhe			iv	on psu.Codigo = iv.ProdutoSituacaoUnidade_Codigo
 update Tributacao
 set Nome = 'Imposto Sob Serviço' 
 where Codigo = 1
-
+jSMRAR028
+Jsmrar028
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 2784 - O produto do grupo Guardanapo deve ser selecionado
 	
