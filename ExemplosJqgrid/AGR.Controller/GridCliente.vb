@@ -8,8 +8,9 @@ Public Class GridCliente
 
         For i = 0 To 10
             Dim vaCliente = New Cliente
+            vaCliente.Codigo = i + 1
             vaCliente.Nome = "Anderson" & i
-            vaCliente.Idade = 3 + i
+            vaCliente.Idade = 38
             vaCliente.DataNascimento = New DateTime(1975, 9, 1 + i)
             lista.Add(vaCliente)
         Next
