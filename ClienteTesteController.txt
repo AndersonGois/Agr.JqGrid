@@ -1,0 +1,182 @@
+Imports Ingresso.Central.Periferico.Facade
+Imports Ingresso.Central.Periferico.Entities
+Imports Ingresso.Web.Mvc.Filtros
+Imports Ingresso.Web.Mvc
+Imports jqMvcGrid
+Imports System.Linq.Dynamic
+Imports Ingresso.Dados.Mod
+Imports Ingresso.Web
+
+Namespace Controllers
+    Public Class ClienteTesteController
+        Inherits ControleBaseController
+
+
+        Private _NomeArea As String = "Periferico"
+        Private _NomeEntidade As String = "ClienteTeste"
+        Private _Fachada As IClienteTesteFacade = PerifericoFacadeFactory.CreateClienteTesteFacade()
+
+
+#Region "Actions - Views"
+
+        Function Index() As ActionResult
+
+
+            ViewData("EntidadeArea") = Me._NomeArea
+            ViewData("EntidadeNome") = Me._NomeEntidade
+
+            ViewData("TituloPagina") = "Cadastro de Tipo de ClienteTeste"
+            ViewData("Entidade Criar") = "Criar Tipo de ClienteTeste"
+
+            Return View()
+        End Function
+
+        Function ClienteCadastro() As ActionResult
+            Return View()
+        End Function
+
+#End Region
+
+        Public Function Listar(ByVal page As Integer, _
+                             ByVal rows As Integer, _
+                             ByVal search As String, _
+                             ByVal sidx As String, _
+                             ByVal sord As String) As ActionResult
+
+            Dim model = (From entity In _Fachada.Listar(Nothing).AsQueryable().OrderBy(sidx & " " & sord) _
+             Select New With { _
+              .codigo = entity.Codigo, _
+              .nome = entity.Nome, _
+              .operacaoExcluir = "<a href=""javascript:excluirOperacao('" + entity.Codigo.ToString + "')"" class=""operacaoExcluir""><img src=""" + Url.Content("~/Content/img/_IcoExcluir.png") + """ border=""0""></a>" _
+             })
+
+            Return Json((model.ToList).AsQueryable.ToJqGridData(page, rows, Nothing, search, New String() {"codigo", "nome"}), JsonRequestBehavior.AllowGet)
+        End Function
+
+        Public Function ListaTeste(ByVal Codigo As Integer, _
+                             ByVal TipoLeituraCodigo As Integer, _
+                             ByVal DataAlteracao As String, _
+                             ByVal Nome As String, _
+                             ByVal TipoLeituraNome As String, _
+                             ByVal id As String, _
+                             ByVal oper As String) As JsonResult
+
+            Dim Dia As Int32
+            Dim mes As Int32
+            Dim ano As Int32
+
+            If Not String.IsNullOrEmpty(DataAlteracao) Then
+                Dia = Int32.Parse(DataAlteracao.Substring(0, 2))
+                mes = Int32.Parse(DataAlteracao.Substring(3, 2))
+                ano = Int32.Parse(DataAlteracao.Substring(6, 4))
+            End If
+
+
+            Dim clienteTeste = New ClienteTeste With {.Codigo = Codigo, _
+                                                      .DataAlteracao = If(Not String.IsNullOrEmpty(DataAlteracao), New DateTime(ano, mes, Dia), Nothing), _
+                                                      .Nome = Nome, _
+                                                      .TipoLeitura = New TipoLeitura With {.Codigo = TipoLeituraCodigo, _
+                                                                                           .Nome = TipoLeituraNome
+                                                                                          }
+                                                     }
+            Me._Fachada.Alterar(clienteTeste)
+
+
+            Return New JsonResult()
+
+        End Function
+
+
+
+        Public Function ListarClienteTeste(ByVal page As Integer, _
+                             ByVal rows As Integer, _
+                             ByVal search As String, _
+                             ByVal sidx As String, _
+                             ByVal sord As String) As ActionResult
+
+
+            Dim vaModel = (From enti In _Fachada.Listar((Function(x) x.Codigo > 0), paIncluirPropriedades:={"TipoLeitura"}).AsQueryable().OrderBy(sidx & " " & sord) _
+                          Select New With { _
+                              .Codigo = enti.Codigo, _
+                              .Nome = enti.Nome, _
+                              .TipoLeituraNome = enti.TipoLeitura.Nome, _
+                              .TipoLeituraCodigo = enti.TipoLeitura.Codigo _
+                              }).ToList()
+
+            Return Json((vaModel).AsQueryable().ToJqGridData(page, rows, Nothing, search, New String() {"Codigo", "Nome", "TipoLeituraNome", "TipoLeituraCodigo"}), JsonRequestBehavior.AllowGet)
+
+
+        End Function
+
+
+        <HttpPost()> _
+        Function ListarTipoLeituraCombo() As ActionResult
+            Dim vaRetorno As New RetornoOperacao
+            Return Json(ListaWeb.converter(_Fachada.ListarTipoLeitura(Nothing)))
+        End Function
+
+        <HttpPost()> _
+        Function ListarNomeCombo() As ActionResult
+
+            Dim vaLista As List(Of ClienteTeste) = Nothing
+            Dim vaRetorno As New RetornoOperacao
+            ''
+            vaLista = _Fachada.ListarNome(Nothing)
+            ''
+            Return Json(ListaWeb.converter(vaLista))
+        End Function
+
+        Public Function ListaCaixa() As ActionResult
+            Return New JsonResult With {.Data = _Fachada.Listar(Nothing, paIncluirPropriedades:={"TipoLeitura"})}
+        End Function
+
+#Region ".Crud"
+
+        <JsonFilter(Parametro:="postdata", TipoDado:=GetType(List(Of ClienteTeste)))> _
+        Public Function Incluir(ByVal postdata As List(Of ClienteTeste)) As JsonResult
+            Dim vaRetorno As New RetornoOperacao
+            vaRetorno.Codigo = "1"
+
+            For Each item As ClienteTeste In postdata
+                Me._Fachada.Incluir(item)
+            Next
+            'Me._Fachada.Incluir(postdata)
+            Return Json(vaRetorno, JsonRequestBehavior.AllowGet)
+        End Function
+
+        <JsonFilter(Parametro:="postdata", TipoDado:=GetType(List(Of ClienteTeste)))> _
+        Public Function Alterar(ByVal postdata As List(Of ClienteTeste)) As JsonResult
+            For Each item As ClienteTeste In postdata
+                Me._Fachada.Alterar(item)
+            Next
+
+            ' Me._Fachada.Alterar(postdata)
+            Dim vaRetorno As New RetornoOperacao
+            vaRetorno.Codigo = "1"
+            Return Json(vaRetorno, JsonRequestBehavior.AllowGet)
+        End Function
+
+        <JsonFilter(Parametro:="postdata", TipoDado:=GetType(ClienteTeste))> _
+        Public Function Excluir(ByVal postdata As ClienteTeste) As JsonResult
+            Me._Fachada.Excluir(postdata)
+            Dim vaRetorno As New RetornoOperacao
+            vaRetorno.Codigo = "1"
+            Return Json(vaRetorno, JsonRequestBehavior.AllowGet)
+        End Function
+
+
+#End Region
+
+
+
+
+        Function Selecionar(ByVal id As Integer) As JsonResult
+            ''
+            Dim vaRetornoDado = Me._Fachada.Listar((Function(x) x.Codigo = id), paIncluirPropriedades:={"TipoLeitura"}).FirstOrDefault()
+            Dim vaRetorno As New RetornoOperacao
+            vaRetorno.DefinirResultado(True, vaRetornoDado)
+            Return Json(vaRetorno, JsonRequestBehavior.AllowGet)
+            ''
+        End Function
+    End Class
+End Namespace

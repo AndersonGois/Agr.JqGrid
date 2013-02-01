@@ -6,7 +6,7 @@ Public Class GridCliente
     Public Function ListarCliente() As List(Of Cliente)
         Dim lista As List(Of Cliente) = New List(Of Cliente)
 
-        For i = 0 To 10
+        For i = 0 To 1
             Dim vaCliente = New Cliente
             vaCliente.Codigo = i + 1
             vaCliente.Nome = "Anderson" & i

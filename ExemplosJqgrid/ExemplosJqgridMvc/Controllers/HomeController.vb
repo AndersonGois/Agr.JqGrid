@@ -34,33 +34,24 @@ Public Class HomeController
     End Function
 #End Region
 
-    Public Function ListarCliente(ByVal page As Integer, _
-                             ByVal rows As Integer, _
-                             ByVal search As String, _
-                             ByVal sidx As String, _
-                             ByVal sord As String) As JsonResult
+    Public Function ListarCliente() As JsonResult
 
 
-        Dim pageIndex As Integer = Convert.ToInt32(page) - 1
-        Dim pageSize As Integer = rows
-        Dim totalRecords As Integer = If(IsNothing(_Controller.ListarCliente()), 0, _Controller.ListarCliente().Count())
-        Dim totalPages As Integer = CInt(Math.Truncate(Math.Ceiling(CSng(totalRecords) / CSng(pageSize))))
+        'Dim pageIndex As Integer = Convert.ToInt32(page) - 1
+        'Dim pageSize As Integer = rows
+        'Dim totalRecords As Integer = If(IsNothing(_Controller.ListarCliente()), 0, _Controller.ListarCliente().Count())
+        'Dim totalPages As Integer = CInt(Math.Truncate(Math.Ceiling(CSng(totalRecords) / CSng(pageSize))))
 
-        Dim jsonData = New With { _
-         Key .Total = totalPages, _
-         Key .Page = page, _
-         Key .Records = totalRecords, _
-         Key .Rows = (From vaEntidade In _Controller.ListarCliente().AsQueryable()
+        Dim jsonData = (From vaEntidade In _Controller.ListarCliente().AsQueryable()
                      Select New With { _
                      Key .Codigo = vaEntidade.Codigo, _
                      Key .Nome = vaEntidade.Nome, _
-                     Key .DataNascimento = vaEntidade.DataNascimento, _
+                     Key .DataNascimento = vaEntidade.DataNascimento.Value.ToShortDateString(), _
                      Key .Idade = vaEntidade.Idade _
-                                    }
-                    ).ToArray(), _
-             .UserData = Nothing}
+                                    }).ToArray()
 
-        Return Json(jsonData, JsonRequestBehavior.AllowGet)
+        Return New JsonResult With {.Data = jsonData}
+        'Return Json(jsonData, JsonRequestBehavior.AllowGet)
 
     End Function
 
