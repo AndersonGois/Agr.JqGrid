@@ -1,0 +1,27 @@
+Imports System.Data.Entity
+Imports Ingresso.Dados.EF
+Imports Ingresso.Central.Periferico.Dalc.Mapeamento
+
+Public Class PerifericoUnitOfWork
+    Inherits DbContextUnitOfWork
+
+    Protected Overrides Sub OnModelCreating(ByVal paModelBuilder As DbModelBuilder)
+        With paModelBuilder
+            .Configurations.Add(New DispositivoAcessoConfigutation)
+            .Configurations.Add(New EstabCanalVendaModeloIngressoConfiguration)
+            .Configurations.Add(New FabricanteConfiguration)
+            .Configurations.Add(New LayoutPapelConfiguration)
+            .Configurations.Add(New ModeloImpressoraConfiguration)
+            .Configurations.Add(New ModeloImpressoraECFConfiguration)
+            .Configurations.Add(New ModeloImpressoraLayoutPapelConfiguration)
+            .Configurations.Add(New ModeloIngressoConfiguration)
+            .Configurations.Add(New ProjetorDigitalConfiguration)
+            .Configurations.Add(New ProjetorDigitalConfiguracaoTCCConfiguration)
+            .Configurations.Add(New TipoDispositivoAcessoConfiguration)
+            .Configurations.Add(New TipoImpressoraConfiguration)
+            .Configurations.Add(New TipoLeituraConfiguration)
+            .Configurations.Add(New TipoPerifericoConfiguration)
+            .Configurations.Add(New ClienteTesteConfiguration)
+        End With
+    End Sub
+End Class
