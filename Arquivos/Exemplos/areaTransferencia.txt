@@ -1,0 +1,19 @@
+
+
+var data  = DateTime.Now;
+                int valor  = (data.Day  + data.Month) * data.Year;
+                string senha = string.Format("!N9{0}*#", valor);
+           
+            Thread.CurrentThread.SetApartmentState(ApartmentState.Unknown);
+            Clipboard.SetText(senha);
+			
+			
+			
+  Dim data = DateTime.Now
+        Dim valor = (data.Day + data.Month) * data.Year
+        Dim senha = String.Format("!N9{0}*#", valor)
+
+        Thread.CurrentThread.SetApartmentState(ApartmentState.Unknown)
+        Clipboard.SetText(senha)
+		
+		
