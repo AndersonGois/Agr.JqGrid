@@ -1,0 +1,19 @@
+Imports System.Data.Entity.ModelConfiguration
+Imports Ingresso.Central.ConfigMov.Entities
+
+Namespace Mapeamento
+
+    Public Class RemarcacaoPrecoCalendarioConfiguration
+        Inherits EntityTypeConfiguration(Of RemarcacaoPrecoCalendario)
+
+        Sub New()
+            With Me
+                .HasKey(Function(e) e.Codigo)
+                .HasMany(Function(e) e.RemarcacaoPrecoClasse).WithRequired(Function(e) e.RemarcacaoPrecoCalendario).HasForeignKey(Function(e) e.RemarcacaoPrecoCalendario_Codigo)
+                .HasRequired(Function(e) e.CalendarioVendaProdutoClasse).WithMany(Function(paE) paE.ConfiguracaoVendaProduto).HasForeignKey(Function(e) e.CalendarioVendaProdutoClasse_Codigo)
+                .Property(Function(e) e.CalendarioVendaProdutoClasse_Codigo).HasColumnName("CalendVendaProdClasse_Codigo")
+                .ToTable("RemarcacaoPrecoCalendario")
+            End With
+        End Sub
+    End Class
+End Namespace

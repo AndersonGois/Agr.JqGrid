@@ -1,0 +1,23 @@
+1- Criar a Entidade 		- ServidorAPLeWEB
+2- Fazer o Mapeamento		- Dalc
+3- Adicionar no UnitOfWork  - Dalc
+4- Criar Interface			- Dalc
+5- Implementar Interface	- Dalc
+6- Criar metodo na Factory 	- Dalc
+7- Configurar Factory 		- factoryConfiguration.config
+
+8- Criar Interface			- Business
+9- Implementar Interface	- Business
+10- Criar metodo na Factory - Business
+11-	Configurar Factory 		- factoryConfiguration.config
+12- Fazer Validação			- Business 
+13- Fazer Exception			- Exception
+
+8-  Criar Interface			- Facade
+9-  Implementar Interface	- Facade
+10- Criar metodo na Factory - Facade
+11-	Configurar Factory 		- factoryConfiguration.config
+12- Fazer Validação			- Facade 
+
+13- Controller
+14-	View

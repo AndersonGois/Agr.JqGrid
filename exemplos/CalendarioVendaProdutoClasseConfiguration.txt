@@ -1,0 +1,21 @@
+Imports System.Data.Entity.ModelConfiguration
+Imports Ingresso.Central.ConfigMov.Entities
+
+Namespace Mapeamento
+
+    Public Class CalendarioVendaProdutoClasseConfiguration
+        Inherits EntityTypeConfiguration(Of CalendarioVendaProdutoClasse)
+
+        Sub New()
+            With Me
+                .HasKey(Function(e) e.Codigo)
+                .Property(Function(e) e.ConfiguracaoVendaProduto_Codigo).HasColumnName("ConfVendaProduto_Codigo")
+                .Property(Function(paE) paE.Status).HasColumnName("Status").IsRequired()
+                .Property(Function(paE) paE.DataHoraInativacao).HasColumnName("DataHoraInativacao").IsOptional()
+                .HasRequired(Function(e) e.ConfiguracaoVendaProduto).WithMany(Function(e) e.CalendarioVendaProdutoClasse).HasForeignKey(Function(e) e.ConfiguracaoVendaProduto_Codigo)
+                .HasOptional(Function(paE) paE.TipoVendaProduto).WithMany().HasForeignKey(Function(e) e.TipoVendaProduto_Codigo)
+                .ToTable("CalendarioVendaProdutoClasse")
+            End With
+        End Sub
+    End Class
+End Namespace

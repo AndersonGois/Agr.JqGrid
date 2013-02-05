@@ -1,0 +1,20 @@
+Public Function ListarGrid(ByVal EstabelecimentoCodigo As Nullable(Of Integer), _
+                                ByVal page As Integer, _
+                                ByVal rows As Integer, _
+                                ByVal search As String, _
+                                ByVal sidx As String, _
+                                ByVal sord As String, _
+                                ByVal _search As Boolean, ByVal searchField As String, ByVal searchString As String) As ActionResult
+            Dim vaModel = _Fachada.ListarEstabelecimento()
+            Dim vaSearchField As String()
+            Dim vaSearch As String
+
+            If _search Then
+                vaSearch = searchString
+                vaSearchField = New String() {searchField}
+            Else
+                vaSearch = ""
+                vaSearchField = New String() {"Estabelecimento", "Departamento", "Categoria", "Grupo", "Classificacao", "Produto"}
+            End If
+            Return Json((vaModel.ToList).AsQueryable.ToJqGridData(page, rows, String.Concat(sidx, " ", sord), vaSearch, vaSearchField), JsonRequestBehavior.AllowGet)
+        End Function

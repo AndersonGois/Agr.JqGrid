@@ -1,0 +1,26 @@
+     var busca = function (paValor, paCampo) {
+            var vaSearch = (paValor == "") ? "False" : "True";
+            var vaValor = tratarCaracterEspecial(paValor);
+           
+            var queryString = "_search=" + vaSearch + "&searchString=" + vaValor + "&searchField=" + paCampo;
+
+            carregarGrid(queryString);
+        }  //busca
+
+        tratarCaracterEspecial = function(paValor){
+        var valor = new Array;
+        for (var i = 0; i < paValor.length; i++) {
+             switch(paValor[i]) {
+		        case "&":
+                   valor[i]= "0026";
+                break;
+                case "+":
+                   valor[i]= "002b";
+                    break;
+                default:
+                    valor[i] =  paValor[i]  
+			    break;
+            }  
+       }
+        return valor;
+    }

@@ -1,0 +1,1053 @@
+factoryConfiguration.config
+<ObjectConfigData name="IConfiguracaoVendaProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ConfiguracaoVendaProdutoBusiness" singleton="false" />
+
+<?xml version="1.0" encoding="utf-8" ?>
+<factoryConfiguration>
+  <xmlSerializerSection type="Ingresso.FrameWork.Factory.Common.FactoriesConfigSection, Ingresso.FrameWork.Factory, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dc9e630b1fd5f16d">
+    <factoryHelperSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <factoryClasses>
+        <ObjectConfigData name="GenericFactory" assembly="Ingresso.FrameWork.Factory" class="Ingresso.FrameWork.Factory.GenericFactory" />
+        <ObjectConfigData name="MockFactory" assembly="Ingresso.FrameWork.Factory.NMock" class="Ingresso.FrameWork.Factory.NMock.MockFactory" />
+      </factoryClasses>
+      <factories>
+        <FactoryConfigData name="CacheFrameWork" factoryClass="GenericFactory">
+          <objects>
+            <ObjectConfigData name="ICacheManager" assembly="Ingresso.FrameWork.Cache.EnterpriseLibrary" class="Ingresso.FrameWork.Cache.EnterpriseLibrary.EnterpriseLibraryCache" singleton="false" />
+          </objects>
+        </FactoryConfigData>
+      </factories>
+      <factories>
+        <FactoryConfigData name="TranslationFrameWork" factoryClass="GenericFactory">
+          <objects>
+            <ObjectConfigData name="ITranslatorManager" assembly="Ingresso.FrameWork.Translation.CustomTranslation" class="Ingresso.FrameWork.Translation.CustomTranslation.Translator" singleton="false" />
+            <ObjectConfigData name="ITranslatorReader" assembly="Ingresso.FrameWork.Translation.Reader.Po" class="Ingresso.FrameWork.Translation.Reader.Po.PoTranslatorReader" singleton="false" />
+          </objects>
+        </FactoryConfigData>
+      </factories>
+      <factories>
+        <FactoryConfigData name="ExceptionFrameWork" factoryClass="GenericFactory">
+          <objects>
+            <ObjectConfigData name="IExceptionManager" assembly="Ingresso.FrameWork.ExceptionHandler.CustomExceptionHandler" class="Ingresso.FrameWork.ExceptionHandler.CustomExceptionHandler.ExceptionHandler" singleton="false" />
+            <ObjectConfigData name="IExceptionThreat" assembly="Ingresso.Web" class="Ingresso.Web.Mvc.Exception.WebExceptionThreat" singleton="false" />
+          </objects>
+        </FactoryConfigData>
+      </factories>
+      <factories>
+        <FactoryConfigData name="LoggingFrameWork" factoryClass="GenericFactory">
+          <objects>
+            <ObjectConfigData name="ILoggingManager" assembly="Ingresso.FrameWork.Logging.Log4Net" class="Ingresso.FrameWork.Logging.Log4Net.Log4NetModule" singleton="false" />
+          </objects>
+        </FactoryConfigData>        
+      </factories>
+      
+      <factories>
+
+        <FactoryConfigData name="Auditoria" factoryClass="GenericFactory">
+          <objects>
+
+            <!--Dalc -->
+            <ObjectConfigData name="UnitOfWork" assembly="Ingresso.Central.Auditoria.Dalc" class="Ingresso.Central.Auditoria.Dalc.AuditoriaUnitOfWork" singleton="false" />
+            <ObjectConfigData name="IAuditoriaDadoRepository" assembly="Ingresso.Central.Auditoria.Dalc" class="Ingresso.Central.Auditoria.Dalc.Implementacao.AuditoriaDadoRepository" singleton="false" />
+            
+
+            <!-- Business -->
+            <ObjectConfigData name="IAuditoriaDadoBusiness" assembly="Ingresso.Central.Auditoria.Business" class="Ingresso.Central.Auditoria.Business.Implementacao.AuditoriaDadoBusiness" singleton="false" />
+            
+
+            <!-- Facade -->
+            <ObjectConfigData name="IAuditoriaDadoFacade" assembly="Ingresso.Central.Auditoria.Facade" class="Ingresso.Central.Auditoria.Facade.Implementacao.AuditoriaDadoFacade" singleton="false" />
+            
+
+
+          </objects>
+        </FactoryConfigData>
+
+        <FactoryConfigData name="Acordo" factoryClass="GenericFactory">
+          <objects>
+
+            <!--Dalc -->
+            <ObjectConfigData name="UnitOfWork" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.AcordoUnitOfWork" singleton="false" />
+            <ObjectConfigData name="IAcordoRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.AcordoRepository" singleton="false" />
+            <ObjectConfigData name="IMetodoClassificacaoCurvaABCRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.MetodoClassificacaoCurvaABCRepository" singleton="false" />
+            <ObjectConfigData name="IParametrosCurvaABCRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.ParametrosCurvaABCRepository" singleton="false" />
+            <ObjectConfigData name="ICineSemanaRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.CineSemanaRepository" singleton="false" />
+            <ObjectConfigData name="ICineSemanaRealRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.CineSemanaRealRepository" singleton="false" />
+            <ObjectConfigData name="IDivulgacaoRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.DivulgacaoRepository" singleton="false" />
+            <ObjectConfigData name="IMediaSalaRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.MediaSalaRepository" singleton="false" />
+            <ObjectConfigData name="INegociacaoRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.NegociacaoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoNegociacaoRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.TipoNegociacaoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoNegociacaoExibicaoRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.TipoNegociacaoExibicaoRepository" singleton="false" />
+            <ObjectConfigData name="IFaturaRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.FaturaRepository" singleton="false" />            
+            <ObjectConfigData name="IFaturaTributacaoRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.FaturaTributacaoRepository" singleton="false" />
+            <ObjectConfigData name="INegociacaoSemanaCopiaRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.NegociacaoSemanaCopiaRepository" singleton="false" />
+            <ObjectConfigData name="INegociacaoSemana" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.NegociacaoSemanaRepository" singleton="false" />
+            <ObjectConfigData name="INegociacaoSemanaRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.NegociacaoSemanaRepository" singleton="false" />
+            <ObjectConfigData name="IHistoricoCurvaABCRepository" assembly="Ingresso.Central.Acordo.Dalc" class="Ingresso.Central.Acordo.Dalc.Implementacao.HistoricoCurvaABCRepository" singleton="false" />
+
+            <!-- Business -->
+            <ObjectConfigData name="IAcordoBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.AcordoBusiness" singleton="false" />
+            <ObjectConfigData name="IMetodoClassificacaoCurvaABCBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.MetodoClassificacaoCurvaABCBusiness" singleton="false" />
+            <ObjectConfigData name="IParametrosCurvaABCBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.ParametrosCurvaABCBusiness" singleton="false" />
+            <ObjectConfigData name="ICineSemanaBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.CineSemanaBusiness" singleton="false" />
+            <ObjectConfigData name="IDivulgacaoBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.DivulgacaoBusiness" singleton="false" />
+            <ObjectConfigData name="IMediaSalaBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.MediaSalaBusiness" singleton="false" />
+            <ObjectConfigData name="INegociacaoBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.NegociacaoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoNegociacaoBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.TipoNegociacaoBusiness" singleton="false" />
+            <ObjectConfigData name="IFaturaBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.FaturaBusiness" singleton="false" />
+            <ObjectConfigData name="IFaturaTributacaoBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.FaturaTributacaoBusiness" singleton="false" />            
+            <ObjectConfigData name="INegociacaoSemanaCopiaBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.NegociacaoSemanaCopiaBusiness" singleton="false" />
+            <ObjectConfigData name="INegociacaoSemanaBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.NegociacaoSemanaBusiness" singleton="false" />
+
+            <ObjectConfigData name="IHistoricoCurvaABCBusiness" assembly="Ingresso.Central.Acordo.Business" class="Ingresso.Central.Acordo.Business.Implementacao.HistoricoCurvaABCBusiness" singleton="false" />
+
+            <!-- Facade -->
+            <ObjectConfigData name="IMetodoClassificacaoCurvaABCFacade" assembly="Ingresso.Central.Acordo.Facade" class="Ingresso.Central.Acordo.Facade.Implementacao.MetodoClassificacaoCurvaABCFacade" singleton="false" />
+            <ObjectConfigData name="IParametrosCurvaABCFacade" assembly="Ingresso.Central.Acordo.Facade" class="Ingresso.Central.Acordo.Facade.Implementacao.ParametrosCurvaABCFacade" singleton="false" />
+            <ObjectConfigData name="ICineSemanaFacade" assembly="Ingresso.Central.Acordo.Facade" class="Ingresso.Central.Acordo.Facade.Implementacao.CineSemanaFacade" singleton="false" />
+            <ObjectConfigData name="IDivulgacaoFacade" assembly="Ingresso.Central.Acordo.Facade" class="Ingresso.Central.Acordo.Facade.Implementacao.DivulgacaoFacade" singleton="false" />
+            <ObjectConfigData name="IMediaSalaFacade" assembly="Ingresso.Central.Acordo.Facade" class="Ingresso.Central.Acordo.Facade.Implementacao.MediaSalaFacade" singleton="false" />
+            <ObjectConfigData name="INegociacaoFacade" assembly="Ingresso.Central.Acordo.Facade" class="Ingresso.Central.Acordo.Facade.Implementacao.NegociacaoFacade" singleton="false" />
+            <ObjectConfigData name="IFaturaFacade" assembly="Ingresso.Central.Acordo.Facade" class="Ingresso.Central.Acordo.Facade.Implementacao.FaturaFacade" singleton="false" />
+            <ObjectConfigData name="ITipoNegociacaoFacade" assembly="Ingresso.Central.Acordo.Facade" class="Ingresso.Central.Acordo.Facade.Implementacao.TipoNegociacaoFacade" singleton="false" />
+             
+
+          </objects>
+        </FactoryConfigData>
+        
+        <FactoryConfigData name="Ambiente" factoryClass="GenericFactory">
+          <objects>
+            
+            <!-- Dalc -->
+            <ObjectConfigData name="UnitOfWork" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.AmbienteUnitOfWork" singleton="false" />
+            <ObjectConfigData name="IAreaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.AreaRepository" singleton="false" />
+            <ObjectConfigData name="IAtributoExternoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.AtributoExternoRepository" singleton="false" />
+            <ObjectConfigData name="IClasseRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.ClasseRepository" singleton="false" />
+            <ObjectConfigData name="IClasseTipoSistemaVendaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.ClasseTipoSistemaVendaRepository" singleton="false" />
+            <ObjectConfigData name="IComplexoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.ComplexoRepository" singleton="false" />
+            <ObjectConfigData name="IContatoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.ContatoRepository" singleton="false" />
+            <ObjectConfigData name="ICurvaturaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.CurvaturaRepository" singleton="false" />            
+            <ObjectConfigData name="IElementoTipoBloqueioRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.ElementoTipoBloqueioRepository" singleton="false" />
+            <ObjectConfigData name="IEmpresaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EmpresaRepository" singleton="false" />
+            <ObjectConfigData name="IEmpresaMoedaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EmpresaMoedaRepository" singleton="false" />
+            <ObjectConfigData name="IEntidadeExternaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EntidadeExternaRepository" singleton="false" />
+            <ObjectConfigData name="IEntidadeExternaTipoEntidadeExternaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EntidadeExternaTipoEntidadeExternaRepository" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EstabelecimentoRepository" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoAcrescimoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EstabelecimentoAcrescimoRepository" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoCanalFormaPagtoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EstabelecimentoCanalFormaPagtoRepository" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoCanalVendaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EstabelecimentoCanalVendaRepository" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoFormaPagamentoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EstabelecimentoFormaPagamentoRepository" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoTipoEstabRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EstabelecimentoTipoEstabRepository" singleton="false" />
+            <ObjectConfigData name="IFornecedorRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.FornecedorRepository" singleton="false" />
+            <ObjectConfigData name="IFornecedorEnderecoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.FornecedorEnderecoRepository" singleton="false" />
+            <ObjectConfigData name="IFornecedorFuncCalendarioRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.FornecedorFuncCalendarioRepository" singleton="false" />
+            <ObjectConfigData name="IGrupoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.GrupoRepository" singleton="false" />
+            <ObjectConfigData name="IGrupoFinanceiroRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.GrupoFinanceiroRepository" singleton="false" />
+            <ObjectConfigData name="IGrupoTipoElementoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.GrupoTipoElementoRepository" singleton="false" />
+            <ObjectConfigData name="ILayoutRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.LayoutRepository" singleton="false" />
+            <ObjectConfigData name="ILayoutVigenciaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.LayoutVigenciaRepository" singleton="false" />
+            <ObjectConfigData name="ILocalRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.LocalRepository" singleton="false" />
+            <ObjectConfigData name="ILocalAcessoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.LocalAcessoRepository" singleton="false" />
+            <ObjectConfigData name="ILocalAcessoAreaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.LocalAcessoAreaRepository" singleton="false" />
+            <ObjectConfigData name="ILocalTipoExibicaoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.LocalTipoExibicaoRepository" singleton="false" />
+            <ObjectConfigData name="IMesaSetorBomboniereEstabelecimentoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.MesaSetorBomboniereEstabelecimentoRepository" singleton="false" />
+            <ObjectConfigData name="IObjetoBDRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.ObjetoBDRepository" singleton="false" />
+            <ObjectConfigData name="IRotaAcessoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.RotaAcessoRepository" singleton="false" />
+            <ObjectConfigData name="IRotaAcessoLocalAcessoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.RotaAcessoLocalAcessoRepository" singleton="false" />
+            <ObjectConfigData name="ISetorBomboniereEstabelecimentoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.SetorBomboniereEstabelecimentoRepository" singleton="false" />
+            <ObjectConfigData name="ISetorRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.SetorRepository" singleton="false" />
+            <ObjectConfigData name="ITipoClasseRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.TipoClasseRepository" singleton="false" />
+            <ObjectConfigData name="IElementoConfiguracaoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.ElementoConfiguracaoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoElementoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.TipoElementoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoEstabelecimentoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.TipoEstabelecimentoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoFornecedorRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.TipoFornecedorRepository" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoDescontoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EstabelecimentoDescontoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoEntidadeExternaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.TipoEntidadeExternaRepository" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoAcrescimoValorRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EstabelecimentoAcrescimoValorRepository" singleton="false" />
+            <ObjectConfigData name="IEstabAcrescimoTipoExibicaoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EstabAcrescimoTipoExibicaoRepository" singleton="false" />
+            <ObjectConfigData name="IAreaCanalVendaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.AreaCanalVendaRepository" singleton="false" />
+            <ObjectConfigData name="IElementoRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.ElementoRepository" singleton="false" />
+            <ObjectConfigData name="IFornecedorTipoSistemaVendaRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.FornecedorTipoSistemaVendaRepository" singleton="false" />
+            <ObjectConfigData name="IEntidadeExternaObjetoBDRepository" assembly="Ingresso.Central.Ambiente.Dalc" class="Ingresso.Central.Ambiente.Dalc.Implementacao.EntidadeExternaObjetoBDRepository" singleton="false" />
+
+            <!-- Business -->
+            <ObjectConfigData name="IAreaBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.AreaBusiness" singleton="false" />
+            <ObjectConfigData name="IAreaCanalVendaBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.AreaCanalVendaBusiness" singleton="false" />
+            <ObjectConfigData name="IAtributoExternoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.AtributoExternoBusiness" singleton="false" />            
+            <ObjectConfigData name="IClasseBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.ClasseBusiness" singleton="false" />
+            <ObjectConfigData name="IComplexoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.ComplexoBusiness" singleton="false" />
+            <ObjectConfigData name="IContatoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.ContatoBusiness" singleton="false" />
+            <ObjectConfigData name="IElementoConfiguracaoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.ElementoConfiguracaoBusiness" singleton="false" />
+            <ObjectConfigData name="IElementoTipoBloqueioBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.ElementoTipoBloqueioBusiness" singleton="false" />
+            <ObjectConfigData name="IEntidadeExternaBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.EntidadeExternaBusiness" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoAcessoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.EstabelecimentoAcessoBusiness" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoAcrescimoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.EstabelecimentoAcrescimoBusiness" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.EstabelecimentoBusiness" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoCanalFormaPagtoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.EstabelecimentoCanalFormaPagtoBusiness" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoCanalVendaBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.EstabelecimentoCanalVendaBusiness" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoDescontoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.EstabelecimentoDescontoBusiness" singleton="false" />
+            <ObjectConfigData name="IFornecedorBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.FornecedorBusiness" singleton="false" />
+            <ObjectConfigData name="IFornecedorFunCalendarioBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.FornecedorFuncCalendarioBusiness" singleton="false" />
+            <ObjectConfigData name="IGrupoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.GrupoBusiness" singleton="false" />
+            <ObjectConfigData name="ILayoutBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.LayoutBusiness" singleton="false" />
+            <ObjectConfigData name="ILayoutVigenciaBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.LayoutVigenciaBusiness" singleton="false" />
+            <ObjectConfigData name="IGrupoFinanceiroBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.GrupoFinanceiroBusiness" singleton="false" />
+            <ObjectConfigData name="IGrupoTipoElementoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.GrupoTipoElementoBusiness" singleton="false" />
+            <ObjectConfigData name="ILocalAcessoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.LocalAcessoBusiness" singleton="false" />
+            <ObjectConfigData name="ILocalBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.LocalBusiness" singleton="false" />
+            <ObjectConfigData name="IObjetoBDBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.ObjetoBDBusiness" singleton="false" />
+            <ObjectConfigData name="IRotaAcessoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.RotaAcessoBusiness" singleton="false" />
+            <ObjectConfigData name="ISetorBomboniereEstabelecimentoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.SetorBomboniereEstabelecimentoBusiness" singleton="false" />
+            <ObjectConfigData name="ISetorBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.SetorBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoClasseBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.TipoClasseBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoElementoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.TipoElementoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoEntidadeExternaBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.TipoEntidadeExternaBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoEstabelecimentoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.TipoEstabelecimentoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoFornecedorBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.TipoFornecedorBusiness" singleton="false" />
+            <ObjectConfigData name="IEmpresaBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.EmpresaBusiness" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoAcrescimoValorBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.EstabelecimentoAcrescimoValorBusiness" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoFormaPagamentoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.EstabelecimentoFormaPagamentoBusiness" singleton="false" />
+            <ObjectConfigData name="IEntidadeExternaObjetoBDBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.EntidadeExternaObjetoBDBusiness" singleton="false" />            
+            <ObjectConfigData name="IFornecedorFuncCalendarioBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.FornecedorFuncCalendarioBusiness" singleton="false" />
+            <ObjectConfigData name="IMesaSetorBomboniereEstabelecimentoBusiness" assembly="Ingresso.Central.Ambiente.Business" class="Ingresso.Central.Ambiente.Business.Implementacao.MesaSetorBomboniereEstabelecimentoBusiness" singleton="false" />
+            
+            <!-- Facade -->
+            <ObjectConfigData name="IAreaFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.AreaFacade" singleton="false" />
+            <ObjectConfigData name="IAtributoExternoFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.AtributoExternoFacade" singleton="false" />
+            <ObjectConfigData name="IClasseFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.ClasseFacade" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.EstabelecimentoFacade" singleton="false" />
+            <ObjectConfigData name="IEntidadeExternaFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.EntidadeExternaFacade" singleton="false" />
+            <ObjectConfigData name="IFornecedorFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.FornecedorFacade" singleton="false" />
+            <ObjectConfigData name="IGrupoFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.GrupoFacade" singleton="false" />
+            <ObjectConfigData name="IGrupoFinanceiroFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.GrupoFinanceiroFacade" singleton="false" />
+            <ObjectConfigData name="IGrupoTipoElementoFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.GrupoTipoElementoFacade" singleton="false" />
+            <ObjectConfigData name="ILayoutFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.LayoutFacade" singleton="false" />
+            <ObjectConfigData name="ILocalFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.LocalFacade" singleton="false" />
+            <ObjectConfigData name="ILocalAcessoFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.LocalAcessoFacade" singleton="false" />
+            <ObjectConfigData name="IObjetoBDFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.ObjetoBDFacade" singleton="false" />
+            <ObjectConfigData name="IRotaAcessoFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.RotaAcessoFacade" singleton="false" />
+            <ObjectConfigData name="ISetorFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.SetorFacade" singleton="false" />
+            <ObjectConfigData name="ITipoClasseFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.TipoClasseFacade" singleton="false" />
+            <ObjectConfigData name="ITipoElementoFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.TipoElementoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoEntidadeExternaFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.TipoEntidadeExternaFacade" singleton="false" />
+            <ObjectConfigData name="ITipoEstabelecimentoFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.TipoEstabelecimentoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoFornecedorFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.TipoFornecedorFacade" singleton="false" />
+            <ObjectConfigData name="IComplexoFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.ComplexoFacade" singleton="false" />
+            <ObjectConfigData name="IEmpresaFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.EmpresaFacade" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoAcrescimoFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.EstabelecimentoAcrescimoFacade" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoAcrescimoValorFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.EstabelecimentoAcrescimoValorFacade" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoCanalFormaPagtoFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.EstabelecimentoCanalFormaPagtoFacade" singleton="false" />
+            <ObjectConfigData name="IEntidadeExternaObjetoBDFacade" assembly="Ingresso.Central.Ambiente.Facade" class="Ingresso.Central.Ambiente.Facade.Implementacao.EntidadeExternaObjetoBDFacade" singleton="false" />
+            
+          </objects>
+        </FactoryConfigData>
+
+        <FactoryConfigData name="AutenticacaoAutorizacao" factoryClass="GenericFactory">
+          <objects>
+            <!-- Dalc -->
+            <ObjectConfigData name="UnitOfWork" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.AutenticacaoAutorizaoUnitOfWork" singleton="false" />
+            <ObjectConfigData name="IFuncionalidadeRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.FuncionalidadeRepository" singleton="false" />
+            <ObjectConfigData name="IFuncionalidadeCalendarioRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.FuncionalidadeCalendarioRepository" singleton="false" />
+            <ObjectConfigData name="IFuncionalidadeTipoCalendarioRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.FuncionalidadeTipoCalendarioRepository" singleton="false" />
+            <ObjectConfigData name="IGrupoAcessoRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.GrupoAcessoRepository" singleton="false" />
+            <ObjectConfigData name="IGrupoAcessoUsuarioRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.GrupoAcessoUsuarioRepository" singleton="false" />
+            <ObjectConfigData name="IGrupoAcessoEstabelecimentoRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.GrupoAcessoEstabelecimentoRepository" singleton="false" />            
+            <ObjectConfigData name="IGrupoAcessoTipoSistemaVendaRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.GrupoAcessoTipoSistemaVendaRepository" singleton="false" />            
+            <ObjectConfigData name="IPerfilAcessoRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.PerfilAcessoRepository" singleton="false" />
+            <ObjectConfigData name="IPermissaoRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.PermissaoRepository" singleton="false" />
+            <ObjectConfigData name="ISistemaRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.SistemaRepository" singleton="false" />
+            <ObjectConfigData name="ITipoAutenticacaoRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.TipoAutenticacaoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoFuncionalidadeRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.TipoFuncionalidadeRepository" singleton="false" />
+            <ObjectConfigData name="ITipoPermissaoRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.TipoPermissaoRepository" singleton="false" />
+            <ObjectConfigData name="IUsuarioRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.UsuarioRepository" singleton="false" />
+            <ObjectConfigData name="IUsuarioEstabelecimentoRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.UsuarioEstabelecimentoRepository" singleton="false" />
+            <ObjectConfigData name="IUsuarioFornecedorRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.UsuarioFornecedorRepository" singleton="false" />
+            <ObjectConfigData name="IUsuarioEstacaoVendaRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.UsuarioEstacaoVendaRepository" singleton="false" />
+            <ObjectConfigData name="IGrpAcessoEstacaoVendaRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.GrpAcessoEstacaoVendaRepository" singleton="false" />
+            <ObjectConfigData name="IUsuarioSenhaHistoricoRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.UsuarioSenhaHistoricoRepository" singleton="false" />
+            <ObjectConfigData name="ISistemaFuncionalidadeRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.SistemaFuncionalidadeRepository" singleton="false" />
+            <ObjectConfigData name="IPermissaoCriacaoUsuarioRepository" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Dalc" class="Ingresso.BOS.AutenticacaoAutorizacao.Dalc.Implementacao.PermissaoCriacaoUsuarioRepository" singleton="false" />
+           
+            <!-- Business -->
+            <ObjectConfigData name="ITipoPermissaoBusiness" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Business" class="Ingresso.BOS.AutenticacaoAutorizacao.Business.Implementacao.TipoPermissaoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoAutenticacaoBusiness" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Business" class="Ingresso.BOS.AutenticacaoAutorizacao.Business.Implementacao.TipoAutenticacaoBusiness" singleton="false" />
+            <ObjectConfigData name="IPerfilAcessoBusiness" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Business" class="Ingresso.BOS.AutenticacaoAutorizacao.Business.Implementacao.PerfilAcessoBusiness" singleton="false" />
+            <ObjectConfigData name="ISistemaBusiness" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Business" class="Ingresso.BOS.AutenticacaoAutorizacao.Business.Implementacao.SistemaBusiness" singleton="false" />
+            <ObjectConfigData name="IGrupoAcessoBusiness" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Business" class="Ingresso.BOS.AutenticacaoAutorizacao.Business.Implementacao.GrupoAcessoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoDataEspecialBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.TipoDataEspecialBusiness" singleton="false" />
+            <ObjectConfigData name="IUsuarioBusiness" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Business" class="Ingresso.BOS.AutenticacaoAutorizacao.Business.Implementacao.UsuarioBusiness" singleton="false" />
+            <ObjectConfigData name="IPermissaoBusiness" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Business" class="Ingresso.BOS.AutenticacaoAutorizacao.Business.Implementacao.PermissaoBusiness" singleton="false" />
+            <ObjectConfigData name="IFuncionalidadeBusiness" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Business" class="Ingresso.BOS.AutenticacaoAutorizacao.Business.Implementacao.FuncionalidadeBusiness" singleton="false" />
+            <ObjectConfigData name="IFuncionalidadeCalendarioBusiness" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Business" class="Ingresso.BOS.AutenticacaoAutorizacao.Business.Implementacao.FuncionalidadeCalendarioBusiness" singleton="false" />
+            <ObjectConfigData name="IMembershipBusiness" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Business" class="Ingresso.BOS.AutenticacaoAutorizacao.Business.Implementacao.AccountMembershipBusiness" singleton="false" />
+            <ObjectConfigData name="IFuncionalidadeTipoCalendarioBusiness" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Business" class="Ingresso.BOS.AutenticacaoAutorizacao.Business.Implementacao.FuncionalidadeTipoCalendarioBusiness" singleton="false" />
+            <ObjectConfigData name="IGrpAcessoEstacaoVendaBusiness" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Business" class="Ingresso.BOS.AutenticacaoAutorizacao.Business.Implementacao.GrpAcessoEstacaoVendaBusiness" singleton="false" />
+
+
+
+            <!-- Facade -->
+            <ObjectConfigData name="ITipoPermissaoFacade" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Facade" class="Ingresso.BOS.AutenticacaoAutorizacao.Facade.Implementacao.TipoPermissaoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoAutenticacaoFacade" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Facade" class="Ingresso.BOS.AutenticacaoAutorizacao.Facade.Implementacao.TipoAutenticacaoFacade" singleton="false" />
+            <ObjectConfigData name="IPerfilAcessoFacade" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Facade" class="Ingresso.BOS.AutenticacaoAutorizacao.Facade.Implementacao.PerfilAcessoFacade" singleton="false" />
+            <ObjectConfigData name="ISistemaFacade" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Facade" class="Ingresso.BOS.AutenticacaoAutorizacao.Facade.Implementacao.SistemaFacade" singleton="false" />
+            <ObjectConfigData name="IGrupoAcessoFacade" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Facade" class="Ingresso.BOS.AutenticacaoAutorizacao.Facade.Implementacao.GrupoAcessoFacade" singleton="false" />
+            <ObjectConfigData name="IUsuarioFacade" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Facade" class="Ingresso.BOS.AutenticacaoAutorizacao.Facade.Implementacao.UsuarioFacade" singleton="false" />
+            <ObjectConfigData name="IPermissaoFacade" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Facade" class="Ingresso.BOS.AutenticacaoAutorizacao.Facade.Implementacao.PermissaoFacade" singleton="false" />
+            <ObjectConfigData name="IFuncionalidadeFacade" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Facade" class="Ingresso.BOS.AutenticacaoAutorizacao.Facade.Implementacao.FuncionalidadeFacade" singleton="false" />
+            <ObjectConfigData name="IAuthenticationFacade" assembly="Ingresso.BOS.AutenticacaoAutorizacao.Facade" class="Ingresso.BOS.AutenticacaoAutorizacao.Facade.Implementacao.AuthenticationFacade" singleton="false" />
+
+          </objects>
+        </FactoryConfigData>
+
+        <FactoryConfigData name="ConfigMov" factoryClass="GenericFactory">
+          <objects>
+
+            <!--Dalc -->
+            <ObjectConfigData name="UnitOfWork" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.ConfigMovUnitOfWork" singleton="false" />
+            <ObjectConfigData name="IAcrescimoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.AcrescimoRepository" singleton="false" />
+            <ObjectConfigData name="ICalendarioVendaProdutoClasseRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.CalendarioVendaProdutoClasseRepository" singleton="false" />
+            <ObjectConfigData name="ICampanhaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.CampanhaRepository" singleton="false" />
+            <ObjectConfigData name="ICaracteristicaProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.CaracteristicaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="ICaracteristicaProdutoTipoMovOperacionalRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.CaracteristicaProdutoTipoMovOperacionalRepository" singleton="false" />
+            <ObjectConfigData name="ICartazRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.CartazRepository" singleton="false" />
+            <ObjectConfigData name="ICategoriaProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.CategoriaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IClassificacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ClassificacaoRepository" singleton="false" />
+            <ObjectConfigData name="IClassificacaoProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ClassificacaoProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IComercialRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ComercialRepository" singleton="false" />
+            <ObjectConfigData name="IComposicaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ComposicaoRepository" singleton="false" />
+            <ObjectConfigData name="IComposicaoIngressoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ComposicaoIngressoRepository" singleton="false" />
+            <ObjectConfigData name="IConfiguracaoVendaProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ConfiguracaoVendaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IContratoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ContratoRepository" singleton="false" />
+            <ObjectConfigData name="IConcentradorProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ConcentradorProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IConcentradorProdutoDetalheRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ConcentradorProdutoDetalheRepository" singleton="false" />
+            <ObjectConfigData name="IConcentradorItemDTORepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ConcentradorItemDTORepository" singleton="false" />
+            <ObjectConfigData name="IConversaoUnidadeRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ConversaoUnidadeRepository" singleton="false" />
+            <ObjectConfigData name="ICopiaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.CopiaRepository" singleton="false" />
+            <ObjectConfigData name="IDevolucaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.DevolucaoRepository" singleton="false" />
+            <ObjectConfigData name="IDepartamentoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.DepartamentoRepository" singleton="false" />
+            <ObjectConfigData name="IDescontoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.DescontoRepository" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoComposicaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.EstabelecimentoComposicaoRepository" singleton="false" />
+            <ObjectConfigData name="IEventoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.EventoRepository" singleton="false" />
+            <ObjectConfigData name="IEventoCidadeRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.EventoCidadeRepository" singleton="false" />
+            <ObjectConfigData name="IEventoEstabelecimentoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.EventoEstabelecimentoRepository" singleton="false" />
+            <ObjectConfigData name="IEventoFornecedorRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.EventoFornecedorRepository" singleton="false" />
+            <ObjectConfigData name="IEventoParticipanteRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.EventoParticipanteRepository" singleton="false" />
+            <ObjectConfigData name="IEventoProgramadoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.EventoProgramadoRepository" singleton="false" />
+            <ObjectConfigData name="IEventoProgramadoPeriodoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.EventoProgramadoPeriodoRepository" singleton="false" />
+            <ObjectConfigData name="IFormaPagamentoProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.FormaPagamentoProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IFormaValidacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.FormaValidacaoRepository" singleton="false" />
+            <ObjectConfigData name="IFormaValidacaoTipoValidacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.FormaValidacaoTipoValidacaoRepository" singleton="false" />
+            <ObjectConfigData name="IGeneroRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.GeneroRepository" singleton="false" />
+            <ObjectConfigData name="IGrupoProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.GrupoProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IGrupoProdutoObservacaoVendaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.GrupoProdutoObservacaoVendaRepository" singleton="false" />
+            <ObjectConfigData name="ICreateGrupoProdutoCaracteristicaProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.CreateGrupoProdutoCaracteristicaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IGrupoProdutoCaracteristicaProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.GrupoProdutoCaracteristicaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IGrupoTributacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.GrupoTributacaoRepository" singleton="false" />
+            <ObjectConfigData name="IGrupoTributacaoAliquotaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.GrupoTributacaoAliquotaRepository" singleton="false" />
+            <ObjectConfigData name="IGrupoTributacaoNCMRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.GrupoTributacaoNCMRepository" singleton="false" />
+            <ObjectConfigData name="IIngressoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.IngressoRepository" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.IngressoEspecialRepository" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialCupomRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.IngressoEspecialCupomRepository" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialDiaSemanaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.IngressoEspecialDiaSemanaRepository" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialFormaPagamentoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.IngressoEspecialFormaPagamentoRepository" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.IngressoEspecialProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialValidacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.IngressoEspecialValidacaoRepository" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialValidacaoValorRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.IngressoEspecialValidacaoValorRepository" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialVigenciaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.IngressoEspecialVigenciaRepository" singleton="false" />
+            <ObjectConfigData name="IItemCaracteristicaProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ItemCaracteristicaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IItemVendaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ItemVendaRepository" singleton="false" />
+            <ObjectConfigData name="IListaValoresRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ListaValoresRepository" singleton="false" />
+            <ObjectConfigData name="IMarcaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.MarcaRepository" singleton="false" />
+            <ObjectConfigData name="INatOperSituacaoTributariaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.NatOperSituacaoTributariaRepository" singleton="false" />
+            <ObjectConfigData name="INaturezaOperacionalRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.NaturezaOperacionalRepository" singleton="false" />
+            <ObjectConfigData name="INaturezaOperTpMovOperacionalRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.NaturezaOperTpMovOperacionalRepository" singleton="false" />
+            <ObjectConfigData name="IObservacaoVendaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ObservacaoVendaRepository" singleton="false" />
+            <ObjectConfigData name="IOrigemMercadoriaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.OrigemMercadoriaRepository" singleton="false" />
+            <ObjectConfigData name="IParticipanteRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ParticipanteRepository" singleton="false" />
+            <ObjectConfigData name="IParticipanteTipoParticipanteRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ParticipanteTipoParticipanteRepository" singleton="false" />
+            <ObjectConfigData name="IPersonalizacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.PersonalizacaoRepository" singleton="false" />
+            <ObjectConfigData name="IPrecoPadraoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.PrecoPadraoRepository" singleton="false" />
+            <ObjectConfigData name="IProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IProdutoFornecedorRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ProdutoFornecedorRepository" singleton="false" />
+            <ObjectConfigData name="IProdutoFornecedorUnidadeRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ProdutoFornecedorUnidadeRepository" singleton="false" />
+            <ObjectConfigData name="IItemReceitaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ItemReceitaRepository" singleton="false" />
+            <ObjectConfigData name="IProdutoSituacaoUnidadeRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ProdutoSituacaoUnidadeRepository" singleton="false" />
+            <ObjectConfigData name="IPropagandaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.PropagandaRepository" singleton="false" />
+            <ObjectConfigData name="IPropagandaCopiaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.PropagandaCopiaRepository" singleton="false" />
+            <ObjectConfigData name="IPropagandaCopiaEstabelecimentoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.PropagandaCopiaEstabelecimentoRepository" singleton="false" />
+            <ObjectConfigData name="IReceitaGrupoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ReceitaGrupoRepository" singleton="false" />
+            <ObjectConfigData name="IReceitaProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ReceitaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IRelacionamentoUnidadeRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.RelacionamentoUnidadeRepository" singleton="false" />
+            <ObjectConfigData name="IRemarcacaoPrecoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.RemarcacaoPrecoRepository" singleton="false" />
+            <ObjectConfigData name="IRemarcacaoPrecoCalendarioRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.RemarcacaoPrecoCalendarioRepository" singleton="false" />
+            <ObjectConfigData name="IRemarcacaoPrecoClasseRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.RemarcacaoPrecoClasseRepository" singleton="false" />            
+            <ObjectConfigData name="ISessaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.SessaoRepository" singleton="false" />
+            <ObjectConfigData name="ISituacaoTributariaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.SituacaoTributariaRepository" singleton="false" />
+            <ObjectConfigData name="ISetorBomboniereRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.SetorBomboniereRepository" singleton="false" />
+            <ObjectConfigData name="ISubTipoEspecialRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.SubTipoEspecialRepository" singleton="false" />
+            <ObjectConfigData name="ITipoCaracteristicaProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoCaracteristicaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoCopiaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoCopiaRepository" singleton="false" />
+            <ObjectConfigData name="ITipoEntregaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoEntregaRepository" singleton="false" />
+            <ObjectConfigData name="ITipoEspecialRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoEspecialRepository" singleton="false" />
+            <ObjectConfigData name="ITipoEventoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoEventoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoEventoSiteRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoEventoSiteRepository" singleton="false" />
+            <ObjectConfigData name="ITipoExibicaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoExibicaoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoExibicaoCompostoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoExibicaoCompostoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoLegendaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoLegendaRepository" singleton="false" />
+            <ObjectConfigData name="ITipoLenteRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoLenteRepository" singleton="false" />
+            <ObjectConfigData name="ITipoProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoProdutoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoParticipanteRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoParticipanteRepository" singleton="false" />
+            <ObjectConfigData name="ITipoProgramacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoProgramacaoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoProgDiaSemanaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoProgDiaSemanaRepository" singleton="false" />
+            <ObjectConfigData name="ITipoSomRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoSomRepository" singleton="false" />
+            <ObjectConfigData name="ITipoValidacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoValidacaoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoVendaProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoVendaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IUnidadeMedidaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.UnidadeMedidaRepository" singleton="false" />
+            <ObjectConfigData name="IValoresValidacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ValoresValidacaoRepository" singleton="false" />
+            <ObjectConfigData name="ITributacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TributacaoRepository" singleton="false" />
+            <ObjectConfigData name="IConfiguracaoTributacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ConfiguracaoTributacaoRepository" singleton="false" />
+            <ObjectConfigData name="ITributacaoAliquotaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TributacaoAliquotaRepository" singleton="false" />
+            <ObjectConfigData name="IPerfilVendaProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.PerfilVendaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IProdutoCaracteristicaProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ProdutoCaracteristicaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IProdutoItemCaractProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ProdutoItemCaractProdutoRepository" singleton="false" />
+            <ObjectConfigData name="ICodigoBarraProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.CodigoBarraProdutoRepository" singleton="false" />
+            <ObjectConfigData name="ICompetenciaTributoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.CompetenciaTributoRepository" singleton="false" />
+            <ObjectConfigData name="ITributacaoTipoMovOperacionalRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TributacaoTipoMovOperacionalRepository" singleton="false" />
+            <ObjectConfigData name="ITraillerRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TraillerRepository" singleton="false" />
+            <ObjectConfigData name="ITraillerMidiaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TraillerMidiaRepository" singleton="false" />
+            <ObjectConfigData name="ITraillerMidiaCanalVendaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TraillerMidiaCanalVendaRepository" singleton="false" />
+            <ObjectConfigData name="IEstabDescontoIngressoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.EstabDescontoIngressoRepository" singleton="false" />
+            <ObjectConfigData name="IClassePrecoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ClassePrecoRepository" singleton="false" />
+            <ObjectConfigData name="IClasseHorarioRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ClasseHorarioRepository" singleton="false" />
+            <ObjectConfigData name="IClasseHorarioDiaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ClasseHorarioDiaRepository" singleton="false" />     
+            <ObjectConfigData name="IClassePrecoCustomizadoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ClassePrecoCustomizadoRepository" singleton="false" />            
+            <ObjectConfigData name="IClassePrecoCustomizadoValorRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ClassePrecoCustomizadoValorRepository" singleton="false" />
+            <ObjectConfigData name="IClassePrecoValorRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ClassePrecoValorRepository" singleton="false" />
+            <ObjectConfigData name="IMixProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.MixProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IMixProdutoClasseRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.MixProdutoClasseRepository" singleton="false" />
+            <ObjectConfigData name="IProdutoMixProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ProdutoMixProdutoRepository" singleton="false" />
+            <ObjectConfigData name="ITelaVendaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TelaVendaRepository" singleton="false" />
+            <ObjectConfigData name="ITelaVendaItemRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TelaVendaItemRepository" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoIngressoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.EstabelecimentoIngressoRepository" singleton="false" />
+            <ObjectConfigData name="IDispositivoAcessoIngressoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.DispositivoAcessoIngressoRepository" singleton="false" />
+            <ObjectConfigData name="ICanalVendaIngressoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.CanalVendaIngressoRepository" singleton="false" />
+            <ObjectConfigData name="IImpressoraComandaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ImpressoraComandaRepository" singleton="false" />
+            <ObjectConfigData name="IDestinoComandaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.DestinoComandaRepository" singleton="false" />
+            <ObjectConfigData name="IDestinoComandaProdutoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.DestinoComandaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="ISetorBombEstabelecimentoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.SetorBombEstabelecimentoRepository" singleton="false" />
+            <ObjectConfigData name="IImpressoraComandaSetorBomboniereEstabelecimentoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ImpressoraComandaSetorBomboniereEstabelecimentoRepository" singleton="false" />
+            <ObjectConfigData name="IProdutoPorEstabelecimentoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ProdutoPorEstabelecimentoRepository" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoProdutoDTORepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.EstabelecimentoProdutoDTORepository" singleton="false" />
+            <ObjectConfigData name="IProdutoReceitaDTORepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ProdutoReceitaDTORepository" singleton="false" />
+            <ObjectConfigData name="IClassificacaoIndicativaRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ClassificacaoIndicativaRepository" singleton="false" />
+            <ObjectConfigData name="ICriterioClassificacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.CriterioClassificacaoRepository" singleton="false" />
+            <ObjectConfigData name="ISubEstoqueRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.SubEstoqueRepository" singleton="false" />
+            <ObjectConfigData name="ISubEstoqueEstabelecimentoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.SubEstoqueEstabelecimentoRepository" singleton="false" />
+            <ObjectConfigData name="IProdutoTributacaoporEstadoDTORepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ProdutoTributacaoPorEstadoDTORepository" singleton="false" />
+            <ObjectConfigData name="ITipoComentarioRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.TipoComentarioRepository" singleton="false" />
+            <ObjectConfigData name="IDiretrizProgramacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.DiretrizProgramacaoRepository" singleton="false" />
+            <ObjectConfigData name="IComentarioDiretrizProgramacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.ComentarioDiretrizProgramacaoRepository" singleton="false" />
+            <ObjectConfigData name="IGeradorProgramacaoRepository" assembly="Ingresso.Central.ConfigMov.Dalc" class="Ingresso.Central.ConfigMov.Dalc.Implementacao.GeradorProgramacaoRepository" singleton="false" />
+
+
+
+
+            <!-- Business -->
+            <ObjectConfigData name="ICampanhaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.CampanhaBusiness" singleton="false" />
+            <ObjectConfigData name="ICaracteristicaProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.CaracteristicaProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="IConfiguracaoVendaProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ConfiguracaoVendaProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="IContratoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ContratoBusiness" singleton="false" />
+            <ObjectConfigData name="IConcentradorProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ConcentradorProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="IConversaoUnidadeBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ConversaoUnidadeBusiness" singleton="false" />
+            <ObjectConfigData name="ICartazBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.CartazBusiness" singleton="false" />
+            <ObjectConfigData name="ICanalVendaIngressoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.CanalVendaIngressoBusiness" singleton="false" />
+            <ObjectConfigData name="IDevolucaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.DevolucaoBusiness" singleton="false" />
+            <ObjectConfigData name="IEventoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.EventoBusiness" singleton="false" />
+            <ObjectConfigData name="IEventoCidadeBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.EventoCidadeBusiness" singleton="false" />
+            <ObjectConfigData name="IEventoFornecedorBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.EventoFornecedorBusiness" singleton="false" />
+            <ObjectConfigData name="IFormaValidacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.FormaValidacaoBusiness" singleton="false" />
+            <ObjectConfigData name="IFormaValidacaoTipoValidacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.FormaValidacaoTipoValidacaoBusiness" singleton="false" />
+            <ObjectConfigData name="IFormaValidacaoTipoVendaProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.FormaValidacaoTipoVendaProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="IGrupoProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.GrupoProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="IGrupoTributacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.GrupoTributacaoBusiness" singleton="false" />
+            <ObjectConfigData name="IIngressoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.IngressoBusiness" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.IngressoEspecialBusiness" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialCupomBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.IngressoEspecialCupomBusiness" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialValidacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.IngressoEspecialValidacaoBusiness" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialVigenciaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.IngressoEspecialVigenciaBusiness" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialVigencialBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.IngressoEspecialVigencialBusiness" singleton="false" />
+            <ObjectConfigData name="IMarcaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.MarcaBusiness" singleton="false" />
+            <ObjectConfigData name="INaturezaOperacionalBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.NaturezaOperacionalBusiness" singleton="false" />
+            <ObjectConfigData name="IObservacaoVendaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ObservacaoVendaBusiness" singleton="false" />
+            <ObjectConfigData name="IOrigemMercadoriaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.OrigemMercadoriaBusiness" singleton="false" />
+            <ObjectConfigData name="IPrecoPadraoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.PrecoPadraoBusiness" singleton="false" />
+            <ObjectConfigData name="IProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="IRelacionamentoUnidadeBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.RelacionamentoUnidadeBusiness" singleton="false" />
+            <ObjectConfigData name="IRemarcacaoPrecoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.RemarcacaoPrecoBusiness" singleton="false" />
+            <ObjectConfigData name="ISetorBomboniereBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.SetorBomboniereBusiness" singleton="false" />
+            <ObjectConfigData name="ISituacaoTributariaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.SituacaoTributariaBusiness" singleton="false" />
+            <ObjectConfigData name="ISubTipoEspecialBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.SubTipoEspecialBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoEspecialBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoEspecialBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoExibicaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoExibicaoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoSomBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoSomBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoLenteBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoLenteBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoLegendaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoLegendaBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoValidacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoValidacaoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoVendaProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoVendaProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="IValoresValidacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ValoresValidacaoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoCaracteristicaProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoCaracteristicaProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoEventoSiteBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoEventoSiteBusiness" singleton="false" />
+            <ObjectConfigData name="IUnidadeMedidaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.UnidadeMedidaBusiness" singleton="false" />
+            <ObjectConfigData name="IGeneroBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.GeneroBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoEventoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoEventoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoProgDiaSemanaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoProgDiaSemanaBusiness" singleton="false" />
+            <ObjectConfigData name="IDepartamentoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.DepartamentoBusiness" singleton="false" />
+            <ObjectConfigData name="IPersonalizacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.PersonalizacaoBusiness" singleton="false" />
+            <ObjectConfigData name="ICategoriaProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.CategoriaProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="IClassificacaoProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ClassificacaoProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="IReceitaProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ReceitaProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoParticipanteBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoParticipanteBusiness" singleton="false" />
+            <ObjectConfigData name="IDescontoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.DescontoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoEntregaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoEntregaBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoCopiaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoCopiaBusiness" singleton="false" />
+            <ObjectConfigData name="ITributacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TributacaoBusiness" singleton="false" />
+            <ObjectConfigData name="IConfiguracaoTributacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ConfiguracaoTributacaoBusiness" singleton="false" />
+            <ObjectConfigData name="ITributacaoAliquotaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TributacaoAliquotaBusiness" singleton="false" />
+            <ObjectConfigData name="IProdutoItemCaractProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ProdutoItemCaractProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="IItemReceitaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ItemReceitaBusiness" singleton="false" />
+            <ObjectConfigData name="ICodigoBarraProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.CodigoBarraProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="ICompetenciaTributoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.CompetenciaTributoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoProgramacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoProgramacaoBusiness" singleton="false" />
+            <ObjectConfigData name="IConcentradorProdutoDetalheBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ConcentradorProdutoDetalheBusiness" singleton="false" />
+            <ObjectConfigData name="IComercialBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ComercialBusiness" singleton="false" />
+            <ObjectConfigData name="IPropagandaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.PropagandaBusiness" singleton="false" />
+            <ObjectConfigData name="IPropagandaCopiaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.PropagandaCopiaBusiness" singleton="false" />
+            <ObjectConfigData name="ITraillerBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TraillerBusiness" singleton="false" />
+            <ObjectConfigData name="ITraillerMidiaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TraillerMidiaBusiness" singleton="false" />
+            <ObjectConfigData name="ITraillerMidiaCanalVendaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TraillerMidiaCanalVendaBusiness" singleton="false" />
+            <ObjectConfigData name="ICopiaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.CopiaBusiness" singleton="false" />
+            <ObjectConfigData name="IParticipanteBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ParticipanteBusiness" singleton="false" />
+            <ObjectConfigData name="IEventoParticipanteBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.EventoParticipanteBusiness" singleton="false" />
+            <ObjectConfigData name="IEstabDescontoIngressoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.EstabDescontoIngressoBusiness" singleton="false" />
+            <ObjectConfigData name="ITributacaoTipoMovOperacionalBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TributacaoTipoMovOperacionalBusiness" singleton="false" />
+            <ObjectConfigData name="ICalendarioVendaProdutoClasseBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.CalendarioVendaProdutoClasseBusiness" singleton="false" />
+            <ObjectConfigData name="IRemarcacaoPrecoCalendarioBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.RemarcacaoPrecoCalendarioBusiness" singleton="false" />
+            <ObjectConfigData name="IAcrescimoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.AcrescimoBusiness" singleton="false" />
+            <ObjectConfigData name="IClassePrecoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ClassePrecoBusiness" singleton="false" />
+            <ObjectConfigData name="IClasseHorarioBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ClasseHorarioBusiness" singleton="false" />
+            <ObjectConfigData name="IClassePrecoCustomizadoValorBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ClassePrecoCustomizadoValorBusiness" singleton="false" />     
+            <ObjectConfigData name="IClassePrecoValorBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ClassePrecoValorBusiness" singleton="false" />
+            <ObjectConfigData name="IMixProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.MixProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="IProdutoFornecedorBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ProdutoFornecedorBusiness" singleton="false" />
+            <ObjectConfigData name="IProdutoMixProdutoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ProdutoMixProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="ITelaVendaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TelaVendaBusiness" singleton="false" />
+            <ObjectConfigData name="ITelaVendaItemBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TelaVendaItemBusiness" singleton="false" />
+            <ObjectConfigData name="IReceitaGrupoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ReceitaGrupoBusiness" singleton="false" />
+            <ObjectConfigData name="IImpressoraComandaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ImpressoraComandaBusiness" singleton="false" />
+            <ObjectConfigData name="IDestinoComandaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.DestinoComandaBusiness" singleton="false" />
+            <ObjectConfigData name="ISetorBombEstabelecimentoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.SetorBombEstabelecimentoBusiness" singleton="false" />
+            <ObjectConfigData name="IMixProdutoClasseBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.MixProdutoClasseBusiness" singleton="false" />
+            <ObjectConfigData name="IProdutoPorEstabelecimentoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ProdutoPorEstabelecimentoBusiness" singleton="false" />
+            <ObjectConfigData name="IClassificacaoIndicativaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ClassificacaoIndicativaBusiness" singleton="false" />
+            <ObjectConfigData name="ICriterioClassificacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.CriterioClassificacaoBusiness" singleton="false" />
+            <ObjectConfigData name="ISubEstoqueBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.SubEstoqueBusiness" singleton="false" />
+            <ObjectConfigData name="IProdutoTributacaoPorEstadoDTOBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ProdutoTributacaoPorEstadoDTOBusiness" singleton="false" />
+            <ObjectConfigData name="IGrupoTributacaoAliquotaBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.GrupoTributacaoAliquotaBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoComentarioBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.TipoComentarioBusiness" singleton="false" />
+            <ObjectConfigData name="IDiretrizProgramacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.DiretrizProgramacaoBusiness" singleton="false" />
+            <ObjectConfigData name="IComentarioDiretrizProgramacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.ComentarioDiretrizProgramacaoBusiness" singleton="false" />
+            <ObjectConfigData name="IGeradorProgramacaoBusiness" assembly="Ingresso.Central.ConfigMov.Business" class="Ingresso.Central.ConfigMov.Business.Implementacao.GeradorProgramacaoBusiness" singleton="false" />
+
+            <!-- Facade -->
+            <ObjectConfigData name="ICampanhaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.CampanhaFacade" singleton="false" />
+            <ObjectConfigData name="ICaracteristicaProdutoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.CaracteristicaProdutoFacade" singleton="false" />
+            <ObjectConfigData name="IContratoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ContratoFacade" singleton="false" />
+            <ObjectConfigData name="IConcentradorProdutoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ConcentradorProdutoFacade" singleton="false" />
+            <ObjectConfigData name="IDevolucaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.DevolucaoFacade" singleton="false" />
+            <ObjectConfigData name="IEventoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.EventoFacade" singleton="false" />
+            <ObjectConfigData name="IFormaValidacaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.FormaValidacaoFacade" singleton="false" />
+            <ObjectConfigData name="IGrupoProdutoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.GrupoProdutoFacade" singleton="false" />
+            <ObjectConfigData name="IGrupoTributacaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.GrupoTributacaoFacade" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialCupomFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.IngressoEspecialCupomFacade" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.IngressoEspecialFacade" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialValidacaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.IngressoEspecialValidacaoFacade" singleton="false" />
+            <ObjectConfigData name="IIngressoEspecialVigenciaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.IngressoEspecialVigenciaFacade" singleton="false" />
+            <ObjectConfigData name="IIngressoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.IngressoFacade" singleton="false" />
+            <ObjectConfigData name="IMarcaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.MarcaFacade" singleton="false" />
+            <ObjectConfigData name="INaturezaOperacionalFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.NaturezaOperacionalFacade" singleton="false" />
+            <ObjectConfigData name="IObservacaoVendaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ObservacaoVendaFacade" singleton="false" />
+            <ObjectConfigData name="IOrigemMercadoriaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.OrigemMercadoriaFacade" singleton="false" />
+            <ObjectConfigData name="IPrecoPadraoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.PrecoPadraoFacade" singleton="false" />
+            <ObjectConfigData name="IProdutoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ProdutoFacade" singleton="false" />
+            <ObjectConfigData name="IProdutoAssociacaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ProdutoAssociacaoFacade" singleton="false" />
+            <ObjectConfigData name="IRelacionamentoUnidadeFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.RelacionamentoUnidadeFacade" singleton="false" />
+            <ObjectConfigData name="IRemarcacaoPrecoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.RemarcacaoPrecoFacade" singleton="false" />
+            <ObjectConfigData name="ISetorBomboniereFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.SetorBomboniereFacade" singleton="false" />
+            <ObjectConfigData name="ISituacaoTributariaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.SituacaoTributariaFacade" singleton="false" />
+            <ObjectConfigData name="ISubTipoEspecialFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.SubTipoEspecialFacade" singleton="false" />
+            <ObjectConfigData name="ITipoEspecialFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoEspecialFacade" singleton="false" />
+            <ObjectConfigData name="ITipoExibicaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoExibicaoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoSomFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoSomFacade" singleton="false" />
+            <ObjectConfigData name="ITipoLenteFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoLenteFacade" singleton="false" />
+            <ObjectConfigData name="ITipoLegendaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoLegendaFacade" singleton="false" />
+            <ObjectConfigData name="ITipoProgDiaSemanaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoProgDiaSemanaFacade" singleton="false" />
+            <ObjectConfigData name="ITipoValidacaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoValidacaoFacade" singleton="false" />
+            <ObjectConfigData name="IValoresValidacaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ValoresValidacaoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoEventoSiteFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoEventoSiteFacade" singleton="false" />
+            <ObjectConfigData name="IUnidadeMedidaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.UnidadeMedidaFacade" singleton="false" />
+            <ObjectConfigData name="IGeneroFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.GeneroFacade" singleton="false" />
+            <ObjectConfigData name="ITipoEventoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoEventoFacade" singleton="false" />
+            <ObjectConfigData name="IDepartamentoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.DepartamentoFacade" singleton="false" />
+            <ObjectConfigData name="IPersonalizacaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.PersonalizacaoFacade" singleton="false" />
+            <ObjectConfigData name="ICategoriaProdutoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.CategoriaProdutoFacade" singleton="false" />
+            <ObjectConfigData name="IClassificacaoProdutoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ClassificacaoProdutoFacade" singleton="false" />
+            <ObjectConfigData name="IReceitaProdutoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ReceitaProdutoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoProdutoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoProdutoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoParticipanteFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoParticipanteFacade" singleton="false" />
+            <ObjectConfigData name="ITipoEntregaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoEntregaFacade" singleton="false" />
+            <ObjectConfigData name="ITipoCopiaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoCopiaFacade" singleton="false" />
+            <ObjectConfigData name="ITributacaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TributacaoFacade" singleton="false" />
+            <ObjectConfigData name="IClassePrecoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ClassePrecoFacade" singleton="false" />
+            <ObjectConfigData name="IClasseHorarioFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ClasseHorarioFacade" singleton="false" />
+            <ObjectConfigData name="ITributacaoTipoMovOperacionalFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TributacaoTipoMovOperacionalFacade" singleton="false" />
+            <ObjectConfigData name="IConfiguracaoTributacaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ConfiguracaoTributacaoFacade" singleton="false" />
+            <ObjectConfigData name="ITributacaoAliquotaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TributacaoAliquotaFacade" singleton="false" />
+            <ObjectConfigData name="IItemCaracteristicaProdutoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ItemCaracteristicaProdutoFacade" singleton="false" />
+            <ObjectConfigData name="IProdutoItemCaractProdutoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ProdutoItemCaractProdutoFacade" singleton="false" />
+            <ObjectConfigData name="ICodigoBarraProdutoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.CodigoBarraProdutoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoProgramacaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoProgramacaoFacade" singleton="false" />
+            <ObjectConfigData name="ITributacaoTipoSistemaVendaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TributacaoTipoSistemaVendaFacade" singleton="false" />
+            <ObjectConfigData name="IComercialFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ComercialFacade" singleton="false" />
+            <ObjectConfigData name="IDescontoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.DescontoFacade" singleton="false" />
+            <ObjectConfigData name="IPropagandaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.PropagandaFacade" singleton="false" />
+            <ObjectConfigData name="IParticipanteFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ParticipanteFacade" singleton="false" />
+            <ObjectConfigData name="IAcrescimoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.AcrescimoFacade" singleton="false" />
+            <ObjectConfigData name="IMixProdutoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.MixProdutoFacade" singleton="false" />
+            <ObjectConfigData name="ITelaVendaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TelaVendaFacade" singleton="false" />
+            <ObjectConfigData name="IEstabDescontoIngressoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.EstabDescontoIngressoFacade" singleton="false" />
+            <ObjectConfigData name="IImpressoraComandaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ImpressoraComandaFacade" singleton="false" />
+            <ObjectConfigData name="IDestinoComandaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.DestinoComandaFacade" singleton="false" />
+            <ObjectConfigData name="IProdutoPorEstabelecimentoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ProdutoPorEstabelecimentoFacade" singleton="false" />
+            <ObjectConfigData name="IClassificacaoIndicativaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ClassificacaoIndicativaFacade" singleton="false" />
+            <ObjectConfigData name="ICriterioClassificacaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.CriterioClassificacaoFacade" singleton="false" />
+            <ObjectConfigData name="ISubEstoqueFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.SubEstoqueFacade" singleton="false" />
+            <ObjectConfigData name="ITipoComentarioFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.TipoComentarioFacade" singleton="false" />
+            <ObjectConfigData name="IProgramacaoFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ProgramacaoFacade" singleton="false" />
+            <ObjectConfigData name="IProgramacaoGerenciaFacade" assembly="Ingresso.Central.ConfigMov.Facade" class="Ingresso.Central.ConfigMov.Facade.Implementacao.ProgramacaoGerenciaFacade" singleton="false" />
+
+          </objects>
+        </FactoryConfigData>
+
+        <FactoryConfigData name="Operacao" factoryClass="GenericFactory">
+          <objects>
+
+            <!--Dalc -->
+            <ObjectConfigData name="UnitOfWork" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.OperacaoUnitOfWork" singleton="false" />
+            <ObjectConfigData name="IAgrupadorNCMRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.AgrupadorNCMRepository" singleton="false" />
+            <ObjectConfigData name="IAjusteDepositoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.AjusteDepositoRepository" singleton="false" />
+            <ObjectConfigData name="IBandeiraRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.BandeiraRepository" singleton="false" />
+            <ObjectConfigData name="IBandeiraIdentificadorRedeRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.BandeiraIdentificadorRedeRepository" singleton="false" />
+            <ObjectConfigData name="ICaixaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.CaixaRepository" singleton="false" />
+            <ObjectConfigData name="ICaixaDetalheRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.CaixaDetalheRepository" singleton="false" />
+            <ObjectConfigData name="ICaixaFormaPagamentoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.CaixaFormaPagamentoRepository" singleton="false" />
+            <ObjectConfigData name="ICalendarioRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.CalendarioRepository" singleton="false" />
+            <ObjectConfigData name="ICalendarioConfiguracaoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.CalendarioConfiguracaoRepository" singleton="false" />
+            <ObjectConfigData name="ICanalVendaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.CanalVendaRepository" singleton="false" />
+            <ObjectConfigData name="ICineSemanaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.CineSemanaRepository" singleton="false" />
+            <ObjectConfigData name="IConfiguracaoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.ConfiguracaoRepository" singleton="false" />
+            <ObjectConfigData name="IConsultaCaixaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.ConsultaCaixaRepository" singleton="false" />
+            <ObjectConfigData name="IDepositoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.DepositoRepository" singleton="false" />
+            <ObjectConfigData name="IEstabelecimentoConfRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.EstabelecimentoConfRepository" singleton="false" />
+            <ObjectConfigData name="IEstacaoLocalRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.EstacaoLocalRepository" singleton="false" />
+            <ObjectConfigData name="IEstacaoVendaModeloImpressoraRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.EstacaoVendaModeloImpressoraRepository" singleton="false" />
+            <ObjectConfigData name="IEstacaoVendaPadraoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.EstacaoVendaPadraoRepository" singleton="false" />
+            <ObjectConfigData name="IEstacaoVendaPerfilRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.EstacaoVendaPerfilRepository" singleton="false" />
+            <ObjectConfigData name="IEstacaoVendaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.EstacaoVendaRepository" singleton="false" />
+            <ObjectConfigData name="IFormaPagamentoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.FormaPagamentoRepository" singleton="false" />
+            <ObjectConfigData name="IFormaPgtoBandeiraRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.FormaPgtoBandeiraRepository" singleton="false" />
+            <ObjectConfigData name="IIdentificadorRedeRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.IdentificadorRedeRepository" singleton="false" />
+            <ObjectConfigData name="IJustificativaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.JustificativaRepository" singleton="false" />
+            <ObjectConfigData name="IMapaEstacaoVendaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.MapaEstacaoVendaRepository" singleton="false" />
+            <ObjectConfigData name="IMapaResumoTributacaoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.MapaResumoTributacaoRepository" singleton="false" />
+            <ObjectConfigData name="IMapaResumoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.MapaResumoRepository" singleton="false" />
+            <ObjectConfigData name="IMediaSalaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.MediaSalaRepository" singleton="false" />
+            <ObjectConfigData name="IMesaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.MesaRepository" singleton="false" />
+            <ObjectConfigData name="IMotivoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.MotivoRepository" singleton="false" />
+            <ObjectConfigData name="INCMRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.NCMRepository" singleton="false" />
+            <ObjectConfigData name="IOperacaoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.OperacaoRepository" singleton="false" />
+            <ObjectConfigData name="IOperacaoCaixaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.OperacaoCaixaRepository" singleton="false" />
+            <ObjectConfigData name="IOutroMontanteRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.OutroMontanteRepository" singleton="false" />
+            <ObjectConfigData name="IPerfilVendaAreaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.PerfilVendaAreaRepository" singleton="false" />
+            <ObjectConfigData name="IPerfilVendaIngressoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.PerfilVendaIngressoRepository" singleton="false" />
+            <ObjectConfigData name="IPerfilVendaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.PerfilVendaRepository" singleton="false" />
+            <ObjectConfigData name="IPerfilVendaProdutoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.PerfilVendaProdutoRepository" singleton="false" />
+            <ObjectConfigData name="IPeriodoDiaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.PeriodoDiaRepository" singleton="false" />
+            <ObjectConfigData name="IRecorrenciaCalendarioRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.RecorrenciaCalendarioRepository" singleton="false" />
+            <ObjectConfigData name="ISistemaConfRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.SistemaConfRepository" singleton="false" />
+            <ObjectConfigData name="ISituacaoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.SituacaoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoBloqueioRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TipoBloqueioRepository" singleton="false" />
+            <ObjectConfigData name="ITipoCalendarioRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TipoCalendarioRepository" singleton="false" />
+            <ObjectConfigData name="ITipoCanalVendaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TipoCanalVendaRepository" singleton="false" />
+            <ObjectConfigData name="ITipoCancelamentoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TipoCancelamentoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoOperacaoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TipoOperacaoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoPerdaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TipoPerdaRepository" singleton="false" />
+            <ObjectConfigData name="ITipoRecorrenciaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TipoRecorrenciaRepository" singleton="false" />
+            <ObjectConfigData name="ITipoSistemaVendaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TipoSistemaVendaRepository" singleton="false" />
+            <ObjectConfigData name="ITipoTefRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TipoTefRepository" singleton="false" />
+            <ObjectConfigData name="ITipoTransacaoAutomaticaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TipoTransacaoAutomaticaRepository" singleton="false" />
+            <ObjectConfigData name="ITributacaoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TributacaoRepository" singleton="false" />
+            <ObjectConfigData name="IWebServiceRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.WebServiceRepository" singleton="false" />
+            <ObjectConfigData name="ITipoControleRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TipoControleRepository" singleton="false" />
+            <ObjectConfigData name="ITipoVendaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.TipoVendaRepository" singleton="false" />
+            <ObjectConfigData name="IControleEventoSemanaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.ControleEventoSemanaRepository" singleton="false" />
+            <ObjectConfigData name="IVendaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.VendaRepository" singleton="false" />
+            <ObjectConfigData name="IVendaBilheteriaDetalheRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.VendaBilheteriaDetalheRepository" singleton="false" />
+            <ObjectConfigData name="IVendaBomboniereDetalheRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.VendaBomboniereDetalheRepository" singleton="false" />
+            <ObjectConfigData name="IVendaBomboniereReceitaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.VendaBomboniereReceitaRepository" singleton="false" />
+            <ObjectConfigData name="IVendaTemporariaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.VendaTemporariaRepository" singleton="false" />
+            <ObjectConfigData name="IFormaPgtoTipoSistemaVendaRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.FormaPgtoTipoSistemaVendaRepository" singleton="false" />
+            <ObjectConfigData name="IResumoMovimentacaoCaixaDTORepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.ResumoMovimentacaoCaixaDTORepository" singleton="false" />            
+            <ObjectConfigData name="IFechamentoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.FechamentoRepository" singleton="false" />
+            <ObjectConfigData name="IFechamentoHistoricoRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.FechamentoHistoricoRepository" singleton="false" />
+            <ObjectConfigData name="IFechamentoDetalheRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.FechamentoDetalheRepository" singleton="false" />
+            <ObjectConfigData name="IFechamentoComentarioRepository" assembly="Ingresso.Central.Operacao.Dalc" class="Ingresso.Central.Operacao.Dalc.Implementacao.FechamentoComentarioRepository" singleton="false" />
+           
+
+            <!-- Business -->
+            <ObjectConfigData name="IAgrupadorNCMBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.AgrupadorNCMBusiness" singleton="false" />
+            <ObjectConfigData name="IBandeiraBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.BandeiraBusiness" singleton="false" />
+            <ObjectConfigData name="ICanalVendaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.CanalVendaBusiness" singleton="false" />
+            <ObjectConfigData name="ICineSemanaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.CineSemanaBusiness" singleton="false" />            
+            <ObjectConfigData name="IEstacaoVendaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.EstacaoVendaBusiness" singleton="false" />
+            <ObjectConfigData name="ICalendarioBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.CalendarioBusiness" singleton="false" />
+            <ObjectConfigData name="ICaixaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.CaixaBusiness" singleton="false" />
+            <ObjectConfigData name="ICaixaDetalheBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.CaixaDetalheBusiness" singleton="false" />
+            <ObjectConfigData name="IConfiguracaoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.ConfiguracaoBusiness" singleton="false" />
+            <ObjectConfigData name="IDepositoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.DepositoBusiness" singleton="false" />
+            <ObjectConfigData name="IOperacaoCaixaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.OperacaoCaixaBusiness" singleton="false" />
+            <ObjectConfigData name="IMesaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.MesaBusiness" singleton="false" />
+            <ObjectConfigData name="IFormaPagamentoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.FormaPagamentoBusiness" singleton="false" />
+            <ObjectConfigData name="IIdentificadorRedeBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.IdentificadorRedeBusiness" singleton="false" />
+            <ObjectConfigData name="IMotivoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.MotivoBusiness" singleton="false" />
+            <ObjectConfigData name="INCMBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.NCMBusiness" singleton="false" />
+            <ObjectConfigData name="IOutroMontanteBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.OutroMontanteBusiness" singleton="false" />
+            <ObjectConfigData name="IPeriodoDiaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.PeriodoDiaBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoBloqueioBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.TipoBloqueioBusiness" singleton="false" />
+            <ObjectConfigData name="IOperacaoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.OperacaoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoSistemaVendaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.TipoSistemaVendaBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoTefBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.TipoTefBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoTransacaoAutomaticaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.TipoTransacaoAutomaticaBusiness" singleton="false" />
+            <ObjectConfigData name="IWebServiceBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.WebServiceBusiness" singleton="false" />
+            <ObjectConfigData name="IJustificativaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.JustificativaBusiness" singleton="false" />
+            <ObjectConfigData name="ISituacaoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.SituacaoBusiness" singleton="false" />            
+            <ObjectConfigData name="ITipoOperacaoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.TipoOperacaoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoPerdaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.TipoPerdaBusiness" singleton="false" />
+            <ObjectConfigData name="IEstacaoVendaPadraoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.EstacaoVendaPadraoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoCancelamentoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.TipoCancelamentoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoControleBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.TipoControleBusiness" singleton="false" />
+            <ObjectConfigData name="IPerfilVendaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.PerfilVendaBusiness" singleton="false" />
+            <ObjectConfigData name="IPerfilVendaProdutoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.PerfilVendaProdutoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoVendaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.TipoVendaBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoCanalVendaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.TipoCanalVendaBusiness" singleton="false" />
+            <ObjectConfigData name="IMapaResumoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.MapaResumoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoCalendarioBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.TipoCalendarioBusiness" singleton="false" />
+            <ObjectConfigData name="IControleEventoSemanaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.ControleEventoSemanaBusiness" singleton="false" />
+            <ObjectConfigData name="IPerfilVendaAreaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.PerfilVendaAreaBusiness" singleton="false" />
+            <ObjectConfigData name="IVendaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.VendaBusiness" singleton="false" />
+            <ObjectConfigData name="IVendaBomboniereDetalheBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.VendaBomboniereDetalheBusiness" singleton="false" />
+            <ObjectConfigData name="IVendaBomboniereReceitaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.VendaBomboniereReceitaBusiness" singleton="false" />
+            <ObjectConfigData name="IMapaResumoTributacaoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.MapaResumoTributacaoBusiness" singleton="false" />            
+            <ObjectConfigData name="IVendaBilheteriaDetalheBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.VendaBilheteriaDetalheBusiness" singleton="false" />
+            <ObjectConfigData name="IVendaTemporariaBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.VendaTemporariaBusiness" singleton="false" />
+            <ObjectConfigData name="IEstacaoVendaModeloImpressoraBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.EstacaoVendaModeloImpressoraBusiness" singleton="false" />
+            <ObjectConfigData name="IAjusteDepositoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.AjusteDepositoBusiness" singleton="false" />
+            <ObjectConfigData name="ICaixaFormaPagamentoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.CaixaFormaPagamentoBusiness" singleton="false" />
+            <ObjectConfigData name="IFechamentoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.FechamentoBusiness" singleton="false" />
+            <ObjectConfigData name="IFechamentoComentarioBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.FechamentoComentarioBusiness" singleton="false" />
+            <ObjectConfigData name="IFechamentoDetalheBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.FechamentoDetalheBusiness" singleton="false" />
+            <ObjectConfigData name="IFechamentoHistoricoBusiness" assembly="Ingresso.Central.Operacao.Business" class="Ingresso.Central.Operacao.Business.Implementacao.FechamentoHistoricoBusiness" singleton="false" />
+
+
+            <!-- Facade -->
+            <ObjectConfigData name="IAgrupadorNCMFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.AgrupadorNCMFacade" singleton="false" />
+            <ObjectConfigData name="IBandeiraFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.BandeiraFacade" singleton="false" />
+            <ObjectConfigData name="ICalendarioFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.CalendarioFacade" singleton="false" />
+            <ObjectConfigData name="ICanalVendaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.CanalVendaFacade" singleton="false" />
+            <ObjectConfigData name="ICaixaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.CaixaFacade" singleton="false" />
+            <ObjectConfigData name="IConfiguracaoFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.ConfiguracaoFacade" singleton="false" />
+            <ObjectConfigData name="IDepositoFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.DepositoFacade" singleton="false" />
+            <ObjectConfigData name="IOperacaoCaixaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.OperacaoCaixaFacade" singleton="false" />
+            <ObjectConfigData name="IEstacaoVendaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.EstacaoVendaFacade" singleton="false" />
+            <ObjectConfigData name="IMesaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.MesaFacade" singleton="false" />
+            <ObjectConfigData name="IFormaPagamentoFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.FormaPagamentoFacade" singleton="false" />
+            <ObjectConfigData name="IIdentificadorRedeFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.IdentificadorRedeFacade" singleton="false" />
+            <ObjectConfigData name="IMotivoFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.MotivoFacade" singleton="false" />
+            <ObjectConfigData name="INCMFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.NCMFacade" singleton="false" />
+            <ObjectConfigData name="IOutroMontanteFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.OutroMontanteFacade" singleton="false" />
+            <ObjectConfigData name="IPeriodoDiaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.PeriodoDiaFacade" singleton="false" />
+            <ObjectConfigData name="ITipoBloqueioFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.TipoBloqueioFacade" singleton="false" />
+            <ObjectConfigData name="IOperacaoFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.OperacaoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoTefFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.TipoTefFacade" singleton="false" />
+            <ObjectConfigData name="ITipoTransacaoAutomaticaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.TipoTransacaoAutomaticaFacade" singleton="false" />            
+            <ObjectConfigData name="IWebServiceFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.WebServiceFacade" singleton="false" />
+            <ObjectConfigData name="IJustificativaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.JustificativaFacade" singleton="false" />
+            <ObjectConfigData name="ISituacaoFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.SituacaoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoOperacaoFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.TipoOperacaoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoPerdaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.TipoPerdaFacade" singleton="false" />
+            <ObjectConfigData name="ITipoSistemaVendaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.TipoSistemaVendaFacade" singleton="false" />
+            <ObjectConfigData name="ITipoControleFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.TipoControleFacade" singleton="false" />
+            <ObjectConfigData name="IPerfilVendaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.PerfilVendaFacade" singleton="false" />
+            <ObjectConfigData name="ITipoCancelamentoFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.TipoCancelamentoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoVendaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.TipoVendaFacade" singleton="false" />
+            <ObjectConfigData name="ITipoCanalVendaFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.TipoCanalVendaFacade" singleton="false" />
+            <ObjectConfigData name="IEstacaoVendaPadraoFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.EstacaoVendaPadraoFacade" singleton="false" />
+            <ObjectConfigData name="IFechamentoFacade" assembly="Ingresso.Central.Operacao.Facade" class="Ingresso.Central.Operacao.Facade.Implementacao.FechamentoFacade" singleton="false" />
+            
+          </objects>
+        </FactoryConfigData>
+
+        <FactoryConfigData name="Localidade" factoryClass="GenericFactory">
+          <objects>
+
+            <!--Dalc -->
+            
+            <ObjectConfigData name="UnitOfWork" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.LocalidadeUnitOfWork" singleton="false" />
+            <ObjectConfigData name="ICEPRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.CEPRepository" singleton="false" />
+            <ObjectConfigData name="ICidadeRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.CidadeRepository" singleton="false" />
+            <ObjectConfigData name="IDataEspecialRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.DataEspecialRepository" singleton="false" />
+            <ObjectConfigData name="IDiaSemanaRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.DiaSemanaRepository" singleton="false" />
+            <ObjectConfigData name="IEstadoRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.EstadoRepository" singleton="false" />
+            <ObjectConfigData name="IFeriadoRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.FeriadoRepository" singleton="false" />
+            <ObjectConfigData name="IFusoHorarioRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.FusoHorarioRepository" singleton="false" />
+            <ObjectConfigData name="IHorarioVeraoRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.HorarioVeraoRepository" singleton="false" />
+            <ObjectConfigData name="IIdiomaRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.IdiomaRepository" singleton="false" />
+            <ObjectConfigData name="ILogradouroRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.LogradouroRepository" singleton="false" />
+            <ObjectConfigData name="IMoedaRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.MoedaRepository" singleton="false" />
+            <ObjectConfigData name="IMoedaValorRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.MoedaValorRepository" singleton="false" />
+            <ObjectConfigData name="IPaisRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.PaisRepository" singleton="false" />
+            <ObjectConfigData name="ITempoRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.TempoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoDataEspecialRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.TipoDataEspecialRepository" singleton="false" />
+            <ObjectConfigData name="ICotacaoRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.CotacaoRepository" singleton="false" />
+            <ObjectConfigData name="IEnderecoRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.EnderecoRepository" singleton="false" />
+            <ObjectConfigData name="IDataEspecialEstabelecimentoRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.DataEspecialEstabelecimentoRepository" singleton="false" />
+            
+            <ObjectConfigData name="IClimaTempoRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.ClimaTempoRepository" singleton="false" />
+            <ObjectConfigData name="IClimaTempoDescricaoRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.ClimaTempoDescricaoRepository" singleton="false" />
+            <ObjectConfigData name="IClimaTempoProvedorRepository" assembly="Ingresso.BOS.Localidade.Dalc" class="Ingresso.BOS.Localidade.Dalc.Implementacao.ClimaTempoProvedorRepository" singleton="false" />
+            
+            <!-- Business -->
+            <ObjectConfigData name="ITipoDataEspecialBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.TipoDataEspecialBusiness" singleton="false" />
+            <ObjectConfigData name="IDataEspecialBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.DataEspecialBusiness" singleton="false" />
+            <ObjectConfigData name="ITempoBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.TempoBusiness" singleton="false" />
+            <ObjectConfigData name="IPaisBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.PaisBusiness" singleton="false" />
+            <ObjectConfigData name="IMoedaValorBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.MoedaValorBusiness" singleton="false" />
+            <ObjectConfigData name="IMoedaBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.MoedaBusiness" singleton="false" />
+            <ObjectConfigData name="ILogradouroBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.LogradouroBusiness" singleton="false" />
+            <ObjectConfigData name="IIdiomaBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.IdiomaBusiness" singleton="false" />
+            <ObjectConfigData name="IHorarioVeraoBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.HorarioVeraoBusiness" singleton="false" />
+            <ObjectConfigData name="IFusoHorarioBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.FusoHorarioBusiness" singleton="false" />
+            <ObjectConfigData name="IFeriadoBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.FeriadoBusiness" singleton="false" />
+            <ObjectConfigData name="IDiaSemanaBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.DiaSemanaBusiness" singleton="false" />
+            <ObjectConfigData name="IDataSemanaBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.DataSemanaBusiness" singleton="false" />
+            <ObjectConfigData name="ICotacaoBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.CotacaoBusiness" singleton="false" />
+            <ObjectConfigData name="ICidadeBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.CidadeBusiness" singleton="false" />
+            <ObjectConfigData name="ICEPBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.CEPBusiness" singleton="false" />
+            <ObjectConfigData name="IEstadoBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.EstadoBusiness" singleton="false" />
+            <ObjectConfigData name="IEnderecoBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.EnderecoBusiness" singleton="false" />
+            <ObjectConfigData name="IDataEspecialEstabelecimentoBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.DataEspecialEstabelecimentoBusiness" singleton="false" />
+            
+            <ObjectConfigData name="IClimaTempoBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.ClimaTempoBusiness" singleton="false" />
+            <ObjectConfigData name="IClimaTempoDescricaoBusiness" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.Implementacao.ClimaTempoDescricaoBusiness" singleton="false" />
+
+            <!-- ClimaTempoService -->
+            <ObjectConfigData name="IClimaTempoServico" assembly="Ingresso.BOS.Localidade.Business" class="Ingresso.BOS.Localidade.Business.ClimaTempoServico.Implementacao.ClimaTempoServicoWorldWeather" singleton="false" />
+
+
+            <!-- Facade -->
+            <ObjectConfigData name="ITipoDataEspecialFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.TipoDataEspecialFacade" singleton="false" />
+            <ObjectConfigData name="ITempoFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.TempoFacade" singleton="false" />
+            <ObjectConfigData name="IPaisFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.PaisFacade" singleton="false" />
+            <ObjectConfigData name="IMoedaValorFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.MoedaValorFacade" singleton="false" />
+            <ObjectConfigData name="IMoedaFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.MoedaFacade" singleton="false" />
+            <ObjectConfigData name="ILogradouroFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.LogradouroFacade" singleton="false" />
+            <ObjectConfigData name="IIdiomaFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.IdiomaFacade" singleton="false" />
+            <ObjectConfigData name="IHorarioVeraoFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.HorarioVeraoFacade" singleton="false" />
+            <ObjectConfigData name="IFusoHorarioFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.FusoHorarioFacade" singleton="false" />
+            <ObjectConfigData name="IFeriadoFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.FeriadoFacade" singleton="false" />
+            <ObjectConfigData name="IDiaSemanaFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.DiaSemanaFacade" singleton="false" />
+            <ObjectConfigData name="IDataSemanaFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.DataSemanaFacade" singleton="false" />
+            <ObjectConfigData name="ICotacaoFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.CotacaoFacade" singleton="false" />
+            <ObjectConfigData name="ICidadeFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.CidadeFacade" singleton="false" />
+            <ObjectConfigData name="ICEPFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.CEPFacade" singleton="false" />
+            <ObjectConfigData name="IDataEspecialFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.DataEspecialFacade" singleton="false" />
+            <ObjectConfigData name="IEstadoFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.EstadoFacade" singleton="false" />
+            <ObjectConfigData name="IEnderecoFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.EnderecoFacade" singleton="false" />
+            
+            <ObjectConfigData name="IClimaTempoFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.ClimaTempoFacade" singleton="false" />
+            <ObjectConfigData name="IGeoLocalizacaoFacade" assembly="Ingresso.BOS.Localidade.Facade" class="Ingresso.BOS.Localidade.Facade.Implementacao.GeoLocalizacaoFacade" singleton="false" />
+
+           
+
+          </objects>
+        </FactoryConfigData>
+
+        <FactoryConfigData name="Movimentacao" factoryClass="GenericFactory">
+          <objects>
+
+            <!--Dalc -->
+            <ObjectConfigData name="UnitOfWork" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.MovimentacaoUnitOfWork" singleton="false" />
+            <ObjectConfigData name="ICustoMedioRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.CustoMedioRepository" singleton="false" />
+            <ObjectConfigData name="IEstoqueRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.EstoqueRepository" singleton="false" />
+            <ObjectConfigData name="IFaturaNotaFiscalRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.FaturaNotaFiscalRepository" singleton="false" />
+            <ObjectConfigData name="IInventarioRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.InventarioRepository" singleton="false" />
+            <ObjectConfigData name="IInventarioDetalheRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.InventarioDetalheRepository" singleton="false" />
+            <ObjectConfigData name="IMovimentoEntreEstabelecimentosRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.MovimentoEntreEstabelecimentosRepository" singleton="false" />
+            <ObjectConfigData name="IMovimentoEstoqueRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.MovimentoEstoqueRepository" singleton="false" />
+            <ObjectConfigData name="IMovimentoOperacionalRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.MovimentoOperacionalRepository" singleton="false" />
+            <ObjectConfigData name="IMovimentoVendaBilheteriaRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.MovimentoVendaBilheteriaRepository" singleton="false" />
+            <ObjectConfigData name="IMovimentoVendaBomboniereRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.MovimentoVendaBomboniereRepository" singleton="false" />
+            <ObjectConfigData name="INotaFiscalRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.NotaFiscalRepository" singleton="false" />
+            <ObjectConfigData name="IParametrosMovimentacaoFiscalRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.ParametrosMovimentacaoFiscalRepository" singleton="false" />
+            <ObjectConfigData name="IParamMovimentoFiscalTipoMovimentoOperacionalRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.ParamMovimentoFiscalTipoMovimentoOperacionalRepository" singleton="false" />
+            <ObjectConfigData name="IProdutoMovimentoOperacionalRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.ProdutoMovimentoOperacionalRepository" singleton="false" />
+            <ObjectConfigData name="IProdutoMovimentoOperacionalFiscalRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.ProdutoMovimentoOperacionalFiscalRepository" singleton="false" />
+            <ObjectConfigData name="ITipoMovimentoOperacionalRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.TipoMovimentoOperacionalRepository" singleton="false" />
+            <ObjectConfigData name="IStatusMovimentoOperacionalRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.StatusMovimentoOperacionalRepository" singleton="false" />
+            <ObjectConfigData name="ITipoMovimentoOperacionalEstabelecimentoRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.TipoMovimentoOperacionalEstabelecimentoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoMovimentoOperacionalOrigemRepository" assembly="Ingresso.Central.Movimentacao.Dalc" class="Ingresso.Central.Movimentacao.Dalc.Implementacao.TipoMovimentoOperacionalOrigemRepository" singleton="false" />
+
+            <!-- Business -->
+            <ObjectConfigData name="ICustoMedioBusiness" assembly="Ingresso.Central.Movimentacao.Business" class="Ingresso.Central.Movimentacao.Business.Implementacao.CustoMedioBusiness" singleton="false" />
+            <ObjectConfigData name="IEstoqueBusiness" assembly="Ingresso.Central.Movimentacao.Business" class="Ingresso.Central.Movimentacao.Business.Implementacao.EstoqueBusiness" singleton="false" />
+            <ObjectConfigData name="IFaturaNotaFiscalBusiness" assembly="Ingresso.Central.Movimentacao.Business" class="Ingresso.Central.Movimentacao.Business.Implementacao.FaturaNotaFiscalBusiness" singleton="false" />
+            <ObjectConfigData name="IMovimentoOperacionalBusiness" assembly="Ingresso.Central.Movimentacao.Business" class="Ingresso.Central.Movimentacao.Business.Implementacao.MovimentoOperacionalBusiness" singleton="false" />
+            <ObjectConfigData name="IMovimentoEstoqueBusiness" assembly="Ingresso.Central.Movimentacao.Business" class="Ingresso.Central.Movimentacao.Business.Implementacao.MovimentoEstoqueBusiness" singleton="false" />
+            <ObjectConfigData name="IMovimentoVendaBilheteriaBusiness" assembly="Ingresso.Central.Movimentacao.Business" class="Ingresso.Central.Movimentacao.Business.Implementacao.MovimentoVendaBilheteriaBusiness" singleton="false" />
+            <ObjectConfigData name="IStatusMovimentoOperacionalBusiness" assembly="Ingresso.Central.Movimentacao.Business" class="Ingresso.Central.Movimentacao.Business.Implementacao.StatusMovimentoOperacionalBusiness" singleton="false" />
+            <ObjectConfigData name="IProdutoMovimentoOperacionalBusiness" assembly="Ingresso.Central.Movimentacao.Business" class="Ingresso.Central.Movimentacao.Business.Implementacao.ProdutoMovimentoOperacionalBusiness" singleton="false" />            
+            <ObjectConfigData name="ITipoMovimentoOperacionalBusiness" assembly="Ingresso.Central.Movimentacao.Business" class="Ingresso.Central.Movimentacao.Business.Implementacao.TipoMovimentoOperacionalBusiness" singleton="false" />
+            <ObjectConfigData name="IInventarioDetalheBusiness" assembly="Ingresso.Central.Movimentacao.Business" class="Ingresso.Central.Movimentacao.Business.Implementacao.InventarioDetalheBusiness" singleton="false" />
+            <ObjectConfigData name="IInventarioBusiness" assembly="Ingresso.Central.Movimentacao.Business" class="Ingresso.Central.Movimentacao.Business.Implementacao.InventarioBusiness" singleton="false" />            
+            <ObjectConfigData name="IMovimentoVendaBomboniereBusiness" assembly="Ingresso.Central.Movimentacao.Business" class="Ingresso.Central.Movimentacao.Business.Implementacao.MovimentoVendaBomboniereBusiness" singleton="false" />
+
+            <!-- Facade -->
+            <ObjectConfigData name="ITipoMovimentoOperacionalFacade" assembly="Ingresso.Central.Movimentacao.Facade" class="Ingresso.Central.Movimentacao.Facade.Implementacao.TipoMovimentoOperacionalFacade" singleton="false" />
+            <ObjectConfigData name="IMovimentoOperacionalMenuFacade" assembly="Ingresso.Central.Movimentacao.Facade" class="Ingresso.Central.Movimentacao.Facade.MovimentoOperacional.Implementacao.MovimentoOperacionalMenuFacade" singleton="false" />
+            <ObjectConfigData name="IMovimentoOperacionalLocalizarFacade" assembly="Ingresso.Central.Movimentacao.Facade" class="Ingresso.Central.Movimentacao.Facade.MovimentoOperacional.Implementacao.LocalizarFacade" singleton="false" />
+            <ObjectConfigData name="IMovimentoOperacionalFacade" assembly="Ingresso.Central.Movimentacao.Facade" class="Ingresso.Central.Movimentacao.Facade.MovimentoOperacional.Implementacao.MovimentoOperacionalFacade" singleton="false" />
+            <ObjectConfigData name="IListaProdutoFacade" assembly="Ingresso.Central.Movimentacao.Facade" class="Ingresso.Central.Movimentacao.Facade.Implementacao.ListaProdutoFacade" singleton="false" />
+            <ObjectConfigData name="IEntradaInventarioFacade" assembly="Ingresso.Central.Movimentacao.Facade" class="Ingresso.Central.Movimentacao.Facade.Implementacao.EntradaInventarioFacade" singleton="false" />
+
+          </objects>
+        </FactoryConfigData>
+
+        <FactoryConfigData name="Periferico" factoryClass="GenericFactory">
+          <objects>
+
+            <!--Dalc -->
+            <ObjectConfigData name="UnitOfWork" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.PerifericoUnitOfWork" singleton="false" />
+            <ObjectConfigData name="IDispositivoAcessoRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.DispositivoAcessoRepository" singleton="false" />            
+            <ObjectConfigData name="IEstabCanalVendaModeloIngressoRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.EstabCanalVendaModeloIngressoRepository" singleton="false" />
+            <ObjectConfigData name="IFabricanteRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.FabricanteRepository" singleton="false" />
+            <ObjectConfigData name="ILayoutPapelRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.LayoutPapelRepository" singleton="false" />
+            <ObjectConfigData name="IModeloImpressoraRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.ModeloImpressoraRepository" singleton="false" />
+            <ObjectConfigData name="IModeloIngressoRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.ModeloIngressoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoDispositivoAcessoRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.TipoDispositivoAcessoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoImpressoraRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.TipoImpressoraRepository" singleton="false" />
+            <ObjectConfigData name="ITipoLeituraRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.TipoLeituraRepository" singleton="false" />
+            <ObjectConfigData name="ITipoPerifericoRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.TipoPerifericoRepository" singleton="false" />
+            <ObjectConfigData name="IModeloImpressoraLayoutPapelRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.ModeloImpressoraLayoutPapelRepository" singleton="false" />
+            <ObjectConfigData name="IModeloImpressoraECFRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.ModeloImpressoraECFRepository" singleton="false" />
+            <ObjectConfigData name="IProjetorDigitalRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.ProjetorDigitalRepository" singleton="false" />
+            <ObjectConfigData name="IProjetorDigitalConfiguracaoTCCRepository" assembly="Ingresso.Central.Periferico.Dalc" class="Ingresso.Central.Periferico.Dalc.Implementacao.ProjetorDigitalConfiguracaoTCCRepository" singleton="false" />
+            
+            
+
+            <!-- Business -->
+            <ObjectConfigData name="IDispositivoAcessoBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.DispositivoAcessoBusiness" singleton="false" />
+            <ObjectConfigData name="IFabricanteBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.FabricanteBusiness" singleton="false" />
+            <ObjectConfigData name="ILayoutPapelBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.LayoutPapelBusiness" singleton="false" />
+            <ObjectConfigData name="IModeloImpressoraBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.ModeloImpressoraBusiness" singleton="false" />
+            <ObjectConfigData name="IModeloIngressoBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.ModeloIngressoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoDispositivoAcessoBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.TipoDispositivoAcessoBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoImpressoraBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.TipoImpressoraBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoLeituraBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.TipoLeituraBusiness" singleton="false" />
+            <ObjectConfigData name="ITipoPerifericoBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.TipoPerifericoBusiness" singleton="false" />
+            <ObjectConfigData name="IModeloImpressoraECFBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.ModeloImpressoraECFBusiness" singleton="false" />
+            <ObjectConfigData name="IEstabCanalVendaModeloIngressoBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.EstabCanalVendaModeloIngressoBusiness" singleton="false" />
+            <ObjectConfigData name="IModeloImpressoraLayoutPapelBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.ModeloImpressoraLayoutPapelBusiness" singleton="false" />
+            <ObjectConfigData name="IProjetorDigitalBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.ProjetorDigitalBusiness" singleton="false" />
+            <ObjectConfigData name="IProjetorDigitalConfiguracaoTCCBusiness" assembly="Ingresso.Central.Periferico.Business" class="Ingresso.Central.Periferico.Business.Implementacao.ProjetorDigitalConfiguracaoTCCBusiness" singleton="false" />
+            
+
+            <!-- Facade -->
+            <ObjectConfigData name="IDispositivoAcessoFacade" assembly="Ingresso.Central.Periferico.Facade" class="Ingresso.Central.Periferico.Facade.Implementacao.DispositivoAcessoFacade" singleton="false" />
+            <ObjectConfigData name="IFabricanteFacade" assembly="Ingresso.Central.Periferico.Facade" class="Ingresso.Central.Periferico.Facade.Implementacao.FabricanteFacade" singleton="false" />
+            <ObjectConfigData name="ILayoutPapelFacade" assembly="Ingresso.Central.Periferico.Facade" class="Ingresso.Central.Periferico.Facade.Implementacao.LayoutPapelFacade" singleton="false" />
+            <ObjectConfigData name="IModeloImpressoraFacade" assembly="Ingresso.Central.Periferico.Facade" class="Ingresso.Central.Periferico.Facade.Implementacao.ModeloImpressoraFacade" singleton="false" />
+            <ObjectConfigData name="IModeloIngressoFacade" assembly="Ingresso.Central.Periferico.Facade" class="Ingresso.Central.Periferico.Facade.Implementacao.ModeloIngressoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoDispositivoAcessoFacade" assembly="Ingresso.Central.Periferico.Facade" class="Ingresso.Central.Periferico.Facade.Implementacao.TipoDispositivoAcessoFacade" singleton="false" />
+            <ObjectConfigData name="ITipoImpressoraFacade" assembly="Ingresso.Central.Periferico.Facade" class="Ingresso.Central.Periferico.Facade.Implementacao.TipoImpressoraFacade" singleton="false" />
+            <ObjectConfigData name="ITipoLeituraFacade" assembly="Ingresso.Central.Periferico.Facade" class="Ingresso.Central.Periferico.Facade.Implementacao.TipoLeituraFacade" singleton="false" />
+            <ObjectConfigData name="ITipoPerifericoFacade" assembly="Ingresso.Central.Periferico.Facade" class="Ingresso.Central.Periferico.Facade.Implementacao.TipoPerifericoFacade" singleton="false" />
+            <ObjectConfigData name="IProjetorDigitalFacade" assembly="Ingresso.Central.Periferico.Facade" class="Ingresso.Central.Periferico.Facade.Implementacao.ProjetorDigitalFacade" singleton="false" />
+            <ObjectConfigData name="IProjetorDigitalConfiguracaoTCCFacade" assembly="Ingresso.Central.Periferico.Facade" class="Ingresso.Central.Periferico.Facade.Implementacao.ProjetorDigitalConfiguracaoTCCFacade" singleton="false" />           
+            
+          </objects>
+        </FactoryConfigData>
+
+        <FactoryConfigData name="Extracao" factoryClass="GenericFactory">
+          <objects>
+            <!--Dalc -->
+            <ObjectConfigData name="UnitOfWork" assembly="Ingresso.Central.Extracao.Dalc" class="Ingresso.Central.Extracao.Dalc.ExtracaoUnitOfWork" singleton="false" />
+            <ObjectConfigData name="IConsultaRepository" assembly="Ingresso.Central.Extracao.Dalc" class="Ingresso.Central.Extracao.Dalc.Implementacao.ConsultaRepository" singleton="false" />
+            <ObjectConfigData name="IConsultaAgrupamentoRepository" assembly="Ingresso.Central.Extracao.Dalc" class="Ingresso.Central.Extracao.Dalc.Implementacao.ConsultaAgrupamentoRepository" singleton="false" />
+
+            <!-- Business -->
+            <ObjectConfigData name="IConsultaBusiness" assembly="Ingresso.Central.Extracao.Business" class="Ingresso.Central.Extracao.Business.Implementacao.ConsultaBusiness" singleton="false" />
+            <ObjectConfigData name="IConsultaAgrupamentoBusiness" assembly="Ingresso.Central.Extracao.Business" class="Ingresso.Central.Extracao.Business.Implementacao.ConsultaAgrupamentoBusiness" singleton="false" />
+            
+            <!-- Facade -->
+            <ObjectConfigData name="IExtracaoFacade" assembly="Ingresso.Central.Extracao.Facade" class="Ingresso.Central.Extracao.Facade.Implementacao.ExtracaoFacade" singleton="false" />
+          </objects>
+        </FactoryConfigData>
+
+        <FactoryConfigData name="Integracao" factoryClass="GenericFactory">
+          <objects>
+            <!--Dalc -->
+            <ObjectConfigData name="UnitOfWork" assembly="Ingresso.Central.Integracao.Dalc" class="Ingresso.Central.Integracao.Dalc.IntegracaoUnitOfWork" singleton="false" />
+            <ObjectConfigData name="IIntegracaoArquivoRepository" assembly="Ingresso.Central.Integracao.Dalc" class="Ingresso.Central.Integracao.Dalc.Implementacao.IntegracaoArquivoRepository" singleton="false" />
+            <ObjectConfigData name="IIntegracaoEntExtTipoEnvioRepository" assembly="Ingresso.Central.Integracao.Dalc" class="Ingresso.Central.Integracao.Dalc.Implementacao.IntegracaoEntExtTipoEnvioRepository" singleton="false" />
+            <ObjectConfigData name="IIntegracaoEntidadeExternaRepository" assembly="Ingresso.Central.Integracao.Dalc" class="Ingresso.Central.Integracao.Dalc.Implementacao.IntegracaoEntidadeExternaRepository" singleton="false" />
+            <ObjectConfigData name="IIntegracaoExecFiltroArquivoRepository" assembly="Ingresso.Central.Integracao.Dalc" class="Ingresso.Central.Integracao.Dalc.Implementacao.IntegracaoExecFiltroArquivoRepository" singleton="false" />
+            <ObjectConfigData name="IIntegracaoExecucaoFiltroRepository" assembly="Ingresso.Central.Integracao.Dalc" class="Ingresso.Central.Integracao.Dalc.Implementacao.IntegracaoExecucaoFiltroRepository" singleton="false" />
+            <ObjectConfigData name="IIntegracaoExecucaoRepository" assembly="Ingresso.Central.Integracao.Dalc" class="Ingresso.Central.Integracao.Dalc.Implementacao.IntegracaoExecucaoRepository" singleton="false" />
+            <ObjectConfigData name="IIntegracaoRepository" assembly="Ingresso.Central.Integracao.Dalc" class="Ingresso.Central.Integracao.Dalc.Implementacao.IntegracaoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoEnvioRepository" assembly="Ingresso.Central.Integracao.Dalc" class="Ingresso.Central.Integracao.Dalc.Implementacao.TipoEnvioRepository" singleton="false" />
+            <ObjectConfigData name="ITipoExportacaoRepository" assembly="Ingresso.Central.Integracao.Dalc" class="Ingresso.Central.Integracao.Dalc.Implementacao.TipoExportacaoRepository" singleton="false" />
+            <ObjectConfigData name="ITipoRepositorioRepository" assembly="Ingresso.Central.Integracao.Dalc" class="Ingresso.Central.Integracao.Dalc.Implementacao.TipoRepositorioRepository" singleton="false" />
+            <!-- Business -->
+            <ObjectConfigData name="IIntegracaoBusiness" assembly="Ingresso.Central.Integracao.Business" class="Ingresso.Central.Integracao.Business.Implementacao.IntegracaoBusiness" singleton="false" />
+            <ObjectConfigData name="IIntegracaoExecucaoBusiness" assembly="Ingresso.Central.Integracao.Business" class="Ingresso.Central.Integracao.Business.Implementacao.IntegracaoExecucaoBusiness" singleton="false" />
+            <!-- Facade -->
+            <ObjectConfigData name="IIntegracaoFacade" assembly="Ingresso.Central.Integracao.Facade" class="Ingresso.Central.Integracao.Facade.Implementacao.IntegracaoFacade" singleton="false" />
+          </objects>
+        </FactoryConfigData>
+
+        <FactoryConfigData name="Widgets" factoryClass="GenericFactory">
+          <objects>
+            <!--Dalc -->
+            <ObjectConfigData name="UnitOfWork" assembly="Ingresso.Central.Widgets.Dalc" class="Ingresso.Central.Widgets.Dalc.WidgetsUnitOfWork" singleton="false" />
+            <ObjectConfigData name="IWidgetRepository" assembly="Ingresso.Central.Widgets.Dalc" class="Ingresso.Central.Widgets.Dalc.Implementacao.WidgetRepository" singleton="false" />
+            <!-- Business -->
+            <ObjectConfigData name="IWidgetBusiness" assembly="Ingresso.Central.Widgets.Business" class="Ingresso.Central.Widgets.Business.Implementacao.WidgetBusiness" singleton="false" />
+            <!-- Facade -->
+           <ObjectConfigData name="IWidgetFacade" assembly="Ingresso.Central.Widgets.Facade" class="Ingresso.Central.Widgets.Facade.Implementacao.WidgetFacade" singleton="false" />
+          </objects>
+        </FactoryConfigData>        
+        
+      </factories>
+      
+    </factoryHelperSettings>
+  </xmlSerializerSection>
+</factoryConfiguration>

@@ -1,0 +1,16 @@
+Imports System.Linq.Expressions
+Imports System.Collections.Generic
+Imports Ingresso.Central.ConfigMov.Entities
+
+''' <history>
+'''    ING-2012.06.11 [rodrigo.goncalo]
+''' </history>
+Public Interface IRemarcacaoPrecoCalendarioBusiness
+
+    Function Listar(ByVal pCondicao As Expression(Of Func(Of RemarcacaoPrecoCalendario, Boolean)), Optional ByVal incluirPropriedades() As String = Nothing) As IEnumerable(Of RemarcacaoPrecoCalendario)
+
+    Function Existe(Optional ByVal paCondicao As Expression(Of Func(Of RemarcacaoPrecoCalendario, Boolean)) = Nothing, Optional ByVal paIgnorarPermissaoAcessoDado As Boolean = True) As Boolean
+
+
+End Interface
+

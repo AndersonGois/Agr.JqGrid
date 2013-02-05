@@ -1,0 +1,51 @@
+AD\3rd.tri.benjamin.qui
+*123triscal#
+
+
+
+rj\3rd.tri.rodrigo.magi
+*triscal#45
+
+3523 - 7006 - CLAUDIO
+7238 - rafael
+7278 - ADRIANA
+7098 - DAYZE
+6080 - VERONICA
+7090 - Karen
+7239 - Fernando
+7138 - Ana
+7137 - ZE
+7123 - Ana lima
+2206-6080 - Marcos
+7167 - Zuqui
+
+
+1047,1062,1101 
+
+
+projeto http://localhost/Central/
+ingresso
+!N9dia+mes*ano*#
+
+!N916104*#
+
+
+
+
+
+banco
+1.1.1.136\desenvolvimento
+ingressodesenv
+desenv
+
+vpn
+usuario ralbuquerque
+senha Manager
+
+2575
+
+Dim vaBusinessIngresso As IIngressoRepository = ConfigMovRepositoryFactory.CreateIngressoRepository
+            Dim valistaIngresso = vaBusinessIngresso.Listar()
+            For Each item In valistaIngresso
+                Dim teste = item.Nome
+            Next

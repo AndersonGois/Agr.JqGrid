@@ -1,0 +1,549 @@
+Imports Ingresso.FrameWork.Factory
+
+''' <history>
+'''    ING-2012.11.05 [ralbuquerque]
+'''    ING-2012.08.15 [fernando.silva]    
+'''    ING-2012.07.12 [leandro.torres]
+'''    ING-2012.07.11 [leandro.torres]
+''' </history>
+Public NotInheritable Class ConfigMovBusinessFactory
+    Private Const FactoryName As String = "ConfigMov"
+
+
+    Public Shared Function CreateTipoComentario() As ITipoComentarioBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoComentarioBusiness"), ITipoComentarioBusiness)
+    End Function
+
+    Public Shared Function CreateCanalVendaIngresso() As ICanalVendaIngressoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ICanalVendaIngressoBusiness"), ICanalVendaIngressoBusiness)
+    End Function
+
+    Public Shared Function CreateIngressoEspecial() As IIngressoEspecialBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IIngressoEspecialBusiness"), IIngressoEspecialBusiness)
+    End Function
+
+    Public Shared Function CreateConfiguracaoTributacao() As IConfiguracaoTributacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IConfiguracaoTributacaoBusiness"), IConfiguracaoTributacaoBusiness)
+    End Function
+
+    Public Shared Function CreateGrupoTributacaoAliquota() As IGrupoTributacaoAliquotaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IGrupoTributacaoAliquotaBusiness"), IGrupoTributacaoAliquotaBusiness)
+    End Function
+
+    Public Shared Function CreateTipoExibicao() As ITipoExibicaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoExibicaoBusiness"), ITipoExibicaoBusiness)
+    End Function
+
+    Public Shared Function CreateEvento() As IEventoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IEventoBusiness"), IEventoBusiness)
+    End Function
+
+    Public Shared Function CreateObservacaoVenda() As IObservacaoVendaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IObservacaoVendaBusiness"), IObservacaoVendaBusiness)
+    End Function
+
+    Public Shared Function CreateProduto() As IProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IProdutoBusiness"), IProdutoBusiness)
+    End Function
+
+    Public Shared Function CreateProdutoTributacaoPorEstadoDTOBusiness() As IProdutoTributacaoPorEstadoDTOBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IProdutoTributacaoPorEstadoDTOBusiness"), IProdutoTributacaoPorEstadoDTOBusiness)
+    End Function
+
+    Public Shared Function CreatePrecoPadrao() As IPrecoPadraoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IPrecoPadraoBusiness"), IPrecoPadraoBusiness)
+    End Function
+
+    Public Shared Function CreateSetorBomboniere() As ISetorBomboniereBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ISetorBomboniereBusiness"), ISetorBomboniereBusiness)
+    End Function
+
+    Public Shared Function CreateTipoProduto() As ITipoProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoProdutoBusiness"), ITipoProdutoBusiness)
+    End Function
+
+    Public Shared Function CreateTraillerMidiaCanalVenda() As ITraillerMidiaCanalVendaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITraillerMidiaCanalVendaBusiness"), ITraillerMidiaCanalVendaBusiness)
+    End Function
+
+    Public Shared Function CreateIngressoEspecialVigencia() As IIngressoEspecialVigenciaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IIngressoEspecialVigenciaBusiness"), IIngressoEspecialVigenciaBusiness)
+    End Function
+
+    Public Shared Function CreateTipoEspecial() As ITipoEspecialBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoEspecialBusiness"), ITipoEspecialBusiness)
+    End Function
+
+    Public Shared Function CreateIngressoEspecialValidacao() As IIngressoEspecialValidacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IIngressoEspecialValidacaoBusiness"), IIngressoEspecialValidacaoBusiness)
+    End Function
+
+    Public Shared Function CreateIngressoEspecialCupom() As IIngressoEspecialCupomBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IIngressoEspecialCupomBusiness"), IIngressoEspecialCupomBusiness)
+    End Function
+
+    Public Shared Function CreateSituacaoTributaria() As ISituacaoTributariaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ISituacaoTributariaBusiness"), ISituacaoTributariaBusiness)
+    End Function
+
+    Public Shared Function CreateSubTipoEspecial() As ISubTipoEspecialBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ISubTipoEspecialBusiness"), ISubTipoEspecialBusiness)
+    End Function
+
+    Public Shared Function CreateCampanha() As ICampanhaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ICampanhaBusiness"), ICampanhaBusiness)
+    End Function
+
+    Public Shared Function CreateCaracteristicaProduto() As ICaracteristicaProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ICaracteristicaProdutoBusiness"), ICaracteristicaProdutoBusiness)
+    End Function
+
+    Public Shared Function CreateTipoCaracteristicaProduto() As ITipoCaracteristicaProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoCaracteristicaProdutoBusiness"), ITipoCaracteristicaProdutoBusiness)
+    End Function
+
+    Public Shared Function CreateIngresso() As IIngressoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IIngressoBusiness"), IIngressoBusiness)
+    End Function
+
+    Public Shared Function CreateContrato() As IContratoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IContratoBusiness"), IContratoBusiness)
+    End Function
+
+    Public Shared Function CreateTipoValidacao() As ITipoValidacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoValidacaoBusiness"), ITipoValidacaoBusiness)
+    End Function
+
+    Shared Function CreateTipoVendaProduto() As ITipoVendaProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoVendaProdutoBusiness"), ITipoVendaProdutoBusiness)
+    End Function
+
+    Public Shared Function CreateFormaValidacao() As IFormaValidacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IFormaValidacaoBusiness"), IFormaValidacaoBusiness)
+    End Function
+
+    Public Shared Function CreateTipoSom() As ITipoSomBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoSomBusiness"), ITipoSomBusiness)
+    End Function
+
+    Public Shared Function CreateTipoLente() As ITipoLenteBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoLenteBusiness"), ITipoLenteBusiness)
+    End Function
+
+    Public Shared Function CreateTipoLegenda() As ITipoLegendaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoLegendaBusiness"), ITipoLegendaBusiness)
+    End Function
+
+    Public Shared Function CreateMarca() As IMarcaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IMarcaBusiness"), IMarcaBusiness)
+    End Function
+
+    Public Shared Function CreateNaturezaOperacional() As INaturezaOperacionalBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("INaturezaOperacionalBusiness"), INaturezaOperacionalBusiness)
+    End Function
+
+    Public Shared Function CreateValoresValidacao() As IValoresValidacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IValoresValidacaoBusiness"), IValoresValidacaoBusiness)
+    End Function
+
+    Public Shared Function CreateFormaValidacaoTipoValidacao() As IFormaValidacaoTipoValidacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IFormaValidacaoTipoValidacaoBusiness"), IFormaValidacaoTipoValidacaoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.03.30 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateGenero() As IGeneroBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IGeneroBusiness"), IGeneroBusiness)
+    End Function
+
+    Public Shared Function CreateClassificacaoIndicativaBusiness() As IClassificacaoIndicativaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IClassificacaoIndicativaBusiness"), IClassificacaoIndicativaBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.03.30 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateTipoEventoSite() As ITipoEventoSiteBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoEventoSiteBusiness"), ITipoEventoSiteBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.04.02 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateTipoEvento() As ITipoEventoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoEventoBusiness"), ITipoEventoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.04.05 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateDepartamento() As IDepartamentoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IDepartamentoBusiness"), IDepartamentoBusiness)
+    End Function
+
+    Public Shared Function CreateUnidadeMedida() As IUnidadeMedidaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IUnidadeMedidaBusiness"), IUnidadeMedidaBusiness)
+    End Function
+
+    Public Shared Function CreateRelacionamentoUnidade() As IRelacionamentoUnidadeBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IRelacionamentoUnidadeBusiness"), IRelacionamentoUnidadeBusiness)
+    End Function
+
+    Public Shared Function CreateRemarcacaoPreco() As IRemarcacaoPrecoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IRemarcacaoPrecoBusiness"), IRemarcacaoPrecoBusiness)
+    End Function
+
+
+    Public Shared Function CreateOrigemMercadoria() As IOrigemMercadoriaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IOrigemMercadoriaBusiness"), IOrigemMercadoriaBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.04.05 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreatePersonalizacao() As IPersonalizacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IPersonalizacaoBusiness"), IPersonalizacaoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.04.09 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateCategoriaProduto() As ICategoriaProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ICategoriaProdutoBusiness"), ICategoriaProdutoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.04.09 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateClassificacaoProduto() As IClassificacaoProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IClassificacaoProdutoBusiness"), IClassificacaoProdutoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.04.10 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateTipoParticipante() As ITipoParticipanteBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoParticipanteBusiness"), ITipoParticipanteBusiness)
+    End Function
+
+    Public Shared Function CreateDesconto() As IDescontoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IDescontoBusiness"), IDescontoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.04.12 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateTipoEntrega() As ITipoEntregaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoEntregaBusiness"), ITipoEntregaBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.04.16 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateTipoCopia() As ITipoCopiaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoCopiaBusiness"), ITipoCopiaBusiness)
+    End Function
+
+    Public Shared Function CreateGrupoProduto() As IGrupoProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IGrupoProdutoBusiness"), IGrupoProdutoBusiness)
+    End Function
+
+    Public Shared Function CreateTributacaoAliquota() As ITributacaoAliquotaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITributacaoAliquotaBusiness"), ITributacaoAliquotaBusiness)
+    End Function
+
+    Public Shared Function CreateTributacao() As ITributacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITributacaoBusiness"), ITributacaoBusiness)
+    End Function
+
+    Public Shared Function CreateTributacaoTipoMovOperacional() As ITributacaoTipoMovOperacionalBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITributacaoTipoMovOperacionalBusiness"), ITributacaoTipoMovOperacionalBusiness)
+    End Function
+
+    Public Shared Function CreateCodigoBarraProduto() As ICodigoBarraProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ICodigoBarraProdutoBusiness"), ICodigoBarraProdutoBusiness)
+    End Function
+
+    Public Shared Function CreateProdutoItemCaractProduto() As IProdutoItemCaractProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IProdutoItemCaractProdutoBusiness"), IProdutoItemCaractProdutoBusiness)
+    End Function
+
+    Public Shared Function CreateItemReceita() As IItemReceitaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IItemReceitaBusiness"), IItemReceitaBusiness)
+    End Function
+
+    Public Shared Function CreateGrupoTributacao() As IGrupoTributacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IGrupoTributacaoBusiness"), IGrupoTributacaoBusiness)
+    End Function
+
+    Public Shared Function CreateCompetenciaTributo() As ICompetenciaTributoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ICompetenciaTributoBusiness"), ICompetenciaTributoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.04.30 [fernando.silva]
+    ''' </history>
+    Public Shared Function CreateReceitaProduto() As IReceitaProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IReceitaProdutoBusiness"), IReceitaProdutoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.02 [rodrigo.goncalo]
+    ''' </history>
+    Public Shared Function CreateTipoProgramacao() As ITipoProgramacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoProgramacaoBusiness"), ITipoProgramacaoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.07.06 [felipe.santos]
+    ''' </history>
+    Public Shared Function CreateConcentradorProduto() As IConcentradorProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IConcentradorProdutoBusiness"), IConcentradorProdutoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.07.04 [rodrigo.goncalo]
+    ''' </history>
+    Public Shared Function CreateConcentradorProdutoDetalhe() As IConcentradorProdutoDetalheBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IConcentradorProdutoDetalheBusiness"), IConcentradorProdutoDetalheBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.09 [helio.gatts]
+    ''' </history>
+    Public Shared Function CreateTipoProgDiaSemana() As ITipoProgDiaSemanaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITipoProgDiaSemanaBusiness"), ITipoProgDiaSemanaBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.04 [rodrigo.goncalo]
+    ''' </history>
+    Public Shared Function CreateComercial() As IComercialBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IComercialBusiness"), IComercialBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.04 [rodrigo.goncalo]
+    ''' </history>
+    Public Shared Function CreatePropaganda() As IPropagandaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IPropagandaBusiness"), IPropagandaBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.07 [rodrigo.goncalo]
+    ''' </history>
+    Public Shared Function CreatePropagandaCopia() As IPropagandaCopiaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IPropagandaCopiaBusiness"), IPropagandaCopiaBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.08 [rodrigo.goncalo]
+    ''' </history>
+    Public Shared Function CreateEstabDescontoIngresso() As IEstabDescontoIngressoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IEstabDescontoIngressoBusiness"), IEstabDescontoIngressoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.04 [rodrigo.goncalo]
+    ''' </history>
+    Public Shared Function CreateTrailler() As ITraillerBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITraillerBusiness"), ITraillerBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.04 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateTraillerMidia() As ITraillerMidiaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITraillerMidiaBusiness"), ITraillerMidiaBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.07 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateCartaz() As ICartazBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ICartazBusiness"), ICartazBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.07 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateCopia() As ICopiaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ICopiaBusiness"), ICopiaBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.07 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateClassificacao() As IClassificacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IClassificacaoBusiness"), IClassificacaoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.08 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateParticipante() As IParticipanteBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IParticipanteBusiness"), IParticipanteBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.05.08 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateEventoParticipante() As IEventoParticipanteBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IEventoParticipanteBusiness"), IEventoParticipanteBusiness)
+    End Function
+
+    Public Shared Function CreateEventoFornecedor() As IEventoFornecedorBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IEventoFornecedorBusiness"), IEventoFornecedorBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.06.11 [rodrigo.goncalo]
+    ''' </history>
+    Public Shared Function CreateCalendarioVendaProdutoClasse() As ICalendarioVendaProdutoClasseBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ICalendarioVendaProdutoClasseBusiness"), ICalendarioVendaProdutoClasseBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.06.11 [rodrigo.goncalo]
+    ''' </history>
+    Public Shared Function CreateRemarcacaoPrecoCalendario() As IRemarcacaoPrecoCalendarioBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IRemarcacaoPrecoCalendarioBusiness"), IRemarcacaoPrecoCalendarioBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.06.11 [rodrigo.goncalo]
+    ''' </history>
+    Public Shared Function CreateProdutoFornecedor() As IProdutoFornecedorBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IProdutoFornecedorBusiness"), IProdutoFornecedorBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.06.13 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateAcrescimo() As IAcrescimoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IAcrescimoBusiness"), IAcrescimoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.06.14 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateClassePreco() As IClassePrecoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IClassePrecoBusiness"), IClassePrecoBusiness)
+    End Function
+
+    ''' <history>
+    '''    FLY-2012.06.22 [daniel.daim]
+    ''' </history>
+    Public Shared Function CreateClasseHorario() As IClasseHorarioBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IClasseHorarioBusiness"), IClasseHorarioBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.08.15 [fernando.silva]
+    ''' </history>
+    Public Shared Function CreateClassePrecoCustomizadoValor() As IClassePrecoCustomizadoValorBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IClassePrecoCustomizadoValorBusiness"), IClassePrecoCustomizadoValorBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.06.14 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateClassePrecoValor() As IClassePrecoValorBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IClassePrecoValorBusiness"), IClassePrecoValorBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.06.15 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateMixProduto() As IMixProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IMixProdutoBusiness"), IMixProdutoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.06.18 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateProdutoMixProduto() As IProdutoMixProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IProdutoMixProdutoBusiness"), IProdutoMixProdutoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.06.19 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateTelaVenda() As ITelaVendaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITelaVendaBusiness"), ITelaVendaBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.06.19 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateTelaVendaItem() As ITelaVendaItemBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ITelaVendaItemBusiness"), ITelaVendaItemBusiness)
+    End Function
+
+    ''' <history>
+    '''    TRI-2012.07.05 [felipe.santos]
+    ''' </history>
+    Public Shared Function CreateEventoCidade() As IEventoCidadeBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IEventoCidadeBusiness"), IEventoCidadeBusiness)
+    End Function
+
+    Public Shared Function CreateReceitaGrupo() As IReceitaGrupoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IReceitaGrupoBusiness"), IReceitaGrupoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.07.11 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateImpressoraComanda() As IImpressoraComandaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IImpressoraComandaBusiness"), IImpressoraComandaBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.07.11 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateDestinoComanda() As IDestinoComandaBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IDestinoComandaBusiness"), IDestinoComandaBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.07.26 [leandro.torres]
+    ''' </history>
+    Public Shared Function CreateMixProdutoClasse() As IMixProdutoClasseBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IMixProdutoClasseBusiness"), IMixProdutoClasseBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.08.10 [joao.bessa]
+    ''' </history>
+    Public Shared Function CreateProdutoPorEstabelecimento() As IProdutoPorEstabelecimentoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IProdutoPorEstabelecimentoBusiness"), IProdutoPorEstabelecimentoBusiness)
+    End Function
+
+    Public Shared Function CreateCriterioClassificacao() As ICriterioClassificacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ICriterioClassificacaoBusiness"), ICriterioClassificacaoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.10.05 [fernando.silva]
+    ''' </history>
+    Public Shared Function CreateSubEstoqueBusiness() As ISubEstoqueBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("ISubEstoqueBusiness"), ISubEstoqueBusiness)
+    End Function
+
+    Public Shared Function CreateComentarioDiretrizProgramacaoBusiness() As IComentarioDiretrizProgramacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IComentarioDiretrizProgramacaoBusiness"), IComentarioDiretrizProgramacaoBusiness)
+    End Function
+
+    Public Shared Function CreateDiretrizProgramacaoBusiness() As IDiretrizProgramacaoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IDiretrizProgramacaoBusiness"), IDiretrizProgramacaoBusiness)
+    End Function
+
+    ''' <history>
+    '''    ING-2012.10.05 [AndersonGois]
+    ''' </history>
+    Public Shared Function CreateConfiguracaoVendaProduto() As IConfiguracaoVendaProdutoBusiness
+        Return DirectCast(FactoryHelper.GetFactory(FactoryName).CreateObject("IConfiguracaoVendaProdutoBusiness"), IConfiguracaoVendaProdutoBusiness)
+    End Function
+End Class
+

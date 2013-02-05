@@ -1,0 +1,1310 @@
+ValidarExclusaoConfigVenda
+
+Imports Ingresso.Central.Movimentacao.Business
+Imports Ingresso.Central.Ambiente.Entities
+Imports Ingresso.Central.Ambiente.Business
+Imports Ingresso.Central.Operacao.Entities
+Imports Ingresso.Central.Acordo.Business
+Imports Ingresso.Central.ConfigMov.Facade.DTO
+Imports Ingresso.Central.Operacao.Business
+Imports Ingresso.Central.ConfigMov.Exception
+Imports Ingresso.FrameWork.ExceptionHandler
+Imports Ingresso.Central.ConfigMov.Entities
+Imports Ingresso.Central.ConfigMov.Entities.DTO
+Imports Ingresso.Negocio
+Imports Ingresso.FrameWork.ServiceLocator
+Imports Ingresso.Dados.Mod
+Imports Ingresso.Central.ConfigMov.Business
+Imports Ingresso.Dados
+Imports Ingresso.Central.ConfigMov.Entities.Tipo
+Imports Ingresso.Central.Operacao.Entities.Tipo
+Imports Ingresso.BOS.Localidade.Entities
+Imports Ingresso.BOS.Localidade.Business
+Imports Ingresso.Central.Sinc.Bus
+Imports Ingresso.Central.Sinc.Bus.ServSincCadastro
+Imports System.Linq.Expressions
+
+Namespace Validation
+
+    ''' <history>
+    '''    ING-2012.12.19 [fernando.silva]
+    '''    ING-2012.12.05 [fernando.silva]
+    '''    ING-2012.11.30 [fernando.silva]
+    ''' </history>
+    Public MustInherit Class ProdutoValidation
+        Protected Sub ValidarInclusao(ByVal paDTO As ProdutoDTO, ByVal paEntidade As Produto)
+            ''
+            ValidarInstancia(paDTO, True)
+            ValidarInstancia(paEntidade, True)
+
+            ''
+            Dim vaGrupoProduto As GrupoProduto
+            Dim vaGrupoProdutoRepository As IGrupoProdutoBusiness = ConfigMovBusinessFactory.CreateGrupoProduto
+            vaGrupoProduto = vaGrupoProdutoRepository.Obter(Function(paE) paE.Codigo = paEntidade.GrupoProduto_Codigo, paIncluirPropriedades:={"ClassificacaoProduto"})
+            ''
+            Dim vaPendenteAtual As Boolean = paDTO.Situacao = ProdutoSituacao.Pendente
+            Dim vaExceptionPermitidoPendente As Boolean = False
+            Try
+                ValidarInclusaoAlteracao(paDTO, paEntidade, vaGrupoProduto, vaExceptionPermitidoPendente)
+            Catch vaEx As IngressoException
+                If vaExceptionPermitidoPendente AndAlso vaPendenteAtual Then
+                    Dim vaMensagem = vaEx.Message + " " + ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoAtivoInativoComPendencias)
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(vaMensagem)
+                Else
+                    Throw
+                End If
+            End Try
+            ''
+        End Sub
+
+        Protected Sub ValidarAlteracao(ByVal paDTO As ProdutoDTO, ByVal paEntidade As Produto)
+            ''
+            ValidarInstancia(paDTO)
+            ValidarInstancia(paEntidade)
+            ''
+            Dim vaEntidadeAtual As Produto
+            Dim vaProdutoBusiness As IProdutoBusiness = ConfigMovBusinessFactory.CreateProduto()
+            vaEntidadeAtual = vaProdutoBusiness.Listar(Function(paE) paE.Codigo = paEntidade.Codigo, paIncluirPropriedades:={"GrupoProduto.ClassificacaoProduto"}).FirstOrDefault()
+            If vaEntidadeAtual Is Nothing Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoNaoExiste))
+            End If
+            ''
+            Dim vaGrupoProduto As GrupoProduto = vaEntidadeAtual.GrupoProduto
+            ''
+            Dim vaPendenteAtual As Boolean = vaEntidadeAtual.Situacao = ProdutoSituacao.Pendente
+            Dim vaExceptionPermitidoPendente As Boolean = False
+            ''
+            ValidarProdutoTributacaoPorEstado(paDTO, paEntidade)
+
+            If paDTO.Situacao = ProdutoSituacao.Inativo Then
+
+                'Dim vaProdutoCodigoAntigo As String = Ingresso.Central.Sinc.Bus.Sincronizador.BuscarCodigoBosAntigo("Produto", paDTO.Codigo.ToString, "PRODPERSONALIZACAO", "IDPRODPERSONALIZACAO")
+
+                ''INI-ING-2012.10.23 [fernando.silva] - ErroProdutoInativarComRequisicaoEmAberto, aguardando restore do banco Teste_Arena_Central_Sic_v0105
+                'If Not String.IsNullOrEmpty(vaProdutoCodigoAntigo) Then
+
+                '    Dim vaRequisicaoArovada As Boolean = Ingresso.Central.Sinc.Bus.Sincronizador.ExistePedidoCompraPorProdutoCodigo(vaProdutoCodigoAntigo, "Aprovado")
+
+                '    Dim vaRequisicaoEntrada As Boolean = Ingresso.Central.Sinc.Bus.Sincronizador.ExistePedidoCompraPorProdutoCodigo(vaProdutoCodigoAntigo, "Entrada")
+
+                '    If vaRequisicaoArovada AndAlso vaRequisicaoEntrada Then
+                '        ''Erro Aprovada e Entrada
+                '        Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoInativarComRequisicaoAguardandoAprovacaoEhSemEntradaNoEstoqueNet))
+                '    ElseIf vaRequisicaoArovada AndAlso Not vaRequisicaoEntrada Then
+                '        ''Erro de Aprovada
+                '        Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoInativarComRequisicaoAguardandoAprovacao))
+                '    ElseIf vaRequisicaoEntrada AndAlso Not vaRequisicaoArovada Then
+                '        ''Erro de Entrada
+                '        Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoInativarComRequisicaoPedidoSemEntradaNoEstoqueNet))
+                '    End If
+
+
+                'End If
+                ''FIM-ING-2012.10.23 [fernando.silva] - ErroProdutoInativarComRequisicaoEmAberto, aguardando restore do banco Teste_Arena_Central_Sic_v0105
+
+            End If
+
+            Try
+                ValidarAlteracaoComposicaoReceita(paEntidade, vaGrupoProduto, vaExceptionPermitidoPendente)
+                ValidarInclusaoAlteracao(paDTO, paEntidade, vaGrupoProduto, vaExceptionPermitidoPendente)
+            Catch vaEx As IngressoException
+                If vaExceptionPermitidoPendente AndAlso vaPendenteAtual Then
+                    Dim vaMensagem = vaEx.Message + " " + ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoAtivoInativoComPendencias)
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(vaMensagem)
+                Else
+                    Throw
+                End If
+            End Try
+            ''
+        End Sub
+
+        Private Sub ValidarInclusaoAlteracao(ByVal paDTO As ProdutoDTO, ByVal paEntidade As Produto, ByVal paGrupoProduto As GrupoProduto, ByRef paExceptionPermitidoPendente As Boolean)
+            ''
+            ValidarInclusaoAlteracaoCadastro(paDTO, paEntidade, paGrupoProduto, paExceptionPermitidoPendente)
+            ValidarInclusaoAlteracaoComposicaoReceita(paDTO, paEntidade, paGrupoProduto, paThrowBusinessException:=True, paExceptionPermitidoPendente:=paExceptionPermitidoPendente)
+            ValidarInclusaoAlteracaoUnidadeMedida(paDTO, paEntidade)
+            ValidarInclusaoAlteracaoFornecedorAcordo(paDTO, paEntidade, paGrupoProduto, paExceptionPermitidoPendente)
+            ValidarInclusaoAlteracaoConfigVenda(paDTO, paEntidade, paGrupoProduto, paExceptionPermitidoPendente)
+            ValidarInclusaoAlteracaoSincronizador(paDTO, paEntidade, paGrupoProduto, paExceptionPermitidoPendente)
+            ''
+        End Sub
+
+        Protected Sub ValidarExclusao(ByVal paEntidade As Produto)
+            ''
+            ValidarInstancia(paEntidade)
+
+            ''
+
+            If libSettings.AtivarSincronizadorBOM Then
+                ''INI-ING-2012.10.23 [fernando.silva] - ErroProdutoExcluirComRequisicaoEmAberto, aguardando restore do banco Teste_Arena_Central_Sic_v0105
+                Dim vaStr As List(Of String) = Ingresso.Central.Sinc.Bus.Sincronizador.BuscarCodigoBosAntigoUmParaN("Produto", paEntidade.Codigo.ToString, "PRODPERSONALIZACAO", "IDPRODPERSONALIZACAO")
+
+                Dim vaProdutoCodigoAntigo As String = String.Join(",", vaStr)
+
+                Dim vaProdutoEhInstitucuionalOuPossuiPersonsalizacao As String = Ingresso.Central.Sinc.Bus.Sincronizador.ProdutoEhInstitucuionalOuPossuiPersonsalizacao(vaProdutoCodigoAntigo)
+
+                If Not String.IsNullOrEmpty(vaProdutoEhInstitucuionalOuPossuiPersonsalizacao) Then
+
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(vaProdutoEhInstitucuionalOuPossuiPersonsalizacao)
+
+                End If
+                ''FIM-ING-2012.10.23 [fernando.silva] - ErroProdutoExcluirComRequisicaoEmAberto, aguardando restore do banco Teste_Arena_Central_Sic_v0105
+            End If
+
+
+
+            Dim vaVendaBomboniereDetalheBusiness As IVendaBomboniereDetalheBusiness = OperacaoBusinessFactory.CreateVendaBomboniereDetalhe()
+            Dim vaReceitaProduto_Codigo As Integer() = New Integer() {}
+            If paEntidade.ReceitaProduto IsNot Nothing Then
+                vaReceitaProduto_Codigo = paEntidade.ReceitaProduto.Select(Function(paE) paE.Codigo).ToArray
+            End If
+            If vaVendaBomboniereDetalheBusiness.Existe(Function(paE) paE.Produto_Codigo = paEntidade.Codigo OrElse vaReceitaProduto_Codigo.Contains(paE.ReceitaProduto_Codigo)) Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoExcluirAssociadoVendaBomboniereDetalhe))
+            End If
+            ''
+            '' ErroProdutoExcluirAssociadoVendaBomboniereReceita (ProdutoMovimento_Codigo e ProdutoPai_Codigo)
+            Dim vaVendaBomboniereReceitaBusiness As IVendaBomboniereReceitaBusiness = OperacaoBusinessFactory.CreateVendaBomboniereReceita()
+            If vaVendaBomboniereReceitaBusiness.Existe(Function(paE) paE.ProdutoPrimario_Codigo = paEntidade.Codigo OrElse paE.ProdutoSecundario_Codigo = paEntidade.Codigo) Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoExcluirAssociadoVendaBomboniereReceita))
+            End If
+            ''
+            Dim vaProdutoBusiness As IProdutoBusiness = ConfigMovBusinessFactory.CreateProduto()
+            Dim vaProdutoAtual = vaProdutoBusiness.Listar(Function(paE) paE.Codigo = paEntidade.Codigo, paIncluirPropriedades:={"ProdutoFornecedorUnidade.ProdutoSituacaoUnidade", "ReceitaProduto.ItemReceita"})
+            ''
+            ''
+            Dim vaEntidadeAtual As Produto
+            Dim vaProdutoRepository As IProdutoBusiness = ConfigMovBusinessFactory.CreateProduto()
+            Dim vaIncluirPropriedades = {
+                "ConfiguracaoVendaProduto.CalendarioVendaProdutoClasse",
+                "ProdutoItemCaractProduto.ItemCaracteristicaProduto.CaracteristicaProduto.TipoCaracteristicaProduto"
+            }
+            vaEntidadeAtual = vaProdutoRepository.Obter(Function(paE) paE.Codigo = paEntidade.Codigo, paIncluirPropriedades:=vaIncluirPropriedades)
+
+
+            ValidarExclusaoConfigVenda(paEntidade, vaEntidadeAtual)
+
+            ''
+            '' ErroProdutoExcluirAssociadoInventarioDetalhe
+            Dim vaProdutoSituacaoUnidadeCodigo As Integer() = (From vaP In vaProdutoAtual
+                                                               From vaF In vaP.ProdutoFornecedorUnidade
+                                                               From vaS In vaF.ProdutoSituacaoUnidade
+                                                               Select vaS.Codigo).ToArray()
+            Dim vaInventarioDetalheBusiness As IInventarioDetalheBusiness = MovimentacaoBusinessFactory.CreateInventarioDetalhe()
+            Dim vaExisteInventarioDetalheAssociada = vaInventarioDetalheBusiness.Existe(Function(paE) (paE.Produto_Codigo = paEntidade.Codigo) OrElse _
+                                                                                                      (paE.ProdutoSituacaoUnidade_Codigo.HasValue AndAlso vaProdutoSituacaoUnidadeCodigo.Contains(paE.ProdutoSituacaoUnidade_Codigo))
+                                                                                       )
+            If vaExisteInventarioDetalheAssociada Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoExcluirAssociadoInventarioDetalhe))
+            End If
+            ''
+            '' ErroProdutoExcluirAssociadoItemMovimentaoOperacional
+            Dim vaProdutoFornecedorUnidadeCodigo As Integer() = (From vaP In vaProdutoAtual
+                                                                 From vaF In vaP.ProdutoFornecedorUnidade
+                                                                 Select vaF.Codigo).ToArray()
+            Dim vaProdutoMovimentoOperacionalBusiness As IProdutoMovimentoOperacionalBusiness = MovimentacaoBusinessFactory.CreateProdutoMovimentoOperacional()
+            Dim vaExisteItemMovimentaoOperacionalAssociado As Boolean = vaProdutoMovimentoOperacionalBusiness.Existe(Function(paE) vaProdutoFornecedorUnidadeCodigo.Contains(paE.ProdutoFornecedorUnidade_Codigo))
+            If vaExisteItemMovimentaoOperacionalAssociado Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoExcluirAssociadoProdutoMovimentoOperacional))
+            End If
+            ''
+            '' ErroProdutoExcluirAssociadoEstoque
+            Dim vaEstoqueBusiness As IEstoqueBusiness = MovimentacaoBusinessFactory.CreateEstoque()
+            Dim vaExisteEstoqueAssociada = vaEstoqueBusiness.Existe(Function(paE) paE.Produto_Codigo = paEntidade.Codigo)
+            If vaExisteEstoqueAssociada Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoExcluirAssociadoEstoque))
+            End If
+            ''
+
+
+        End Sub
+
+        Private Sub ValidarExclusaoConfigVenda(ByVal paEntidade As Produto, ByVal paEntidadeAtual As Produto)
+            ''
+            Dim vaRemarcacaoPrecoCalendarioBusiness As IRemarcacaoPrecoCalendarioBusiness = ConfigMovBusinessFactory.CreateRemarcacaoPrecoCalendario()
+            Dim vaCalendarioVendaProdutoClasseCodigos = (From vaE In paEntidadeAtual.ConfiguracaoVendaProduto
+                    From vaC In vaE.CalendarioVendaProdutoClasse
+                    Select vaC.Codigo).ToArray
+
+
+            ValidarDataReMarcacaoPreco2(paEntidadeAtual)
+
+            If vaRemarcacaoPrecoCalendarioBusiness.Existe(Function(paE) vaCalendarioVendaProdutoClasseCodigos.Contains(paE.CalendarioVendaProdutoClasse_Codigo)) Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoConfiguracaoVendaExcluirAssociadoRemarcacaoPrecoCalendario))
+            End If
+
+            ''
+        End Sub
+
+        Public Sub ValidarDataRemarcacaoPreco(ByVal paEntidadeAtual As Produto)
+
+            Dim vaConfiguracaoVendaProdutoBusiness As IConfiguracaoVendaProdutoBusiness = ConfigMovBusinessFactory.CreateConfiguracaoVendaProduto()
+
+            Dim vaRemarcacaoPrecoCalendarioBusiness As IRemarcacaoPrecoCalendarioBusiness = ConfigMovBusinessFactory.CreateRemarcacaoPrecoCalendario()
+            Dim vaCalendarioVendaProdutoClasseBusiness As ICalendarioVendaProdutoClasseBusiness = ConfigMovBusinessFactory.CreateCalendarioVendaProdutoClasse()
+            Dim vaRemarcacaoPrecoBusiness As IRemarcacaoPrecoBusiness = ConfigMovBusinessFactory.CreateRemarcacaoPreco()
+            Dim vaCalendarioBusiness As ICalendarioBusiness = OperacaoBusinessFactory.CreateCalendario()
+
+
+            Dim vaConfiguracaoVendaProduto = vaConfiguracaoVendaProdutoBusiness.Listar(Function(x) x.Produto_Codigo.Equals(paEntidadeAtual.Codigo)).FirstOrDefault()
+
+            If vaConfiguracaoVendaProduto IsNot Nothing Then
+                Dim vaCalendarioVendaProdutoClasse = vaCalendarioVendaProdutoClasseBusiness.Listar(Function(x) x.ConfiguracaoVendaProduto_Codigo.Equals(vaConfiguracaoVendaProduto.Codigo)).FirstOrDefault()
+
+                If vaCalendarioVendaProdutoClasse IsNot Nothing Then
+                    Dim vaRemarcacaoPrecoCalendario = vaRemarcacaoPrecoCalendarioBusiness.Listar(Function(x) x.CalendarioVendaProdutoClasse_Codigo.Equals(vaCalendarioVendaProdutoClasse.Codigo)).FirstOrDefault()
+
+                    If vaRemarcacaoPrecoCalendario IsNot Nothing Then
+                        Dim vaRemarcacaoPreco = vaRemarcacaoPrecoBusiness.Listar(Function(x) x.Codigo.Equals(vaRemarcacaoPrecoCalendario.RemarcacaoPreco_Codigo)).FirstOrDefault()
+
+                        If vaRemarcacaoPreco IsNot Nothing Then
+                            Dim vaCalendario = vaCalendarioBusiness.Listar(Function(x) x.Codigo.Equals(vaRemarcacaoPreco.Calendario_Codigo)).FirstOrDefault()
+
+                            If vaCalendario IsNot Nothing Then
+                                If vaCalendario.DataInicio.Value.AddMonths(1).Month < (paEntidadeAtual.DataLancamento.Month) Then
+                                    Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoConfiguracaoVendaExcluirAssociadoRemarcacaoPrecoCalendario))
+                                End If
+
+                            End If
+
+                        End If
+
+                    End If
+
+                End If
+
+            End If
+        End Sub
+
+        Public Sub ValidarDataReMarcacaoPreco2(ByVal paEntidadeAtual As Produto)
+            ''
+            Dim vaCalendarioBusiness As ICalendarioBusiness = OperacaoBusinessFactory.CreateCalendario()
+            Dim vaDataCalendarioRestrito = DateTime.Today.AddMonths(-1)
+            Dim vaCalendario = vaCalendarioBusiness.Listar(Function(paE) paE.TipoCalendario.Sigla = TipoCalendarioSigla.ApenasInicio AndAlso paE.DataInicio >= vaDataCalendarioRestrito)
+            Dim vaCalendario_Codigo = vaCalendario.Select(Function(paE) paE.Codigo).ToArray()
+            ''
+            Dim vaProdutoBusiness As IProdutoBusiness = ConfigMovBusinessFactory.CreateProduto()
+            Dim vaExisteRemarcacaoPrecoRestricaoExclusao = vaProdutoBusiness.Existe(Function(paE) paE.Codigo = paEntidadeAtual.Codigo AndAlso _
+                                                                                                  paE.ConfiguracaoVendaProduto _
+                                                                                                         .Any(Function(paC) paC.CalendarioVendaProdutoClasse _
+                                                                                                                                    .Any(Function(paCal) paCal.RemarcacaoPrecoCalendario _
+                                                                                                                                                                .Any(Function(paR) vaCalendario_Codigo.Contains(paR.RemarcacaoPreco.Calendario_Codigo))
+                                                                                                                                        )
+                                                                                                             ) _
+                                                                                   )
+            If vaExisteRemarcacaoPrecoRestricaoExclusao Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoConfiguracaoVendaExcluirAssociadoRemarcacaoPrecoCalendario))
+            End If
+            ''
+
+        End Sub
+
+
+#Region "Cadastro"
+
+        Private Sub ValidarInclusaoAlteracaoCadastro(ByVal paDTO As ProdutoDTO, ByVal paEntidade As Produto, ByVal paGrupoProduto As GrupoProduto, ByRef paExceptionPermitidoPendente As Boolean)
+            ''
+            Dim vaDeveValidarHistoricoCurvaABC = paGrupoProduto.Composicao = ComposicaoGrupoProduto.ItemNormal
+            If vaDeveValidarHistoricoCurvaABC Then
+                '' ErroProdutoHistoricoCurvaABCNuloOuVazio
+                Dim vaHistoricoCurvaABCBusiness As IHistoricoCurvaABCBusiness = AcordoBusinessFactory.CreateHistoricoCurvaABC
+                Dim vaHistoricoCurvaABCNova = paDTO.HistoricoCurvaABC.Where(Function(paE) paE.Codigo <= 0).ToList
+                Dim vaExisteHistoricoCurvaABC = vaHistoricoCurvaABCNova.Any() OrElse _
+                                                vaHistoricoCurvaABCBusiness.Existe(Function(paE) paE.Produto_Codigo = paEntidade.Codigo)
+                If Not vaExisteHistoricoCurvaABC Then
+                    If paEntidade.Situacao <> ProdutoSituacao.Pendente Then
+                        paExceptionPermitidoPendente = True
+                        Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoHistoricoCurvaABCNuloOuVazio))
+                    End If
+                End If
+                ''
+                Dim vaMetodoClassificacaoCurvaABCCodigo = (From vaE In vaHistoricoCurvaABCNova
+                                                           Select vaE.MetodoClassificacaoCurvaABC_Codigo).ToArray
+                Dim vaMetodoClassificacaoCurvaABCBusiness As IMetodoClassificacaoCurvaABCBusiness = AcordoBusinessFactory.CreateMetodoClassificacaoCurvaABC
+                Dim vaAlgumMetodoClassificacaoCurvaABCNovoAutomatico = vaMetodoClassificacaoCurvaABCBusiness.Existe(Function(paE) vaMetodoClassificacaoCurvaABCCodigo.Contains(paE.Codigo) AndAlso _
+                                                                                                                                  paE.CalculadoAutomaticamente)
+                If vaAlgumMetodoClassificacaoCurvaABCNovoAutomatico Then
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoHistoricoCurvaABCComMetodoMetodoClassificacaoCurvaABCNovoAutomatico))
+                End If
+                ''
+            End If
+            ''
+        End Sub
+
+#End Region
+
+#Region "Tributação"
+
+        ''' <history>
+        '''     FLY-2012.10.16 [diogo.areas]
+        ''' </history>
+
+        Private Sub ValidarProdutoTributacaoPorEstado(ByVal paDTO As ProdutoDTO, ByVal paEntidade As Produto)
+            ''
+            Dim vaProdutoVenda As IProdutoBusiness = ConfigMovBusinessFactory.CreateProduto()
+            Dim vaProdutoVendaAtual = vaProdutoVenda.Listar(Function(pae) pae.Codigo = paDTO.Codigo, {"GrupoProduto.ClassificacaoProduto"}).FirstOrDefault
+
+            If UCase(paDTO.Situacao) = "A" And vaProdutoVendaAtual.GrupoProduto.ClassificacaoProduto.Sigla = ClassificacaoProdutoSigla.ProdutoVenda Then 'paEntidade.GrupoProduto.ClassificacaoProduto.Sigla = ClassificacaoProdutoSigla.ProdutoVenda
+
+                Dim vaTributacaoProdutoBusiness As IProdutoTributacaoPorEstadoDTOBusiness = ConfigMovBusinessFactory.CreateProdutoTributacaoPorEstadoDTOBusiness()
+                Dim vaMixProdutoClasses As IMixProdutoClasseBusiness = ConfigMovBusinessFactory.CreateMixProdutoClasse()
+                Dim vaEstabelecimentos As IEstabelecimentoBusiness = AmbienteBusinessFactory.CreateEstabelecimento()
+                Dim vaEnderecos As IEnderecoBusiness = LocalidadeBusinessFactory.CreateEndereco()
+                Dim vaCidades As ICidadeBusiness = LocalidadeBusinessFactory.CreateCidade()
+                Dim vaEstados As IEstadoBusiness = LocalidadeBusinessFactory.CreateEstado()
+                Dim vaGrupoTributacao As IGrupoTributacaoBusiness = ConfigMovBusinessFactory.CreateGrupoTributacao()
+                Dim vaTributacaoAliquota As ITributacaoAliquotaBusiness = ConfigMovBusinessFactory.CreateTributacaoAliquota()
+                Dim vaConfiguracaoTributacao As IConfiguracaoTributacaoBusiness = ConfigMovBusinessFactory.CreateConfiguracaoTributacao()
+                Dim vaGrupoTributacaoAliquota As IGrupoTributacaoAliquotaBusiness = ConfigMovBusinessFactory.CreateGrupoTributacaoAliquota()
+                Dim vaTributacaoTipoMovOperacional As ITributacaoTipoMovOperacionalBusiness = ConfigMovBusinessFactory.CreateTributacaoTipoMovOperacional()
+                Dim vaTipoMovOperacional As ITipoMovimentoOperacionalBusiness = MovimentacaoBusinessFactory.CreateTipoMovimentoOperacional()
+
+                Dim vaMixProdutoDto = paDTO.MixProduto
+                Dim vaGrupoCodigo = paDTO.GrupoTributacao.Codigo
+                Dim vaTributacaoTipoMovOperacionalAtual = vaTributacaoTipoMovOperacional.Listar(Function(pae) pae.Tributacao.Sigla = "ICMS" AndAlso (pae.TipoMovOperacional_Codigo = 2 Or pae.TipoMovOperacional_Codigo = 7))
+                Dim vaTipoMovOperacionalAtual = vaTipoMovOperacional.Listar(Function(pae) pae.Nome = "Venda Balcão" Or pae.Nome = "Venda Manual")
+
+                Dim vaListTipoMovOperacional As New List(Of Integer)
+                vaListTipoMovOperacional = (From oo1 In vaTipoMovOperacionalAtual
+                                            Select oo1.Codigo).ToList()
+
+                Dim vaEstabelecimentosAtuais As New List(Of Estabelecimento)
+                Dim vaEstabelecimentosFinais As New List(Of Estabelecimento)
+                Dim vaClasseAtual As New List(Of MixProdutoClasse)
+                Dim vaEnderecoAtual As New List(Of Endereco)
+                Dim vaCidadeAtual As New List(Of Cidade)
+                Dim vaEstadoAtual As New List(Of Estado)
+                Dim vaTributacaoAliquotaAutal As New List(Of TributacaoAliquota)
+                Dim vaConfiguracaoTributacaoAtual As New List(Of ConfiguracaoTributacao)
+
+                Dim vaEstadosSemTributacao As New List(Of String)
+
+                For Each _vaClasses In vaMixProdutoDto : Dim vaClasses = _vaClasses
+                    vaClasseAtual.Add(vaMixProdutoClasses.Listar(Function(pae) pae.MixProduto_Codigo = vaClasses.Codigo).FirstOrDefault)
+                Next
+
+                For Each _vaClasses In vaClasseAtual : Dim vaClasses = _vaClasses
+                    vaEstabelecimentosAtuais = vaEstabelecimentos.ListarEstabelecimentoPorClasse(vaClasses.Classe_Codigo)
+                    For Each _vaClassesAtuais In vaEstabelecimentosAtuais : Dim vaClassesAtuais = _vaClassesAtuais
+                        vaEstabelecimentosFinais.Add(vaClassesAtuais)
+                    Next
+                Next
+
+                For Each _vaEnderecosAtuais In vaEstabelecimentosFinais : Dim vaEnderecosAtuais = _vaEnderecosAtuais
+                    vaEnderecoAtual.Add(vaEnderecos.Listar(Function(pae) pae.Codigo = vaEnderecosAtuais.Endereco_Codigo, Nothing, {"Cidade"}).FirstOrDefault)
+                Next
+
+                For Each _vaCidadesAtuais In vaEnderecoAtual : Dim vaCidadesAtuais = _vaCidadesAtuais
+                    vaCidadeAtual.Add(vaCidades.Listar(Function(pae) pae.Codigo = vaCidadesAtuais.Cidade.Codigo).FirstOrDefault)
+                Next
+
+                For Each _vaEstadosAtuais In vaCidadeAtual : Dim vaEstadosAtuais = _vaEstadosAtuais
+                    vaEstadoAtual.Add(vaEstados.Listar(Function(pae) pae.Codigo = vaEstadosAtuais.Estado_Codigo).FirstOrDefault)
+                Next
+
+                Dim vaEstadosTributadosFinal = From vaE In vaEstadoAtual
+                                          Group By vaE.Codigo, vaE.Sigla Into Group
+                                          Select Codigo, Sigla
+
+                Dim vaEstadosTributados
+
+                Dim vaGrupoTributacaoAliquotaAtual = vaGrupoTributacaoAliquota.Listar(Function(pae) pae.GrupoTributacao.Codigo = vaGrupoCodigo, Nothing, {"TributacaoAliquota"}).ToList()
+
+                For Each _vaGrpTributacaoAliquota In vaGrupoTributacaoAliquotaAtual : Dim vaGrpTributacaoAliquota = _vaGrpTributacaoAliquota
+                    vaTributacaoAliquotaAutal.Add(vaTributacaoAliquota.Listar(Function(pae) pae.Codigo = vaGrpTributacaoAliquota.TributacaoAliquota.Codigo, Nothing, {"ConfiguracaoTributacao.TributacaoTipoMovimentoOperacional.Tributacao"}).FirstOrDefault)
+                Next
+
+                For Each _vaConfTributacao In vaTributacaoAliquotaAutal : Dim vaConfTributacao = _vaConfTributacao
+                    vaConfiguracaoTributacaoAtual.Add(vaConfiguracaoTributacao.Listar(Function(pae) pae.Codigo = vaConfTributacao.ConfiguracaoTributacao.Codigo).FirstOrDefault)
+                Next
+
+                vaEstadosTributados = (From oo In vaEstadosTributadosFinal
+                                      From oo1 In vaTributacaoAliquotaAutal
+                                      From oo2 In vaConfiguracaoTributacaoAtual
+                                      Where oo.Codigo = oo1.Estado_Codigo AndAlso
+                                      oo1.ConfiguracaoTributacao.TributacaoTipoMovimentoOperacional.Tributacao.Sigla = "ICMS" AndAlso
+                                      vaListTipoMovOperacional.Contains(oo1.ConfiguracaoTributacao.TributacaoTipoMovimentoOperacional.TipoMovOperacional_Codigo)
+                                      Select oo.Sigla).ToList()
+
+                For Each _vaEstadosTributadosAtual In vaEstadosTributadosFinal : Dim vaEstadosTributadosAtual = _vaEstadosTributadosAtual
+                    If Not vaEstadosTributados.Contains(vaEstadosTributadosAtual.Sigla) Then
+                        vaEstadosSemTributacao.Add(vaEstadosTributadosAtual.Sigla)
+                    End If
+                Next
+
+                Dim vaListaEstados As String = ""
+
+                If vaEstadosSemTributacao.Count > 0 Then
+                    For i = 0 To vaEstadosSemTributacao.Count - 1
+                        If i = 0 Then
+                            vaListaEstados = vaEstadosSemTributacao(i)
+                        Else
+                            vaListaEstados = vaListaEstados + "," + vaEstadosSemTributacao(i)
+                        End If
+                    Next
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(String.Format(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoTributacaoPorEstado), Trim(vaListaEstados)))
+                End If
+            Else
+                Exit Sub
+            End If
+            ''
+        End Sub
+#End Region
+
+
+#Region "Composição / Receita"
+
+        ''' <history>
+        '''     ING-2012.08.13 [marcus.miris]
+        ''' </history>
+        Private Function ValidarInclusaoAlteracaoComposicaoReceita(ByVal paDTO As ProdutoDTO,
+                                                                   ByVal paEntidade As Produto,
+                                                                   ByVal paGrupoProduto As GrupoProduto,
+                                                                   ByVal paThrowBusinessException As Boolean,
+                                                                   ByRef paExceptionPermitidoPendente As Boolean,
+                                                                   Optional ByRef paItemInvalidoEstabelecimento As List(Of ObjetoListavel) = Nothing,
+                                                                   Optional ByRef paItemInvalidoPerfilVenda As List(Of ObjetoListavel) = Nothing,
+                                                                   Optional ByVal paDTOOrigem As ProdutoDTO = Nothing) _
+                                                           As Boolean
+            ''
+            Dim vaProdutoBusiness = ConfigMovBusinessFactory.CreateProduto()
+            paItemInvalidoEstabelecimento = New List(Of ObjetoListavel)
+            paItemInvalidoPerfilVenda = New List(Of ObjetoListavel)
+            ''
+            ValidarInclusaoAlteracaoComposicaoReceitaAssociado(paDTO, paEntidade, paExceptionPermitidoPendente)
+            If Not vaProdutoBusiness.DeveValidarComposicaoReceita(paGrupoProduto) Then
+                Return True
+            End If
+            ''
+            Dim vaItemComposicao = paGrupoProduto IsNot Nothing AndAlso paGrupoProduto.Composicao = ComposicaoGrupoProduto.ItemComposto
+            ''
+            Dim vaPerfilVendaCodigo As Integer()
+            Dim vaMixProdutoCodigo As Integer()
+            ''
+            If paDTO.PerfilVendaProduto IsNot Nothing Then
+                vaPerfilVendaCodigo = (From vaE In paDTO.PerfilVendaProduto Select vaE.PerfilVenda_Codigo).ToArray
+            Else
+                vaPerfilVendaCodigo = New Integer() {}
+            End If
+            ''
+            If paDTO.MixProduto IsNot Nothing Then
+                vaMixProdutoCodigo = (From vaE In paDTO.MixProduto Select vaE.Codigo).ToArray
+            Else
+                vaMixProdutoCodigo = New Integer() {}
+            End If
+            ''
+            Dim vaReceitaAberta = (From vaR In paEntidade.ReceitaProduto Where Not vaR.DataFim.HasValue).SingleOrDefault
+            If vaReceitaAberta IsNot Nothing AndAlso vaReceitaAberta.DataInicio <= Date.Today Then
+                vaReceitaAberta.ItemReceita = ConfigMovBusinessFactory.CreateItemReceita().Listar(Function(paE) paE.ReceitaProduto.Codigo = vaReceitaAberta.Codigo, incluirPropriedades:={"Produto"})
+            End If
+            '' 
+            Dim vaProdutoConcentradorAssociadoQuery = From vaR In paEntidade.ReceitaProduto
+                                                      From vaI In vaR.ItemReceita
+                                                      Where vaItemComposicao
+                                                      Let vaAssociadoProduto = vaI.Produto IsNot Nothing
+                                                      Let vaAssociadoConcentrador = vaI.ConcentradorProduto IsNot Nothing
+                                                      Where vaAssociadoProduto OrElse vaAssociadoConcentrador
+                                                      Select vaAssociadoProduto, vaAssociadoConcentrador, vaI.Produto, vaI.ConcentradorProduto
+            ''
+            '' Produto
+            Dim vaProduto_CodigoAssociado = (From vaE In vaProdutoConcentradorAssociadoQuery
+                                             Where vaE.vaAssociadoProduto
+                                             Select vaE.Produto.Codigo).ToList
+            Dim vaProdutoLista As List(Of Produto)
+            Dim vaIncluirPropriedadesProduto = {"ProdutoMixProduto.MixProduto.MixProdutoClasse", "GrupoProduto.ClassificacaoProduto"}
+            vaProdutoLista = vaProdutoBusiness.Listar(Function(paE) vaProduto_CodigoAssociado.Contains(paE.Codigo), paIncluirPropriedades:=vaIncluirPropriedadesProduto)
+            paItemInvalidoEstabelecimento = ValidarInclusaoAlteracaoComposicaoReceitaListarInvalidoEstabelecimento(paGrupoProduto, vaMixProdutoCodigo, vaProdutoLista, paDTOOrigem)
+            paItemInvalidoPerfilVenda = ValidarInclusaoAlteracaoComposicaoReceitaListarInvalidoPerfilVenda(paGrupoProduto, vaPerfilVendaCodigo, vaProdutoLista, paDTOOrigem)
+            If paItemInvalidoEstabelecimento.Any() OrElse paItemInvalidoPerfilVenda.Any Then
+                Dim vaMensagem = ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoComposicaoReceitaProdutoInvalidoAssociado)
+                Dim vaProdutoInvalido = paItemInvalidoEstabelecimento.Concat(paItemInvalidoPerfilVenda)
+                Dim vaProdutoNomes = (From vaP In vaProdutoInvalido
+                                      Order By vaP.Nome
+                                      Select vaP.Nome Distinct).ToArray
+                vaMensagem = String.Format(vaMensagem, String.Join(",", vaProdutoNomes))
+                If paThrowBusinessException Then
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(vaMensagem)
+                End If
+                Return False
+            End If
+            ''
+            '' Concentrador
+            Dim vaConcentradorBusiness = ConfigMovBusinessFactory.CreateConcentradorProduto()
+            Dim vaConcentrador_CodigoAssociado = (From vaE In vaProdutoConcentradorAssociadoQuery
+                                                  Where vaE.vaAssociadoConcentrador
+                                                  Select vaE.ConcentradorProduto.Codigo).ToList
+            ''
+            Dim vaListaConcentrador = vaConcentradorBusiness.Listar(Function(paE) vaConcentrador_CodigoAssociado.Contains(paE.Codigo))
+            Dim vaIncluirPropriedadesConcentrador = {"ProdutoMixProduto.MixProduto.MixProdutoClasse", "GrupoProduto.ClassificacaoProduto"}
+            Dim vaConcentradorRestritoQuery = From vaC In vaListaConcentrador
+                                              Let vaProduto = vaProdutoBusiness.ListarPorConcentradorProduto(vaC.Codigo, paCondicao:=Function(paE) paE.Situacao = ProdutoSituacao.Ativo, paIncluirPropriedades:=vaIncluirPropriedadesConcentrador)
+                                              Let vaProdutoRestritoEstabelecimentoConcentrador = ValidarInclusaoAlteracaoComposicaoReceitaListarInvalidoEstabelecimento(paGrupoProduto, vaMixProdutoCodigo, vaProduto, paDTOOrigem)
+                                              Let vaProdutoRestritoPerfilVendaConcentrador = ValidarInclusaoAlteracaoComposicaoReceitaListarInvalidoPerfilVenda(paGrupoProduto, vaPerfilVendaCodigo, vaProduto, paDTOOrigem)
+                                              Let vaTodosProdutosDoConcentradorPossuemRestricaoEstabelecimento = vaProduto.All(Function(paE) vaProdutoRestritoEstabelecimentoConcentrador.Any(Function(paR) paE.Codigo = paR.Codigo))
+                                              Let vaTodosProdutosDoConcentradorPossuemRestricaoPerfilVenda = vaProduto.All(Function(paE) vaProdutoRestritoPerfilVendaConcentrador.Any(Function(paR) paE.Codigo = paR.Codigo))
+                                              Where vaTodosProdutosDoConcentradorPossuemRestricaoEstabelecimento OrElse
+                                                    vaTodosProdutosDoConcentradorPossuemRestricaoPerfilVenda
+                                              Select vaC,
+                                                     vaTodosProdutosDoConcentradorPossuemRestricaoEstabelecimento,
+                                                     vaTodosProdutosDoConcentradorPossuemRestricaoPerfilVenda
+            ''
+            If vaConcentradorRestritoQuery.Any() Then
+                Dim vaMensagem = ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoComposicaoReceitaConcentradorInvalidoAssociado)
+                paItemInvalidoEstabelecimento = (From vaE In vaConcentradorRestritoQuery
+                                                 Where vaE.vaTodosProdutosDoConcentradorPossuemRestricaoEstabelecimento
+                                                 Select New ObjetoListavel With {.Codigo = vaE.vaC.Codigo, .Nome = vaE.vaC.Nome}).ToList
+                paItemInvalidoPerfilVenda = (From vaE In vaConcentradorRestritoQuery
+                                             Where vaE.vaTodosProdutosDoConcentradorPossuemRestricaoPerfilVenda
+                                             Select New ObjetoListavel With {.Codigo = vaE.vaC.Codigo, .Nome = vaE.vaC.Nome}).ToList
+                Dim vaConcentradorNomes = (From vaE In vaConcentradorRestritoQuery
+                                           Let vaP = vaE.vaC
+                                           Order By vaP.Nome
+                                           Select vaP.Nome).ToArray
+                vaMensagem = String.Format(vaMensagem, String.Join(",", vaConcentradorNomes))
+                If paThrowBusinessException Then
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(vaMensagem)
+                End If
+                Return False
+            End If
+            ''
+            Return True
+            ''
+        End Function
+
+        Private Sub ValidarInclusaoAlteracaoComposicaoReceitaAssociado(ByVal paDTO As ProdutoDTO, ByVal paEntidade As Produto, ByRef paExceptionPermitidoPendente As Boolean)
+            ''
+            Dim vaProdutoBusiness = ConfigMovBusinessFactory.CreateProduto()
+            Dim vaConcentradorProdutoCodigo As List(Of Integer)
+            Dim vaConcentradorProdutoBusiness As IConcentradorProdutoBusiness = ConfigMovBusinessFactory.CreateConcentradorProduto()
+            vaConcentradorProdutoCodigo = vaConcentradorProdutoBusiness.ListarPorProdutoCodigo(paEntidade.Codigo).Select(Function(paE) paE.Codigo).ToList()
+            ''
+            Dim vaIncluirPropriedades = {"GrupoProduto.ClassificacaoProduto",
+                                         "ProdutoMixProduto.MixProduto",
+                                         "ReceitaProduto.ItemReceita.Produto",
+                                         "ReceitaProduto.ItemReceita.ConcentradorProduto"}
+            Dim vaProdutoComposicaoReceitaAssociado = vaProdutoBusiness.Listar(Function(paE) paE.Situacao = ProdutoSituacao.Ativo AndAlso _
+                                                                                             paE.ReceitaProduto.Any(Function(paR) paR.DataFim Is Nothing AndAlso _
+                                                                                                                                  paR.ItemReceita.Any(Function(paI) (paI.Produto.Codigo = paEntidade.Codigo OrElse _
+                                                                                                                                                                    vaConcentradorProdutoCodigo.Contains(paI.ConcentradorProduto_Codigo)))
+                                                                                                                   ),
+                                                                              paIncluirPropriedades:=vaIncluirPropriedades
+                                                                             )
+            ''
+            Dim vaProdutoEstabelecimentoInvalido As New List(Of Produto)
+            Dim vaProdutoPerfilVendaInvalido As New List(Of Produto)
+            ''
+            Dim vaItemInvalidoEstabelecimento As List(Of ObjetoListavel)
+            Dim vaItemInvalidoPerfilVenda As List(Of ObjetoListavel)
+            ''
+            For Each vaProduto In vaProdutoComposicaoReceitaAssociado
+                Dim vaDTO As ProdutoDTO = New ProdutoDTO()
+                ConverterEntidadeParaDTOCadastro(vaProduto, vaDTO)
+                ConverterEntidadeParaDTOConfigVendaPerfilVendaProduto(vaProduto, vaDTO)
+                Dim vaProdutoValido = ValidarInclusaoAlteracaoComposicaoReceita(vaDTO, vaProduto, vaProduto.GrupoProduto, False, paExceptionPermitidoPendente, vaItemInvalidoEstabelecimento, vaItemInvalidoPerfilVenda, paDTO)
+                If Not vaProdutoValido Then
+                    If vaItemInvalidoEstabelecimento.Any Then
+                        vaProdutoEstabelecimentoInvalido.Add(vaProduto)
+                    End If
+                    If vaItemInvalidoPerfilVenda.Any Then
+                        vaProdutoPerfilVendaInvalido.Add(vaProduto)
+                    End If
+                End If
+            Next
+            ''
+            If vaProdutoEstabelecimentoInvalido.Any() OrElse vaProdutoPerfilVendaInvalido.Any() Then
+                If paEntidade.Situacao <> ProdutoSituacao.Pendente Then
+                    paExceptionPermitidoPendente = True
+                    Dim vaChaveMensagem As ChaveMensagem
+                    Dim vaProdutos As String
+                    If vaProdutoEstabelecimentoInvalido.Any Then
+                        vaChaveMensagem = ChaveMensagem.ErroProdutoComposicaoReceitaEstabelecimentoInvalidaComposicaoAssociada
+                        vaProdutos = String.Join(", ", vaProdutoEstabelecimentoInvalido.OrderBy(Function(paE) paE.Nome).Select(Function(paE) paE.Nome).ToArray)
+                    Else
+                        vaChaveMensagem = ChaveMensagem.ErroProdutoComposicaoReceitaPerfilVendaInvalidaComposicaoAssociada
+                        vaProdutos = String.Join(", ", vaProdutoPerfilVendaInvalido.OrderBy(Function(paE) paE.Nome).Select(Function(paE) paE.Nome).ToArray)
+                    End If
+                    Dim vaMensagem = ConfigMovException.Mensagens(vaChaveMensagem)
+                    vaMensagem = String.Format(vaMensagem, vaProdutos)
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(vaMensagem)
+                End If
+            End If
+
+        End Sub
+
+        Private Function ValidarInclusaoAlteracaoComposicaoReceitaListarInvalidoEstabelecimento(ByVal paGrupoProduto As GrupoProduto,
+                                                                                                ByVal paMixProduto_Codigo As Integer(),
+                                                                                                ByVal paProduto As List(Of Produto),
+                                                                                                Optional ByVal paDTOOrigem As ProdutoDTO = Nothing) _
+                                                                                       As List(Of ObjetoListavel)
+            ''
+            If Not DeveRealizarValidacaoIntramoduloComposicaoReceita(paGrupoProduto) Then
+                Return New List(Of ObjetoListavel) '' Retorna uma lista vazia (nenhuma restrição, quando restrição não deve ser avaliada)
+            End If
+            ''
+            '' Estabelecimento
+            Dim vaMixProdutoBusiness = ConfigMovBusinessFactory.CreateMixProduto()
+            Dim vaMixProduto = vaMixProdutoBusiness.Listar(Function(paE) paMixProduto_Codigo.Contains(paE.Codigo), paIncluirPropriedades:={"MixProdutoClasse"})
+            Dim vaClasse_Codigo = (From vaE In vaMixProduto
+                                   From vaC In vaE.MixProdutoClasse
+                                   Select vaC.Classe_Codigo).ToList
+            Dim vaEstabelecimentoBusiness As IEstabelecimentoBusiness = AmbienteBusinessFactory.CreateEstabelecimento()
+            Dim vaEstabelecimento = vaEstabelecimentoBusiness.Listar(Function(paE) paE.Classe.Any(Function(paC) vaClasse_Codigo.Contains(paC.Codigo)))
+            Dim vaEstabelecimento_Codigo = (From vaE In vaEstabelecimento Select vaE.Codigo).ToList
+            ''
+            Dim vaEstabelecimentoEhCompativel As Func(Of Produto, Boolean)
+            ''
+            Dim vaClassificacaoSiglaInsumoSuprimento As String() = {ClassificacaoProdutoSigla.Insumo, ClassificacaoProdutoSigla.Suprimento}
+            vaEstabelecimentoEhCompativel = Function(paP)
+                                                Dim vaVerificarRestricoesEstabelecimento = Not vaClassificacaoSiglaInsumoSuprimento.Contains(paP.GrupoProduto.ClassificacaoProduto.Sigla)
+                                                If Not vaVerificarRestricoesEstabelecimento Then
+                                                    Return True
+                                                End If
+                                                Dim vaFiltroClasse_Codigo As Integer()
+                                                If (paDTOOrigem IsNot Nothing AndAlso paP.Codigo = paDTOOrigem.Codigo) Then
+                                                    Dim vaMixProdutoCodigo = If(paDTOOrigem.MixProduto IsNot Nothing, paDTOOrigem.MixProduto.Select(Function(paE) paE.Codigo).ToArray, New Integer() {})
+                                                    Dim vaMixProdutoOrigem = vaMixProdutoBusiness.Listar(Function(paE) vaMixProdutoCodigo.Contains(paE.Codigo), paIncluirPropriedades:={"MixProdutoClasse"})
+                                                    vaFiltroClasse_Codigo = (From vaM In vaMixProdutoOrigem
+                                                                             From vaC In vaM.MixProdutoClasse
+                                                                             Select vaC.Classe_Codigo).ToArray
+                                                Else
+                                                    vaFiltroClasse_Codigo = (From vaE In paP.ProdutoMixProduto
+                                                                             Let vaM = vaE.MixProduto
+                                                                             From vaC In vaM.MixProdutoClasse
+                                                                             Select vaC.Classe_Codigo).ToArray
+                                                End If
+                                                Dim vaEstabelecimentoAssociado = vaEstabelecimentoBusiness.Listar(Function(paE) paE.Classe.Any(Function(paC) vaFiltroClasse_Codigo.Contains(paC.Codigo)))
+                                                Dim vaEstabelecimento_CodigoAssociado = (From vaE In vaEstabelecimentoAssociado Select vaE.Codigo)
+                                                Dim vaEstabelecimentoAlgumNaoAssociado = vaEstabelecimento_Codigo.Except(vaEstabelecimento_CodigoAssociado).Any
+                                                Return Not vaEstabelecimentoAlgumNaoAssociado
+                                            End Function
+            ''
+            Dim vaProdutoQueNaoAtendemFiltrosAdicionais = (From vaP In paProduto
+                                                           Where Not vaEstabelecimentoEhCompativel(vaP)
+                                                           Select New ObjetoListavel With {.Codigo = vaP.Codigo, .Nome = vaP.Nome}).ToList
+            ''
+            Return vaProdutoQueNaoAtendemFiltrosAdicionais
+            ''
+        End Function
+
+        Private Function ValidarInclusaoAlteracaoComposicaoReceitaListarInvalidoPerfilVenda(ByVal paGrupoProduto As GrupoProduto,
+                                                                                            ByVal paPerfilVenda_Codigo As Integer(),
+                                                                                            ByVal paProduto As List(Of Produto),
+                                                                                            Optional ByVal paDTOOrigem As ProdutoDTO = Nothing) _
+                                                                                        As List(Of ObjetoListavel)
+            ''
+            If Not DeveRealizarValidacaoIntramoduloComposicaoReceita(paGrupoProduto) Then
+                Return New List(Of ObjetoListavel) '' Retorna uma lista vazia (nenhuma restrição, quando restrição não deve ser avaliada)
+            End If
+            Dim vaPerfilVendaProdutoBusiness As IPerfilVendaProdutoBusiness = OperacaoBusinessFactory.CreatePerfilVendaProduto()
+            ''
+            Dim vaPerfilVendaEhCompativel As Func(Of Produto, Boolean)
+            ''
+            vaPerfilVendaEhCompativel = Function(paP)
+                                            Dim vaVerificarRestricoesPerfilVenda = paP.GrupoProduto.ClassificacaoProduto.Sigla = ClassificacaoProdutoSigla.ProdutoVenda
+                                            If Not vaVerificarRestricoesPerfilVenda Then
+                                                Return True
+                                            End If
+
+                                            Dim vaPerfilVenda_CodigoAssociado As New List(Of Integer)
+                                            If (paDTOOrigem IsNot Nothing AndAlso paP.Codigo = paDTOOrigem.Codigo) Then
+                                                vaPerfilVenda_CodigoAssociado = (From vaE In paDTOOrigem.PerfilVendaProduto
+                                                                                 Select vaE.PerfilVenda_Codigo).ToList
+                                            Else
+                                                Dim vaPerfilVendaProdutoAssociado As IEnumerable(Of PerfilVendaProduto)
+                                                vaPerfilVendaProdutoAssociado = vaPerfilVendaProdutoBusiness.Listar(Function(paE) paE.Produto_Codigo = paP.Codigo, paIncluirPropriedades:={"PerfilVenda"})
+                                                vaPerfilVenda_CodigoAssociado = (From vaE In vaPerfilVendaProdutoAssociado Select vaE.PerfilVenda.Codigo).ToList
+                                            End If
+                                            Dim vaPerfilVendaAlgumNaoAssociado = vaPerfilVenda_CodigoAssociado.Any AndAlso paPerfilVenda_Codigo.Except(vaPerfilVenda_CodigoAssociado).Any
+                                            Return Not vaPerfilVendaAlgumNaoAssociado
+                                        End Function
+            ''
+            Dim vaProdutoQueNaoAtendemFiltrosAdicionais = (From vaP In paProduto
+                                                           Where Not vaPerfilVendaEhCompativel(vaP)
+                                                           Select New ObjetoListavel With {.Codigo = vaP.Codigo, .Nome = vaP.Nome}).ToList
+            ''
+            Return vaProdutoQueNaoAtendemFiltrosAdicionais
+            ''
+        End Function
+
+        Private Function DeveRealizarValidacaoIntramoduloComposicaoReceita(ByVal paGrupoProduto As GrupoProduto) As Boolean
+
+            Dim vaDeveRealizarValidacaoIntramoduloComposicaoReceita = (paGrupoProduto.ClassificacaoProduto.Sigla = ClassificacaoProdutoSigla.ProdutoVenda AndAlso
+                                                                       paGrupoProduto.Composicao = ComposicaoGrupoProduto.ItemComposto)
+            Return vaDeveRealizarValidacaoIntramoduloComposicaoReceita
+        End Function
+
+        Private Sub ValidarAlteracaoComposicaoReceita(ByVal paEntidade As Produto, ByVal paGrupoProduto As GrupoProduto, ByRef paExceptionPermitidoPendente As Boolean)
+            ''
+            Dim vaProdutoBusiness As IProdutoBusiness = ConfigMovBusinessFactory.CreateProduto
+            If Not vaProdutoBusiness.DeveValidarComposicaoReceita(paGrupoProduto) Then
+                Return
+            End If
+            ''
+            Dim vaReceitaProduto = paEntidade.ReceitaProduto
+            If paEntidade.Situacao = ProdutoSituacao.Pendente AndAlso ValidationHelper.EhNuloOuVazio(vaReceitaProduto) Then
+                Return
+            End If
+            ''
+            Dim vaClasse As List(Of ObjetoListavel)
+            If paGrupoProduto.ReceitaDiferenciadaClasse Then
+                Dim vaClasseBusiness As IClasseBusiness = AmbienteBusinessFactory.CreateClasse()
+                vaClasse = vaClasseBusiness.Listar(Function(paE) paE.TipoClasse.Sigla = Aplicacao.Tipos.TipoClasseSigla.Receita).Cast(Of ObjetoListavel).ToList()
+            Else
+                vaClasse = New List(Of ObjetoListavel)
+            End If
+            Dim vaClasse_Codigo = (From vaC In vaClasse Select vaC.Codigo).ToList
+            ''
+            Dim vaReceitaGrupo As List(Of ReceitaGrupo)
+            vaReceitaGrupo = vaProdutoBusiness.ListarGrupoProdutoComposicaoReceita(paEntidade.Codigo, paIncluirPropriedades:={"GrupoProdutoSecundario"})
+            Dim vaGrupoProduto_CodigoReceitaConfigurado = (From vaA In vaReceitaGrupo
+                                                           Group By GrupoProduto_Codigo = vaA.GrupoProdutoSecundario.Codigo Into Group
+                                                           Select New With
+                                                                  {
+                                                                      Key GrupoProduto_Codigo,
+                                                                      .Classe_Codigo = vaClasse_Codigo
+                                                                  }
+                                                           ).ToList
+            ''
+            If vaReceitaProduto Is Nothing Then
+                vaReceitaProduto = New List(Of ReceitaProduto)()
+            End If
+            Dim vaItemReceitaBusiness As IItemReceitaBusiness = ConfigMovBusinessFactory.CreateItemReceita
+            Dim vaProdutoReceitaProdutoConcentrador = (From vaR In vaReceitaProduto
+                                                       Where vaR.DataFim Is Nothing
+                                                       Let vaItemReceita = If(vaR.DataInicio > DateTime.Today, vaR.ItemReceita, vaItemReceitaBusiness.Listar(Function(paE) paE.ReceitaProduto.Codigo = vaR.Codigo, incluirPropriedades:={"Produto"}))
+                                                       From vaI In vaItemReceita
+                                                       Where vaI.Produto IsNot Nothing OrElse vaI.ConcentradorProduto_Codigo IsNot Nothing
+                                                       Group By Produto_Codigo = If(vaI.Produto IsNot Nothing, New Nullable(Of Integer)(vaI.Produto.Codigo), Nothing),
+                                                                ConcentradorProduto_Codigo = If(vaI.ConcentradorProduto_Codigo IsNot Nothing, vaI.ConcentradorProduto_Codigo, Nothing)
+                                                            Into Group
+                                                       Select Produto_Codigo,
+                                                              ConcentradorProduto_Codigo,
+                                                              Classe_Codigo = (From vaG In Group
+                                                                               Where vaG.vaI.Classe_Codigo.HasValue
+                                                                               Select vaG.vaI.Classe_Codigo.Value Distinct).ToList
+                                                        ).ToList
+            ''
+            '' GrupoProdutoProduto
+            Dim vaGrupoProdutoBusiness As IGrupoProdutoBusiness = ConfigMovBusinessFactory.CreateGrupoProduto
+            Dim vaProdutoReceitaProduto = (From vaE In vaProdutoReceitaProdutoConcentrador
+                                           Where vaE.Produto_Codigo.HasValue
+                                           Select vaE.Produto_Codigo.Value)
+            Dim vaGrupoProdutoProduto = vaGrupoProdutoBusiness.Listar(Function(paE) paE.Produto.Any(Function(paP) vaProdutoReceitaProduto.Contains(paP.Codigo)))
+            Dim vaGrupoProdutoClasseDeProduto = (From vaE In vaProdutoReceitaProdutoConcentrador
+                                                 Where vaE.Produto_Codigo.HasValue
+                                                 Let Produto_Codigo = vaE.Produto_Codigo.Value
+                                                 Let GrupoProduto = vaGrupoProdutoBusiness.Listar(Function(paE) paE.Produto.Any(Function(paP) paP.Codigo = Produto_Codigo)).FirstOrDefault
+                                                 Group By GrupoProduto_Codigo = GrupoProduto.Codigo Into Group
+                                                 Select New With
+                                                        {
+                                                            Key GrupoProduto_Codigo,
+                                                            .Classe_Codigo = (From vaG In Group
+                                                                              From vaC In vaG.vaE.Classe_Codigo
+                                                                              Select vaC Distinct).ToList
+                                                        }).ToList
+            '' GrupoProdutoConcentrador
+            Dim vaConcentradorProduto As List(Of ConcentradorProduto)
+            Dim vaConcentradorProdutoBusiness As IConcentradorProdutoBusiness = ConfigMovBusinessFactory.CreateConcentradorProduto
+            Dim vaGrupoProdutoClasseDeConcentrador = (From vaE In vaProdutoReceitaProdutoConcentrador
+                                                      Where vaE.ConcentradorProduto_Codigo.HasValue
+                                                      Let ConcentradorProduto_Codigo = vaE.ConcentradorProduto_Codigo.Value
+                                                      Let ConcentradorProduto = vaConcentradorProdutoBusiness.Listar(Function(paE) ConcentradorProduto_Codigo = paE.Codigo, paIncluirPropriedades:={"ConcentradorProdutoDetalhe.GrupoProduto"}).First
+                                                      From vaD In ConcentradorProduto.ConcentradorProdutoDetalhe
+                                                      Group By GrupoProduto_Codigo = vaD.GrupoProduto.Codigo Into Group
+                                                      Let vaGrupoProdutoJaAssociadoAtravesDeUmProduto = vaGrupoProdutoClasseDeProduto.Any(Function(paG) paG.GrupoProduto_Codigo = GrupoProduto_Codigo)
+                                                      Where Not vaGrupoProdutoJaAssociadoAtravesDeUmProduto
+                                                      Select New With
+                                                             {
+                                                                 Key GrupoProduto_Codigo,
+                                                                 .Classe_Codigo = (From vaG In Group
+                                                                                   From vaC In vaG.vaE.Classe_Codigo
+                                                                                   Select vaC Distinct).ToList,
+            .ConcentradorProduto_Codigo = (From vaG In Group Select ConcentradorProduto_Codigo = vaG.vaE.ConcentradorProduto_Codigo.Value).ToList
+                                                             }).ToList
+
+            ''
+            Dim vaGrupoProduto_CodigoNaoUtilizado = vaGrupoProduto_CodigoReceitaConfigurado.Except(vaGrupoProdutoClasseDeProduto).ToList
+            Dim vaConcentradorUtilizadaNaRemocao As List(Of Integer) = New List(Of Integer)
+            For vaIndice As Integer = vaGrupoProduto_CodigoNaoUtilizado.Count - 1 To 0 Step -1
+                Dim vaGrupoProdutoConfigurado = vaGrupoProduto_CodigoNaoUtilizado(vaIndice)
+                Dim vaGrupoProduto_Codigo = vaGrupoProdutoConfigurado.GrupoProduto_Codigo
+                Dim vaConcentradorAssociado = vaGrupoProdutoClasseDeConcentrador.FirstOrDefault(Function(paE) paE.GrupoProduto_Codigo = vaGrupoProduto_Codigo AndAlso _
+                                                                                                              paE.ConcentradorProduto_Codigo.Any(Function(paC) Not vaConcentradorUtilizadaNaRemocao.Contains(paC)))
+                ''
+                If vaConcentradorAssociado Is Nothing Then
+                    Continue For
+                End If
+                ''
+                If vaConcentradorAssociado.ConcentradorProduto_Codigo.Any Then
+                    Dim vaConcentradorProduto_Codigo = vaConcentradorAssociado.ConcentradorProduto_Codigo.First
+                    vaConcentradorUtilizadaNaRemocao.Add(vaConcentradorProduto_Codigo)
+                End If
+                ''
+                Dim vaReceitaConfigurado = vaGrupoProdutoClasseDeConcentrador.FirstOrDefault(Function(paE) paE.GrupoProduto_Codigo = vaGrupoProduto_Codigo)
+                Dim vaGrupoProdutoFoiUtilizadoComoConcentrador = vaReceitaConfigurado IsNot Nothing
+                If Not vaGrupoProdutoFoiUtilizadoComoConcentrador Then
+                    Continue For
+                End If
+                ''
+                vaGrupoProduto_CodigoNaoUtilizado.RemoveAt(vaIndice)
+                Dim vaInvalido = Not ValidarAlteracaoComposicaoReceitaClasse(paEntidade, vaGrupoProdutoConfigurado.Classe_Codigo, vaConcentradorAssociado.Classe_Codigo, paExceptionPermitidoPendente)
+                If vaInvalido Then
+                    Return
+                End If
+            Next
+            ''
+            If vaGrupoProduto_CodigoNaoUtilizado.Any Then
+                If paEntidade.Situacao <> ProdutoSituacao.Pendente Then
+                    paExceptionPermitidoPendente = True
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoComposicaoReceitaDiferenteConfigurado))
+                End If
+                Return
+            End If
+            ''
+            For Each vaC In vaGrupoProdutoClasseDeProduto
+                Dim vaGrupoProdutoConfigurado = vaGrupoProduto_CodigoReceitaConfigurado.FirstOrDefault(Function(paE) paE.GrupoProduto_Codigo = vaC.GrupoProduto_Codigo)
+                Dim vaGrupoProdutoEhOutros = vaGrupoProdutoConfigurado Is Nothing
+                If vaGrupoProdutoEhOutros Then
+                    Return
+                End If
+                Dim vaInvalido = Not ValidarAlteracaoComposicaoReceitaClasse(paEntidade, vaGrupoProdutoConfigurado.Classe_Codigo, vaC.Classe_Codigo, paExceptionPermitidoPendente)
+                If vaInvalido Then
+                    Return
+                End If
+            Next
+            ''
+        End Sub
+
+        Private Function ValidarAlteracaoComposicaoReceitaClasse(ByVal paEntidade As Produto, ByVal paClasse_CodigoConfigurada As List(Of Integer), ByVal paClasse_CodigoAssociada As List(Of Integer), ByRef paExceptionPermitidoPendente As Boolean)
+            ''
+            Dim vaClasse_CodigoNaoUtilizado = paClasse_CodigoConfigurada.Except(paClasse_CodigoAssociada)
+            If vaClasse_CodigoNaoUtilizado.Any Then
+                If paEntidade.Situacao <> ProdutoSituacao.Pendente Then
+                    paExceptionPermitidoPendente = True
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoComposicaoReceitaDiferenteConfigurado))
+                End If
+                Return False
+            End If
+            Return True
+            ''
+        End Function
+
+#End Region
+
+#Region "Unidade Medida"
+
+        Private Sub ValidarInclusaoAlteracaoUnidadeMedida(ByVal paDTO As ProdutoDTO, ByVal entidade As Produto)
+            ''
+            Dim vaProdutoFornecedorUnidadesEmbalagem = ConverterDTOParaEntidadeUnidadeMedidaEmbalagem(paDTO)
+            Dim vaProdutoFornecedorUnidadesConversao = ConverterDTOParaEntidadeUnidadeMedidaConversao(paDTO)
+            ''
+            Dim vaProdutoFornecedorUnidade = New List(Of ProdutoFornecedorUnidade)
+            Dim vaProdutoFornecedorUnidadeValidoParaSituacaoInventario = New List(Of ProdutoFornecedorUnidade)
+            vaProdutoFornecedorUnidade.AddRange(vaProdutoFornecedorUnidadesEmbalagem)
+            vaProdutoFornecedorUnidade.AddRange(vaProdutoFornecedorUnidadesConversao)
+            ''
+            If vaProdutoFornecedorUnidadesEmbalagem.Any(Function(paE) paE.RelacionamentoUnidade Is Nothing) Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoUnidadeMedidaEmbalagemUnidadeMedidaInvalida))
+            End If
+            ''
+            If vaProdutoFornecedorUnidadesConversao.Any(Function(paE) paE.RelacionamentoUnidade Is Nothing) Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoUnidadeMedidaConversaoUnidadeMedidaInvalida))
+            End If
+            ''
+            Dim vaProdutoFornecedorUnidadesSituacaoInventario = ConverterDTOParaEntidadeUnidadeMedidaSituacaoInventario(paDTO, vaProdutoFornecedorUnidade, vaProdutoFornecedorUnidadeValidoParaSituacaoInventario)
+            Dim vaSituacaoInventarioNaoEmbalagemConversao = (From vaS In vaProdutoFornecedorUnidadesSituacaoInventario.Except(vaProdutoFornecedorUnidadeValidoParaSituacaoInventario)
+                                                             Where vaS.RelacionamentoUnidade_Codigo IsNot Nothing).ToList
+            ''
+            If vaSituacaoInventarioNaoEmbalagemConversao.Any(Function(paE) paE.RelacionamentoUnidade_Codigo IsNot Nothing) Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoUnidadeMedidaSituacaoInventarioNaoBaseNemEmbalagemConversao))
+            End If
+            ''
+        End Sub
+
+        Protected Function ConverterDTOParaEntidadeUnidadeMedidaEmbalagem(ByVal paDTO As ProdutoDTO) As List(Of ProdutoFornecedorUnidade)
+            ''
+            If paDTO.UnidadeMedida.Embalagem Is Nothing Then
+                Return New List(Of ProdutoFornecedorUnidade)
+            End If
+            ''
+            Dim vaRelacionamentoUnidadeBusiness As IRelacionamentoUnidadeBusiness = ConfigMovBusinessFactory.CreateRelacionamentoUnidade()
+            Dim vaRelacionamentoUnidadeEspecial = vaRelacionamentoUnidadeBusiness.Listar(Function(paE) paE.TipoRelacionamento = TipoRelacionamentoUnidade.EmbalagemEspecial, incluirPropriedades:={"UnidadeMedidaFilho", "UnidadeMedidaPai"})
+            Dim vaRelacionamentoUnidadePossiveis = vaRelacionamentoUnidadeBusiness.ListarPorUnidadeBase(paDTO.UnidadeMedida.UnidadeMedida_Codigo, _
+                                                                                                        paCondicao:=Function(paE) paE.TipoRelacionamento = TipoRelacionamentoUnidade.Embalagem, _
+                                                                                                        paIncluirPropriedades:={"UnidadeMedidaPai"})
+            ''
+            Dim vaProdutoFornecedorUnidadesEmbalagem = From vaE In paDTO.UnidadeMedida.Embalagem
+                                                       Let RelacionamentoUnidade_Codigo = If(vaE.UnidadeMedida_Codigo < 0, vaE.UnidadeMedida_Codigo * -1, vaE.UnidadeMedida_Codigo)
+                                                       Let vaRelacionamentoUnidadeBase = If(vaE.UnidadeMedida_Codigo < 0, vaRelacionamentoUnidadeEspecial.FirstOrDefault(Function(paE) paE.Codigo = RelacionamentoUnidade_Codigo), Nothing)
+                                                       Let vaRelacionamentoUnidadeAtual = If(vaRelacionamentoUnidadeBase Is Nothing, vaRelacionamentoUnidadeBusiness.Listar(Function(paE) paE.Codigo = RelacionamentoUnidade_Codigo).FirstOrDefault, Nothing)
+                                                       Let vaUnidadeMedida_Codigo = If(vaRelacionamentoUnidadeAtual IsNot Nothing, vaRelacionamentoUnidadeAtual.UnidadeMedidaPai_Codigo, Nothing)
+                                                       Let vaRelacionamentoUnidadeFator = vaRelacionamentoUnidadePossiveis.FirstOrDefault(Function(paE) paE.UnidadeMedidaPai_Codigo = vaUnidadeMedida_Codigo AndAlso paE.Fator.GetValueOrDefault = vaE.Fator.GetValueOrDefault)
+                                                       Let vaRelacionamentoUnidadeCodigo = vaRelacionamentoUnidadePossiveis.FirstOrDefault(Function(paE) paE.UnidadeMedidaPai_Codigo = vaUnidadeMedida_Codigo)
+                                                       Let vaRelacionamentoUnidade = If(vaRelacionamentoUnidadeBase IsNot Nothing, vaRelacionamentoUnidadeBase, _
+                                                                                           If(vaRelacionamentoUnidadeFator IsNot Nothing, vaRelacionamentoUnidadeFator, _
+                                                                                           vaRelacionamentoUnidadeCodigo))
+                                                       Select RelacionamentoUnidade_Codigo,
+                                                              vaRelacionamentoUnidadeAtual,
+                                                              vaUnidadeMedida_Codigo,
+                                                              vaRelacionamentoUnidadeBase,
+                                                              vaRelacionamentoUnidadeFator,
+                                                              vaRelacionamentoUnidadeCodigo,
+                                                              vaRelacionamentoUnidade,
+                                                              ProdutoFornecedorUnidade = New ProdutoFornecedorUnidade With
+                                                                                                {
+                                                                                                    .Codigo = vaE.Codigo,
+                                                                                                    .ProdutoSituacaoUnidade = New List(Of ProdutoSituacaoUnidade)(),
+                                                                                                    .RelacionamentoUnidade_Codigo = If(vaRelacionamentoUnidade Is Nothing, Nothing, vaRelacionamentoUnidade.Codigo),
+                                                                                                    .RelacionamentoUnidade = If(vaRelacionamentoUnidade Is Nothing, Nothing, vaRelacionamentoUnidade),
+                                                                                                    .Fator = vaE.Fator,
+                                                                                                    .ProdutoFornecedor = If(vaE.Fornecedor_Codigo > 0, New ProdutoFornecedor With {.Fornecedor_Codigo = vaE.Fornecedor_Codigo}, Nothing),
+                                                                                                    .Status = True
+                                                                                                }
+            ''
+            Return vaProdutoFornecedorUnidadesEmbalagem.Select(Function(paE) paE.ProdutoFornecedorUnidade).ToList
+            ''
+        End Function
+
+        Protected Function ConverterDTOParaEntidadeUnidadeMedidaConversao(ByVal paDTO As ProdutoDTO) As List(Of ProdutoFornecedorUnidade)
+            ''
+            If paDTO.UnidadeMedida.Conversao Is Nothing Then
+                Return New List(Of ProdutoFornecedorUnidade)
+            End If
+            ''
+            Dim vaUnidadeBaseCodigo As Nullable(Of Integer) = Nothing
+            Dim vaRelacionamentoUnidadeEmbalageEspecialCodigo As Nullable(Of Integer) = Nothing
+            ''
+            If paDTO.UnidadeMedida.UnidadeMedida_Codigo > 0 Then
+                vaUnidadeBaseCodigo = paDTO.UnidadeMedida.UnidadeMedida_Codigo
+            Else
+                vaRelacionamentoUnidadeEmbalageEspecialCodigo = paDTO.UnidadeMedida.UnidadeMedida_Codigo * -1
+            End If
+            ''
+            Dim vaRelacionamentoUnidadeBusiness As IRelacionamentoUnidadeBusiness = ConfigMovBusinessFactory.CreateRelacionamentoUnidade()
+            Dim vaConversoesPossiveis = vaRelacionamentoUnidadeBusiness.ListarConversao(vaUnidadeBaseCodigo, vaRelacionamentoUnidadeEmbalageEspecialCodigo)
+            ''
+            Dim vaProdutoFornecedorUnidadeConversao = From vaE In paDTO.UnidadeMedida.Conversao
+                                                      Let RelacionamentoUnidade_Codigo = If(vaE.RelacionamentoUnidade_Codigo < 0, vaE.RelacionamentoUnidade_Codigo * -1, vaE.RelacionamentoUnidade_Codigo)
+                                                      Let vaRelacionamentoUnidade = vaConversoesPossiveis.FirstOrDefault(Function(paE) paE.Codigo = RelacionamentoUnidade_Codigo)
+                                                      Select New ProdutoFornecedorUnidade With
+                                                             {
+                                                                 .Codigo = vaE.Codigo,
+                                                                 .ProdutoSituacaoUnidade = New List(Of ProdutoSituacaoUnidade)(),
+                                                                 .RelacionamentoUnidade = If(vaRelacionamentoUnidade Is Nothing, Nothing, vaRelacionamentoUnidade),
+                                                                 .RelacionamentoUnidade_Codigo = If(vaRelacionamentoUnidade Is Nothing, Nothing, vaRelacionamentoUnidade.Codigo),
+                                                                 .ProdutoFornecedor = If(vaE.Fornecedor_Codigo > 0, New ProdutoFornecedor With {.Fornecedor_Codigo = vaE.Fornecedor_Codigo}, Nothing),
+                                                                 .AplicaImportacao = vaE.AplicaImportacao,
+                                                                 .Status = True
+                                                             }
+            ''
+            Return vaProdutoFornecedorUnidadeConversao.ToList
+            ''
+        End Function
+
+        Protected Function ConverterDTOParaEntidadeUnidadeMedidaSituacaoInventario(ByVal paDTO As ProdutoDTO, _
+                                                                                   ByVal paProdutoFornecedorUnidade As IList(Of ProdutoFornecedorUnidade), _
+                                                                                   Optional ByRef paProdutoFornecedorUnidadeValidoParaSituacaoInventario As IList(Of ProdutoFornecedorUnidade) = Nothing) _
+                                                                    As List(Of ProdutoFornecedorUnidade)
+            ''
+            If paDTO.UnidadeMedida.SituacaoInventario Is Nothing Then
+                Return New List(Of ProdutoFornecedorUnidade)
+            End If
+            ''
+            paProdutoFornecedorUnidadeValidoParaSituacaoInventario = (From vaE In paProdutoFornecedorUnidade
+                                                                      Where vaE.RelacionamentoUnidade IsNot Nothing AndAlso _
+                                                                            ((vaE.RelacionamentoUnidade.TipoRelacionamento = TipoRelacionamentoUnidade.Embalagem) OrElse _
+                                                                             (vaE.RelacionamentoUnidade.TipoRelacionamento = TipoRelacionamentoUnidade.EmbalagemEspecial) OrElse _
+                                                                             (vaE.RelacionamentoUnidade.TipoRelacionamento = TipoRelacionamentoUnidade.Conversao AndAlso vaE.ProdutoFornecedor Is Nothing)
+                                                                            )
+                                                                      Order By vaE.ProdutoFornecedor_Codigo.GetValueOrDefault, vaE.Fator.GetValueOrDefault
+                                                                      ).ToList()
+            '' Realizando cópia para poder utilizar parametro ByRef em query
+            Dim vaProdutoFornecedorUnidadeValidoParaSituacaoInventario = paProdutoFornecedorUnidadeValidoParaSituacaoInventario.ToList
+            ''
+            Dim vaSituacaoInventarioQuery = (From vaE In paDTO.UnidadeMedida.SituacaoInventario
+                                             Group By RelacionamentoUnidade_Codigo = If(vaE.UnidadeMedida_Codigo.GetValueOrDefault < 0, vaE.UnidadeMedida_Codigo.GetValueOrDefault * -1, 0),
+                                                      Fator = vaE.Fator
+                                                    Into Group
+                                             Let vaProdutoFornecedorUnidadePossivel = vaProdutoFornecedorUnidadeValidoParaSituacaoInventario.FirstOrDefault(Function(paE) paE.RelacionamentoUnidade_Codigo = RelacionamentoUnidade_Codigo AndAlso _
+                                                                                                                                                                          paE.Fator.GetValueOrDefault = Fator.GetValueOrDefault)
+                                             Let vaRelacionamentoUnidadePossivel = If(vaProdutoFornecedorUnidadePossivel IsNot Nothing AndAlso vaProdutoFornecedorUnidadePossivel.RelacionamentoUnidade_Codigo.HasValue AndAlso vaProdutoFornecedorUnidadePossivel.RelacionamentoUnidade_Codigo > 0, _
+                                                       New RelacionamentoUnidade With {.Codigo = vaProdutoFornecedorUnidadePossivel.RelacionamentoUnidade_Codigo}, _
+                                                       Nothing)
+                                             Let vaRelacionamentoUnidadeInstancia = If(RelacionamentoUnidade_Codigo > 0, New RelacionamentoUnidade With {.Codigo = RelacionamentoUnidade_Codigo}, Nothing)
+                                             Let vaRelacionamentoUnidade = If(vaRelacionamentoUnidadePossivel IsNot Nothing, vaRelacionamentoUnidadePossivel, vaRelacionamentoUnidadeInstancia)
+                                             Let vaProdutoSituacaoUnidade = (From vaS In Group Select New ProdutoSituacaoUnidade With {.Situacao_Codigo = vaS.Situacao_Codigo}).ToList()
+                                                                             Select RelacionamentoUnidade_Codigo = If(vaRelacionamentoUnidade Is Nothing, 0, vaRelacionamentoUnidade.Codigo),
+                                                                                    Fator = Fator,
+                                                                                    RelacionamentoUnidade = vaRelacionamentoUnidade,
+                                                                                    ProdutoSituacaoUnidade = vaProdutoSituacaoUnidade,
+                                                                                    vaProdutoFornecedorUnidadePossivel, vaRelacionamentoUnidadePossivel, vaRelacionamentoUnidadeInstancia
+                                                                             ).ToList
+
+            For Each vaUnidadeSituacaoInventario In vaSituacaoInventarioQuery : Dim vaUnidadeSituacaoInventarioEscopoLocal = vaUnidadeSituacaoInventario
+                Dim vaProdutoFornecedorUnidade = paProdutoFornecedorUnidadeValidoParaSituacaoInventario.FirstOrDefault(Function(paE) vaUnidadeSituacaoInventarioEscopoLocal.RelacionamentoUnidade_Codigo = paE.RelacionamentoUnidade_Codigo.GetValueOrDefault AndAlso _
+                                                                                                                                     vaUnidadeSituacaoInventarioEscopoLocal.Fator.GetValueOrDefault = paE.Fator.GetValueOrDefault)
+                If vaProdutoFornecedorUnidade IsNot Nothing Then
+                    vaProdutoFornecedorUnidade.ProdutoSituacaoUnidade = vaUnidadeSituacaoInventario.ProdutoSituacaoUnidade
+                    Continue For
+                End If
+                '' Adiciona novo produtofornecedorunidade com codigo ficticio de relacionamento unidade para que seja dado erro na validação de existência realizada posteriormente.
+                Dim vaRelacionamentoUnidade_Codigo As Nullable(Of Integer) = Nothing
+                If vaUnidadeSituacaoInventario.RelacionamentoUnidade_Codigo > 0 Then vaRelacionamentoUnidade_Codigo = vaUnidadeSituacaoInventario.RelacionamentoUnidade_Codigo
+                vaProdutoFornecedorUnidade = New ProdutoFornecedorUnidade With
+                                             {
+                                                 .RelacionamentoUnidade_Codigo = vaRelacionamentoUnidade_Codigo,
+                                                 .RelacionamentoUnidade = vaUnidadeSituacaoInventario.RelacionamentoUnidade,
+                                                 .ProdutoSituacaoUnidade = vaUnidadeSituacaoInventario.ProdutoSituacaoUnidade,
+                                                 .Status = True
+                                             }
+                paProdutoFornecedorUnidade.Add(vaProdutoFornecedorUnidade)
+                ''
+            Next
+            ''
+            Return paProdutoFornecedorUnidade.Where(Function(paE) paE.ProdutoSituacaoUnidade.Any).ToList
+            ''
+        End Function
+
+#End Region
+
+#Region "Fornecedor / Acordo"
+
+       Private Sub ValidarInclusaoAlteracaoFornecedorAcordo(ByVal paDTO As ProdutoDTO, ByVal paEntidade As Produto, ByVal paGrupoProduto As GrupoProduto, ByRef paExceptionPermitidoPendente As Boolean)
+            ''
+            Dim vaProdutoBusiness As IProdutoBusiness = ConfigMovBusinessFactory.CreateProduto()
+            Dim vaDeveValidarFornecedorAcordo = vaProdutoBusiness.DeveValidarFornecedorAcordo(paGrupoProduto)
+            If Not vaDeveValidarFornecedorAcordo Then
+                Return
+            End If
+            ''
+
+            If paDTO.ProdutoFornecedor IsNot Nothing Then
+
+                Dim vaProdutoFornecedor As List(Of ProdutoDTO.ProdutoFornecedorDTO) = paDTO.ProdutoFornecedor
+
+                Dim vaProdutoFornecedorCodigo As List(Of Integer) = If(vaProdutoFornecedor IsNot Nothing, (From oo In paDTO.ProdutoFornecedor Select oo.Codigo).ToList, Nothing)
+
+                Dim vaFornecedor_Codigos = vaProdutoFornecedor.Select(Function(paE) paE.Fornecedor_Codigo).Distinct.ToArray
+                Dim vaFornecedorBusiness As IFornecedorBusiness = AmbienteBusinessFactory.CreateFornecedor()
+                Dim vaFornecedor = vaFornecedorBusiness.Listar(Function(paE) vaFornecedor_Codigos.Contains(paE.Codigo), paIncluirPropriedades:={"Classe.TipoClasse"})
+                If vaFornecedor_Codigos.Count() <> vaFornecedor.Count() Then
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoFornecedorAcordoFornecedorInexistente))
+                End If
+                If paEntidade.Situacao <> ProdutoSituacao.Pendente Then
+                    '' ErroProdutoFornecedorAcordoIncompleto
+                    Dim vaAcordoFornecedorClasseInformado = From vaP In vaProdutoFornecedor
+                                                            Where vaP IsNot Nothing AndAlso vaP.ProdutoAcordo IsNot Nothing
+                                                            From vaA In vaP.ProdutoAcordo
+                                                            Where vaA IsNot Nothing AndAlso vaA.Classe_Codigo.HasValue
+                                                            Let Classe_Codigo = vaA.Classe_Codigo.Value
+                                                            Select New With {Key vaP.Fornecedor_Codigo, Key Classe_Codigo}
+
+                    Dim vaFornecedorClassePossivel = From vaF In vaFornecedor
+                                                    Where vaF.RequerAcordoCompra = True
+                                                    From vaC In vaF.Classe
+                                                    Where vaC.TipoClasse.Sigla = Aplicacao.Tipos.TipoClasseSigla.Compra
+                                                    Let Fornecedor_Codigo = vaF.Codigo
+                                                    Let Classe_Codigo = vaC.Codigo
+                                                    Select New With {Key Fornecedor_Codigo, Key Classe_Codigo}
+
+                    If vaFornecedorClassePossivel IsNot Nothing Then
+                        Dim vaFornecedoresClassePossivesPreenchidos = Not vaFornecedorClassePossivel.Except(vaAcordoFornecedorClasseInformado).Any()
+                        If Not vaFornecedoresClassePossivesPreenchidos Then
+                            paExceptionPermitidoPendente = True
+                            Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoFornecedorAcordoIncompleto))
+                        End If
+                    End If
+
+                    ''
+                End If
+                ''
+            End If
+        End Sub
+
+#End Region
+
+#Region "Config. Venda"
+
+        Private Sub ValidarInclusaoAlteracaoConfigVenda(ByVal paDTO As ProdutoDTO, ByVal paEntidade As Produto, ByVal paGrupoProduto As GrupoProduto, ByRef paExceptionPermitidoPendente As Boolean)
+            ''
+            Dim vaProdutoBusiness As IProdutoBusiness = ConfigMovBusinessFactory.CreateProduto()
+            Dim vaDeveValidarConfigVenda = vaProdutoBusiness.DeveValidarConfigVenda(paGrupoProduto)
+            If Not vaDeveValidarConfigVenda Then
+                Return
+            End If
+            ''
+            '' ErroProdutoConfiguracaoVendaPrecoPadraoPerfilVendaInvalido
+            Dim vaExistePerfilVenda = Not ValidationHelper.EhNuloOuVazio(paDTO.PerfilVendaProduto)
+            Dim vaExistePrecoPadrao = paDTO.ConfiguracaoVendaProduto IsNot Nothing AndAlso
+                                            paDTO.ConfiguracaoVendaProduto.Any AndAlso
+                                            paDTO.ConfiguracaoVendaProduto.First.ConfiguracaoPrecoPadrao IsNot Nothing AndAlso
+                                            paDTO.ConfiguracaoVendaProduto.First.ConfiguracaoPrecoPadrao.PrecoVenda.HasValue AndAlso
+                                            paDTO.ConfiguracaoVendaProduto.First.ConfiguracaoPrecoPadrao.PrecoVenda.Value > 0
+            If (vaExistePerfilVenda Xor vaExistePrecoPadrao) AndAlso (Not paGrupoProduto.PossuiPrecoVendaSimbolico) Then
+                If paEntidade.Situacao <> ProdutoSituacao.Pendente Then
+                    paExceptionPermitidoPendente = True
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoConfiguracaoVendaPrecoPadraoPerfilVendaInvalido))
+                End If
+                Return
+            End If
+            ''
+            '' ErroProdutoConfiguracaoVendaPerfilVendaInexistente
+            If Not ValidationHelper.EhNuloOuVazio(paDTO.PerfilVendaProduto) Then
+                Dim vaPerfilVendaBusiness As IPerfilVendaBusiness = OperacaoBusinessFactory.CreatePerfilVenda()
+                Dim vaPerfilVendaCodigos As Integer()
+                vaPerfilVendaCodigos = paDTO.PerfilVendaProduto.Select(Function(paE) paE.PerfilVenda_Codigo).Distinct().ToArray()
+                If vaPerfilVendaBusiness.Listar(Function(paE) vaPerfilVendaCodigos.Contains(paE.Codigo)).Count <> vaPerfilVendaCodigos.Count() Then
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoConfiguracaoVendaPerfilVendaInexistente))
+                End If
+            End If
+            ''
+            '' ErroProdutoConfiguracaoVendaFormaPagamentoInexistente
+            If paEntidade.FormaPagamentoProduto IsNot Nothing Then
+                Dim vaFormaPagamentoBusiness As IFormaPagamentoBusiness = OperacaoBusinessFactory.CreateFormaPagamento()
+                Dim vaFormaPagamentoCodigos As Integer()
+                vaFormaPagamentoCodigos = paEntidade.FormaPagamentoProduto.Select(Function(paE) paE.FormaPagamento_Codigo).Distinct().ToArray()
+                If vaFormaPagamentoBusiness.Listar(Function(paE) vaFormaPagamentoCodigos.Contains(paE.Codigo)).Count <> vaFormaPagamentoCodigos.Count() Then
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoConfiguracaoVendaFormaPagamentoInexistente))
+                End If
+            End If
+            ''
+            '' TODO: Todos os calendários associados estão vinculados à Venda Balcão
+            '' TODO: Existência de calendários
+            ''
+            '' RN12 Produto possui Remarcações de Preço Futuras
+            '' O sistema deve verificar se existe alguma remarcação de preço associada ao produto cuja data de início seja maior 
+            '' que a data atual. Se sim, exibir tabela com as remarcações encontradas e não permitir alteração em nenhum dos preços do produto.
+            '' TODO: Colocar validation de alteracao de preco com remarcaco futura no servidor
+            'Dim vaCalendarioFuturo As List(Of Calendario)
+            'Dim vaIncluirPropriedades = {"RemarcacaoPrecoCalendario.CalendarioVendaProdutoClasse.ConfiguracaoVendaProduto"}
+            'Dim vaRemarcaocaPrecoFutura As IList(Of RemarcacaoPreco) = ListarRemarcacaoPrecoFutura(paEntidade, vaCalendarioFuturo, paIncluirPropriedades:=vaIncluirPropriedades)
+            'If Not ValidationHelper.EhNuloOuVazio(vaRemarcaocaPrecoFutura) Then
+            '    Dim vaAlteracaoComRemarcacaoFutura = (From vaE In vaRemarcaocaPrecoFutura
+            '                                          From vaC In vaE.RemarcacaoPrecoCalendario
+            '                                          Where vaC.CalendarioVendaProdutoClasse IsNot Nothing AndAlso
+            '                                                vaC.CalendarioVendaProdutoClasse.Status AndAlso
+            '                                                vaC.CalendarioVendaProdutoClasse.ConfiguracaoVendaProduto IsNot Nothing
+            '                                          Select Produto_Codigo = vaC.CalendarioVendaProdutoClasse.ConfiguracaoVendaProduto.Produto_Codigo,
+            '                                                 Xml = vaC.CalendarioVendaProdutoClasse.PrecoVenda
+            '                                          Select vaC.CalendarioVendaProdutoClasse.ConfiguracaoVendaProduto.PrecoDiferenciado Distinct).ToList
+            '    Dim vaFlagPrecoDiferenciado = paEntidade.ConfiguracaoVendaProduto.Select(Function(paE) paE.PrecoDiferenciado).Distinct.ToList
+
+            '    Dim vaAlgumFlagPrecoDiferenciadoDiferente = vaAlteracaoComRemarcacaoFutura.Except(vaFlagPrecoDiferenciado).Any OrElse
+            '                                                    vaFlagPrecoDiferenciado.Except(vaAlteracaoComRemarcacaoFutura).Any
+            '    If vaAlgumFlagPrecoDiferenciadoDiferente Then
+            '        Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoConfiguracaoVendaVendaAlteracaoComRemarcacaoPrecoFutura))
+            '    End If
+            'End If
+            ''
+        End Sub
+
+        Protected Function ListarRemarcacaoPrecoFutura(ByVal paEntidade As Produto, _
+                                                       ByRef paCalendarioFuturo As List(Of Calendario), _
+                                                       Optional ByVal paIncluirPropriedades As String() = Nothing) _
+                As IList(Of RemarcacaoPreco)
+            ''
+            '' Calendario
+            Dim vaCalendarioBusiness As ICalendarioBusiness = OperacaoBusinessFactory.CreateCalendario()
+            paCalendarioFuturo = vaCalendarioBusiness.ListarPorPeriodo(condicao:=Function(paE) paE.DataInicio > DateTime.Today AndAlso _
+                                                                                               paE.TipoCalendario.Sigla = TipoCalendarioSigla.ApenasInicio AndAlso _
+                                                                                               paE.Status)
+            Dim vaCalendarioFuturoCodigos = (From vaC In paCalendarioFuturo Select vaC.Codigo).ToList
+            '' Remarcacao 
+            Dim vaRemarcacaoPrecoBusiness As IRemarcacaoPrecoBusiness = ConfigMovBusinessFactory.CreateRemarcacaoPreco()
+            Dim vaProdutoCodigos = New Integer() {paEntidade.Codigo}
+            ''
+            Return vaRemarcacaoPrecoBusiness.ListarPorProduto(vaProdutoCodigos, paCondicao:=Function(paE) vaCalendarioFuturoCodigos.Contains(paE.Calendario_Codigo),
+                                                              paIncluirPropriedades:=paIncluirPropriedades)
+            ''
+        End Function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#End Region
+
+#Region "Sincronizador"
+
+        Private Sub ValidarInclusaoAlteracaoSincronizador(ByVal paDTO As ProdutoDTO, ByVal paEntidade As Produto, ByVal paGrupoProduto As GrupoProduto, ByVal paExceptionPermitidoPendente As Boolean)
+            ''
+            If Not libSettings.AtivarSincronizadorBOM Then
+                Return
+            End If
+
+            '' Um produto com PerfilVenda que possui integracaoBos = Produto Avulso, não pode estar associado a mais de um perfilVenda
+            Dim vaPerfilVendaBusiness As IPerfilVendaBusiness = OperacaoBusinessFactory.CreatePerfilVenda
+
+            Dim va As List(Of Integer) = (From oo In paDTO.PerfilVendaProduto Select oo.PerfilVenda_Codigo).ToList
+            Dim perfilVendaAssociadoAoProdutoAvulso = vaPerfilVendaBusiness.Listar(Function(x) va.Contains(x.Codigo) AndAlso x.IntegracaoBOS = Ingresso.Aplicacao.Tipos.IntegracaoBOS.ProdutoAvulso).Count
+
+            If (perfilVendaAssociadoAoProdutoAvulso > 0) AndAlso (paDTO.PerfilVendaProduto.Count > perfilVendaAssociadoAoProdutoAvulso) Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoSincronizadorUnicidadePerfilVendaAssociadoProdutoAvulso))
+            End If
+
+            '' Um produto com PerfilVenda que possui integracaoBos = Produto Avulso, não pode explicitar formas de pagamento
+            If (perfilVendaAssociadoAoProdutoAvulso > 0) AndAlso (Not paDTO.FormaPagamentoProduto Is Nothing) Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoSincronizadorPerfilVendaAssociadoProdutoAvulsoComFormaPagamento))
+            End If
+
+            '- Não pode cadastrar um calendário do tipo Mensal para o "Venda em".
+            Dim vaConfiguracaoVendaProduto As List(Of ProdutoDTO.ConfiguracaoVendaProdutoDTO)
+            vaConfiguracaoVendaProduto = If(paDTO.ConfiguracaoVendaProduto IsNot Nothing, paDTO.ConfiguracaoVendaProduto, New List(Of ProdutoDTO.ConfiguracaoVendaProdutoDTO))
+            Dim vaCalendario_Codigo = (From vaV In vaConfiguracaoVendaProduto
+                                       Where vaV.ConfiguracaoPrecoVendaEm IsNot Nothing
+                                       From vaC In vaV.ConfiguracaoPrecoVendaEm
+                                       Select vaC.Calendario_Codigo).ToArray
+            Dim vaCalendarioBusiness As ICalendarioBusiness = OperacaoBusinessFactory.CreateCalendario()
+            Dim vaCalendarioMensalAssociado As Boolean = False
+            Dim vaTipoRecorrenciaSiglaMensal = New String() {TipoRecorrenciaSigla.MensalDiaMes, TipoRecorrenciaSigla.MensalNumeroSemana}
+            vaCalendarioMensalAssociado = vaCalendarioBusiness.Existe(Function(paE) vaCalendario_Codigo.Contains(paE.Codigo) AndAlso _
+                                                                                    paE.CalendarioConfiguracao.Any(Function(paC) vaTipoRecorrenciaSiglaMensal.Contains(paC.TipoRecorrencia.Sigla)))
+            If vaCalendarioMensalAssociado Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoSincronizadorVendaEmComCalendarioMensal))
+            End If
+            ''
+
+            ''só é permitido cadastrar curvas ABC para o mesmo método de classificação.
+            If paEntidade.Codigo <> 0 Then
+
+                Dim vaHistoricoCurvaABCBusiness As IHistoricoCurvaABCBusiness = AcordoBusinessFactory.CreateHistoricoCurvaABC
+
+                Dim vaMetodoExistente = vaHistoricoCurvaABCBusiness.Listar(Function(paE) paE.Produto_Codigo = paEntidade.Codigo, paIncluirPropriedades:={"ParametrosCurvaABC"}).Select(Function(paX) paX.ParametrosCurvaABC.MetodoClassifCurvaABC_Codigo).Distinct.ToList
+
+                Dim vaMetodosExistentesENovos = paDTO.HistoricoCurvaABC.Select(Function(oo) oo.MetodoClassificacaoCurvaABC_Codigo).Concat(vaMetodoExistente).Distinct
+
+                If vaMetodosExistentesENovos.Count > 1 Then
+                    Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroProdutoSincronizadorCurvaABCMetodosDiferentes))
+                End If
+
+            End If
+            ''
+        End Sub
+
+#End Region
+
+        Protected Sub ValidarInstancia(ByVal paEntidade As CodeObject, Optional ByVal paPermitirVazio As Boolean = False)
+            ''
+            If ValidationHelper.EhNuloOuVazio(paEntidade, paPermitirVazio) Then
+                Instance(Of IExceptionManager).Get().ThrowBusinessException(ConfigMovException.Mensagens(ChaveMensagem.ErroValorNulloOuVazio))
+            End If
+            ''
+        End Sub
+
+        Protected MustOverride Sub ConverterEntidadeParaDTOConfigVendaPerfilVendaProduto(ByVal paEntidade As Produto, ByVal paDTO As ProdutoDTO)
+
+        Protected MustOverride Sub ConverterEntidadeParaDTOCadastro(ByVal paEntidade As Produto, ByVal paDTO As ProdutoDTO)
+    End Class
+End Namespace
+

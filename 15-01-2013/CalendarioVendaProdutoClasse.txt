@@ -1,0 +1,23 @@
+Imports Ingresso.Dados.Mod
+
+''' <history>
+'''    ING-2012.04.04 [leandro.torres]
+''' </history>
+Public Class CalendarioVendaProdutoClasse
+    Inherits CodeObject
+
+    Public Property Calendario_Codigo As Integer?
+    Public Property Classe_Codigo As Integer?
+    Public Property ConfiguracaoVendaProduto_Codigo As Integer
+    Public Property ConfiguracaoVendaProduto As ConfiguracaoVendaProduto
+    Public Property RemarcacaoPrecoCalendario As List(Of RemarcacaoPrecoCalendario)
+    Public Property TipoVendaProduto_Codigo As Nullable(Of Integer)
+    Public Property TipoVendaProduto As TipoVendaProduto
+    Public Property DiaSemanaInicio_Codigo As Nullable(Of Integer)
+
+    Public Property PrecoVenda As Decimal?
+
+    Public Property Status As Boolean
+    Public Property DataHoraInativacao As DateTime?
+End Class
+

@@ -1,4 +1,4 @@
-
+\\1.1.1.10\publico\Bemjamin
 2577 - V0105  - Módulo Produto : Produto -  O sistema  não está ordenando os dados  da combo "Grupo Tributação do Produto". -- OK
 2769 - Módulo Operação - Calendário - A execução de datas não está respeitando o especificado na RN8 de recorrência ---------- OK
 2878 - V0105 - Módulo Negociação : CineSemana -  Considerar a  data fim para o ano de referência quando o ano virar.---------- OK
@@ -33,8 +33,8 @@ join InventarioDetalhe			iv	on psu.Codigo = iv.ProdutoSituacaoUnidade_Codigo
 update Tributacao
 set Nome = 'Imposto Sob Serviço' 
 where Codigo = 1
-jSMRAR028
-Jsmrar028
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 2784 - O produto do grupo Guardanapo deve ser selecionado
 	
@@ -42,6 +42,8 @@ Jsmrar028
 2844 - 	Erro. - Existe um registro em branco na combo 
 		Erro de configuração: Ingresso de referência não foi selecionado
 		Ingresso Base *:
-
-
+		
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2844- já estava com a validação mas tem um campo ensirido em branco 
+O campo no banco de dados esta errado
 

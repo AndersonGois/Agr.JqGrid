@@ -1,0 +1,374 @@
+Imports Ingresso.Dados.Mod
+Imports Ingresso.Central.ConfigMov.Entities
+Imports Ingresso.Central.Operacao.Facade.DTO
+Imports Ingresso.Central.Operacao.Business
+Imports Ingresso.BOS.Localidade.Business
+Imports Ingresso.Central.ConfigMov.Business
+Imports System.Linq.Expressions
+Imports Ingresso.BOS.AutenticacaoAutorizacao.Entities
+Imports Ingresso.BOS.AutenticacaoAutorizacao.Business
+Imports Ingresso.Central.Ambiente.Entities
+Imports Ingresso.Central.Ambiente.Business
+Imports Ingresso.Central.Operacao.Entities
+Imports System.Transactions
+
+
+Namespace Implementacao
+
+    ''' <history>
+
+
+    '''    ING-2013.01.04 [fernando.silva]
+    '''    ING-2013.01.02 [fernando.silva]
+    '''    ING-2012.12.20 [fernando.silva]
+    ''' </history>
+    Public Class FechamentoFacade
+        Implements IFechamentoFacade
+
+        Public Function ListarEstabelecimentos(ByVal paComplexoCodigo As Integer) As List(Of ObjetoListavel) Implements IFechamentoFacade.ListarEstabelecimentos
+            Dim business As IEstabelecimentoBusiness = AmbienteBusinessFactory.CreateEstabelecimento
+            Return (From a In business.Listar(Function(paE) paE.Complexo.Codigo = paComplexoCodigo, Nothing, {"Complexo"}, False) Select New ObjetoListavel With {.Nome = a.Nome, .Codigo = a.Codigo}).ToList()
+        End Function
+
+        Public Function ObterTiposComentario(ByVal somenteObrigatorios As Boolean) As List(Of TipoComentarioDTO) Implements IFechamentoFacade.ObterTiposComentario
+            Dim business As ITipoComentarioBusiness = ConfigMovBusinessFactory.CreateTipoComentario
+            Dim exp As Expression(Of Func(Of TipoComentario, Boolean))
+            If (somenteObrigatorios) Then
+                exp = Function(paE) paE.Obrigatorio = somenteObrigatorios
+            Else
+                exp = Nothing
+            End If
+            Dim retorno = (From c In business.Listar(exp) Select New TipoComentarioDTO With {.Codigo = c.Codigo, .Nome = c.Nome, .Obrigatorio = c.Obrigatorio}).ToList()
+            Return retorno
+        End Function
+
+        Public Function ObterTiposComentarioFechamentoJaIniciado(ByVal idEstabelecimento As List(Of Integer), ByVal data As Date) As List(Of TipoComentarioDTO) Implements IFechamentoFacade.ObterTiposComentarioFechamentoJaIniciado
+            Dim fechamentoBusiness As IFechamentoBusiness = OperacaoBusinessFactory.CreateFechamento()
+            Dim comentariosBusiness As ITipoComentarioBusiness = ConfigMovBusinessFactory.CreateTipoComentario
+            Dim fechamento = fechamentoBusiness.Listar(Function(paE) paE.DataFechamento = data And idEstabelecimento.Contains(paE.Estabelecimento_Codigo), paIncluirPropriedades:={"FechamentoComentario"}).FirstOrDefault()
+            Dim tiposComentario = comentariosBusiness.Listar(Nothing)
+            Dim fechamentoComentario = (From c In fechamento.FechamentoComentario Select c)
+            Dim result = (From c In tiposComentario
+                         Group Join a In fechamentoComentario On c.Codigo Equals (a.TipoComentario_Codigo) Into Group
+                         From j In Group.DefaultIfEmpty
+                         Select New TipoComentarioDTO With {.Codigo = c.Codigo, .Nome = c.Nome, .Valor = If(j IsNot Nothing, j.Valor, ""), .Obrigatorio = c.Obrigatorio}).ToList()
+            Return result
+        End Function
+
+        Public Function ObterTiposSistemaVenda() As List(Of ObjetoListavel) Implements IFechamentoFacade.ObterTiposSistemaVenda
+            Dim tiposistema = OperacaoBusinessFactory.CreateTipoSistemaVenda
+            Return (From t In tiposistema.Listar(Nothing) Select New ObjetoListavel With {.Codigo = t.Codigo, .Nome = t.Nome}).ToList()
+        End Function
+
+        Public Function ObterDadosOutrosMontantes(ByVal idEstabelecimento As List(Of Integer), ByVal data As Date) As List(Of OutrosMontantesDTO) Implements IFechamentoFacade.ObterDadosOutrosMontantes
+
+            Dim caixasFormaPagamentoBusiness As ICaixaFormaPagamentoBusiness = OperacaoBusinessFactory.CreateCaixaFormaPagamento
+            Dim caixaBusiness As ICaixaBusiness = OperacaoBusinessFactory.CreateCaixa
+            Dim fechamentoBusiness As IFechamentoBusiness = OperacaoBusinessFactory.CreateFechamento()
+            ''pegando as caixasFormaPagamento a partir do estabelecimento e data
+            Dim dataFim As Date = data.AddDays(1)
+            Dim caixas = caixaBusiness.Listar(Function(paE) idEstabelecimento.Contains(paE.EstacaoVenda.Estabelecimento_Codigo) And paE.DataConsolidacao >= data And paE.DataConsolidacao < dataFim).Select(Function(paE) paE.Codigo)
+            Dim caixasFormaPagamento = caixasFormaPagamentoBusiness.Listar(Function(paE) caixas.Contains(paE.Caixa_Codigo),
+                                                                 paIncluirPropriedades:={"FormaPagamento.OutroMontante", "Caixa.EstacaoVenda.CanalVenda.TipoSistemaVenda"})
+            Dim fechamento = fechamentoBusiness.Obter(Function(paE) idEstabelecimento.Contains(paE.Estabelecimento_Codigo) And paE.DataFechamento = data, paIncluirPropriedades:={"FechamentoDetalhe.OutroMontante", "FechamentoDetalhe.TipoSistemaVenda"})
+            Dim fechamentosDetalhe = fechamento.FechamentoDetalhe
+
+            Dim resultGrupo = (From c In caixasFormaPagamento
+                               From canalVenda In c.Caixa.EstacaoVenda.CanalVenda
+                             Where c.FormaPagamento.OutroMontante IsNot Nothing
+                             Group By OutroMontante_Tipo = c.FormaPagamento.OutroMontante.TipoTransacao, _
+                                      OutroMontante_Codigo = c.FormaPagamento.OutroMontante.Codigo, _
+                                      Outromontante_Nome = c.FormaPagamento.OutroMontante.Nome, _
+                                      TipoSistemaVenda_Codigo = canalVenda.TipoSistemaVenda.Codigo, _
+                                      TipoSistemaVenda_Nome = canalVenda.TipoSistemaVenda.Nome, _
+                                      Sinal = c.FormaPagamento.OutroMontante.Sinal Into Group
+                             Select New With {.OutroMontante_Tipo = If(OutroMontante_Tipo = "M", "Manual", "Automatico"), _
+                                              .OutroMontante_Codigo = OutroMontante_Codigo, _
+                                              .OutroMontante_Nome = Outromontante_Nome, _
+                                              .TipoSistemaVenda_Nome = TipoSistemaVenda_Nome, _
+                                              .TipoSistemaVenda_Codigo = TipoSistemaVenda_Codigo, _
+                                              .ValorGrupo = Group.Sum(Function(paE) paE.c.ValorVendido - If(paE.c.ValorDevolvido Is Nothing, 0, paE.c.ValorDevolvido)), _
+                                              .Sinal = Sinal}).ToList()
+            Dim result = (From g In resultGrupo
+                          Group Join d In fechamentosDetalhe On g.OutroMontante_Codigo Equals d.OutroMontante.Codigo And g.TipoSistemaVenda_Nome Equals d.TipoSistemaVenda.Nome Into Group
+                          From gr In Group.DefaultIfEmpty
+                          Select New OutrosMontantesDTO With {.OutroMontante_Tipo = g.OutroMontante_Tipo, _
+                                                              .OutroMontante_Codigo = g.OutroMontante_Codigo, _
+                                                              .OutroMontante_Nome = g.OutroMontante_Nome, _
+                                                              .TipoSistemaVenda_Nome = If(gr IsNot Nothing, gr.TipoSistemaVenda.Nome, g.TipoSistemaVenda_Nome), _
+                                                              .TipoSistemaVenda_Codigo = If(gr IsNot Nothing, gr.TipoSistemaVenda.Codigo, g.TipoSistemaVenda_Codigo), _
+                                                              .Valor = If(gr IsNot Nothing, gr.Valor, g.ValorGrupo), _
+                                                              .Sinal = g.Sinal})
+
+            Return result.ToList()
+        End Function
+
+        Public Function ObterDadosResumo(ByVal idEstabelecimento As List(Of Integer), ByVal data As Date) As ResumoDTO Implements IFechamentoFacade.ObterDadosResumo
+
+            Dim caixasBusiness As ICaixaFormaPagamentoBusiness = OperacaoBusinessFactory.CreateCaixaFormaPagamento
+            ''pegando as caixasFormaPagamento a partir do estabelecimento e data
+            Dim dataFim As Date = data.AddDays(1)
+            'Forma de pagamento = 4 Dinheiro
+            Dim operacaoCaixaBusiness As IOperacaoCaixaBusiness = OperacaoBusinessFactory.CreateOperacaoCaixa
+            Dim formasPagamentoCodigos = operacaoCaixaBusiness.Listar(Function(paE) (paE.DataHora >= data And paE.DataHora < dataFim) And idEstabelecimento.Contains(paE.Estabelecimento_Codigo), paIncluirPropriedades:={"CaixaFormaPagamento"}).Select(Function(paE) paE.CaixaFormaPagamento.Codigo).Distinct()
+            Dim caixasFormaPagamentoDinheiro As List(Of CaixaFormaPagamento) = caixasBusiness.Listar(Function(paE) formasPagamentoCodigos.Contains(paE.Codigo) _
+                                                                 And (paE.Caixa.EstacaoVenda.CanalVenda.Any(Function(paR) paR.TipoSistemaVenda.Sigla = "I" Or paR.TipoSistemaVenda.Sigla = "O")) _
+                                                                 And paE.FormaPagamento_Codigo = 4,
+                                                                 paIncluirPropriedades:={"Caixa.EstacaoVenda.CanalVenda.TipoSistemaVenda"})
+
+
+
+
+
+
+
+
+
+
+
+            Dim resultadoDinheiro = (From c In caixasFormaPagamentoDinheiro
+                                     From x In c.Caixa.EstacaoVenda.CanalVenda
+                                     Group By TipoSistema_Nome = x.TipoSistemaVenda.Nome Into Group
+                                     Select TipoSistema_Nome, Valor = Group.Sum(Function(paE) paE.c.ValorVendido - paE.c.ValorDevolvido))
+
+
+            Dim caixaFormaPagamento = caixasBusiness.Listar(Function(paE) formasPagamentoCodigos.Contains(paE.Codigo) _
+                                                                 And idEstabelecimento.Contains(paE.Caixa.EstacaoVenda.Estabelecimento_Codigo) _
+                                                                 And (paE.Caixa.EstacaoVenda.CanalVenda.Any(Function(paR) paR.TipoSistemaVenda.Sigla = "I" Or paR.TipoSistemaVenda.Sigla = "O")))
+
+            Dim caixaFormaPagamentoCodigos = caixaFormaPagamento.Select(Function(paE) paE.Codigo).Distinct()
+
+            Dim operacaoCaixa As IOperacaoCaixaBusiness = OperacaoBusinessFactory.CreateOperacaoCaixa
+            Dim operacoes = operacaoCaixa.Listar(Function(paE) caixaFormaPagamentoCodigos.Contains(paE.CaixaFormaPagamento.Codigo), paIncluirPropriedades:={"Deposito", "CaixaFormaPagamento.Caixa.EstacaoVenda.CanalVenda.TipoSistemaVenda"}).ToList()
+            Dim depositos = From o In operacoes
+                            From x In o.CaixaFormaPagamento.Caixa.EstacaoVenda.CanalVenda
+                            Where o.Deposito IsNot Nothing
+                            Group By TipoSistema_Nome = x.TipoSistemaVenda.Nome Into Group
+                            Select TipoSistema_Nome, Valor = Group.Sum(Function(paE) paE.o.Deposito.ValorDeposito)
+
+            Dim BilRendaDinheiro = (From r In resultadoDinheiro Where r.TipoSistema_Nome = "Bilheteria" Select r.Valor.Value).FirstOrDefault()
+            Dim BomRendaDinheiro = (From r In resultadoDinheiro Where r.TipoSistema_Nome = "Bomboniere" Select r.Valor.Value).FirstOrDefault()
+            Dim BomDeposito = (From d In depositos Where d.TipoSistema_Nome = "Bilheteria" Select d.Valor).FirstOrDefault()
+            Dim BilDeposito = (From d In depositos Where d.TipoSistema_Nome = "Bomboniere" Select d.Valor).FirstOrDefault()
+            Dim TotalDinheiro = BilRendaDinheiro + BomRendaDinheiro
+            Dim TotalDeposito = BomDeposito + BilDeposito
+            Dim Diferenca = TotalDinheiro - TotalDeposito
+
+            Return New ResumoDTO With {.BilRendaDinheiro = BilRendaDinheiro.ToString("n2"),
+                                        .BomRendaDinheiro = BomRendaDinheiro.ToString("n2"),
+                                        .BomDeposito = BomDeposito.ToString("n2"),
+                                        .BilDeposito = BilDeposito.ToString("n2"),
+                                        .TotalDinheiro = TotalDinheiro.ToString("n2"),
+                                        .TotalDeposito = TotalDeposito.ToString("n2"),
+                                        .Diferenca = Diferenca.ToString("n2")}
+
+        End Function
+
+
+        Public Function IniciarFechamento(ByVal idEstabelecimento As List(Of Integer), ByVal data As Date) As Object Implements IFechamentoFacade.IniciarFechamento
+
+            Dim fechamentoBusiness As IFechamentoBusiness = OperacaoBusinessFactory.CreateFechamento()
+            Dim fechamento = fechamentoBusiness.Listar(Function(paE) paE.DataFechamento = data And idEstabelecimento.Contains(paE.Estabelecimento_Codigo)).FirstOrDefault()
+            If (fechamento IsNot Nothing) Then
+                If (fechamento.Situacao = "A") Then
+                    Return New With {.Codigo = 1, .CodigoMensagem = "Fechamento em andamento.", .RelatorioVisualizado = fechamento.RelatorioVisualizado}
+                Else
+                    Return New With {.Codigo = 2, .CodigoMensagem = "Fechamento finalizado.", .RelatorioVisualizado = fechamento.RelatorioVisualizado}
+                End If
+            Else
+                Dim dataEspecialBusiness As IDataEspecialBusiness = LocalidadeBusinessFactory.CreateDataEspecial()
+                Dim dataEspecial = dataEspecialBusiness.Listar(Function(paE) paE.Data = data).FirstOrDefault()
+                Dim codigoData As Integer? = Nothing
+                If (dataEspecial IsNot Nothing) Then
+                    codigoData = dataEspecial.Codigo
+                End If
+                fechamentoBusiness.IniciarFechamento(idEstabelecimento, data, codigoData)
+                Return New With {.Codigo = 0, .CodigoMensagem = "Iniciado com sucesso."}
+            End If
+
+        End Function
+
+        Public Sub Alterar(ByVal fechamento As FechamentoDTO) Implements IFechamentoFacade.Alterar
+
+            Dim fechamentoBusiness As IFechamentoBusiness = OperacaoBusinessFactory.CreateFechamento()
+
+            Using vaScope = New TransactionScope(TransactionScopeOption.Required)
+                ''
+                For Each _va In fechamento.Estabelecimento : Dim va = _va
+
+                    Dim vaEntidade As Fechamento = ConverterDTOEmEntidade(fechamento, va.Codigo)
+
+                    fechamentoBusiness.Alterar(vaEntidade)
+
+                Next
+                ''
+                vaScope.Complete()
+                ''
+            End Using
+
+        End Sub
+
+        Private Function ConverterDTOEmEntidade(ByVal paDTO As FechamentoDTO, ByVal paEstabelecimentoCodigo As Integer) As Fechamento
+            ''
+            Dim vaRetorno As New Fechamento
+          
+            vaRetorno = New Fechamento With {
+                .Codigo = paDTO.Codigo,
+                .Estabelecimento_Codigo = (From oo In paDTO.Estabelecimento Where oo.Codigo = paEstabelecimentoCodigo Select oo.Codigo).First,
+                .Usuario_Codigo = paDTO.Usuario_Codigo,
+                .Situacao = paDTO.Situacao,
+                .DataFechamento = paDTO.DataFechamento,
+                .DataHoraInicio = paDTO.DataHoraInicio,
+                .DataEspecial_Codigo = paDTO.DataEspecial_Codigo,
+                .DataHoraFim = paDTO.DataHoraFim,
+                .DataHoraImpressao = paDTO.DataHoraImpressao,
+                .RelatorioVisualizado = paDTO.RelatorioVisualizado,
+                .FechamentoComentario = If(paDTO.FechamentoComentario Is Nothing, Nothing, (From oo In paDTO.FechamentoComentario Select New FechamentoComentario With {
+                                                                                            .Codigo = oo.Codigo,
+                                                                                            .Fechamento = New Fechamento With {.Codigo = paDTO.Codigo},
+                                                                                            .TipoComentario_Codigo = oo.TipoComentario_Codigo,
+                                                                                            .Valor = oo.Valor
+                                                                                        }).ToList
+                ),
+                .FechamentoDetalhe = If(paDTO.FechamentoDetalhe Is Nothing, Nothing, (From oo In paDTO.FechamentoDetalhe Select New FechamentoDetalhe With {
+                                                                                        .Codigo = oo.Codigo,
+                                                                                        .Fechamento = New Fechamento With {.Codigo = paDTO.Codigo},
+                                                                                        .OutroMontante = New OutroMontante With {.Codigo = oo.OutroMontante.Codigo},
+                                                                                        .TipoSistemaVenda = New TipoSistemaVenda With {.Codigo = oo.TipoSistemaVenda.Codigo},
+                                                                                        .Valor = oo.Valor
+                                                                                     }).ToList
+                ),
+            .FechamentoHistorico = If(paDTO.FechamentoHistorico Is Nothing, Nothing, (From oo In paDTO.FechamentoHistorico Select New FechamentoHistorico With {
+                                                                                        .Codigo = oo.Codigo,
+                                                                                        .Fechamento = New Fechamento With {.Codigo = paDTO.Codigo},
+                                                                                        .Usuario_Codigo = oo.Usuario_Codigo,
+                                                                                        .DataHoraReaberturaInicial = oo.DataHoraReaberturaInicial,
+                                                                                        .DataHoraReaberturaFinal = oo.DataHoraReaberturaFinal
+                                                                                    }).ToList
+            )
+            }
+
+            Return vaRetorno
+            ''
+        End Function
+
+        ''' <summary>
+        ''' O controle que será feito na tela apos a data ser selecionado vai ser a partir da dataretorno que será comparada e mostrada na tela para o usuario
+        ''' </summary>
+        ''' <param name="paEstabelecimentosCodigo"></param>
+        ''' <param name="data"></param>
+        ''' <returns>Retorna a o status da data que o usuario escolheu e retorna a data que ele deveria selecionar</returns>
+        ''' <remarks></remarks>
+        Public Function VerificaDataSelecionada(ByVal paEstabelecimentosCodigo As List(Of Integer), ByVal data As Date) As Object Implements IFechamentoFacade.VerificaDataSelecionada
+
+            Dim dataRetorno As Date
+            Dim mensagem As String
+            Dim fechamentoBusiness As IFechamentoBusiness = OperacaoBusinessFactory.CreateFechamento
+            Dim abertoOuFechado = fechamentoBusiness.Obter(Function(paE) paEstabelecimentosCodigo.Contains(paE.Estabelecimento_Codigo) _
+                                                                   And paE.DataFechamento = data)
+            If (abertoOuFechado IsNot Nothing) Then
+                dataRetorno = data
+                mensagem = abertoOuFechado.Situacao
+            Else
+                Dim ultimosFechamentos = fechamentoBusiness.Listar(Function(paE) paEstabelecimentosCodigo.Contains(paE.Estabelecimento_Codigo) _
+                                                                   And (paE.Situacao = "F" Or paE.Situacao = "A")).OrderByDescending(Function(paE) paE.DataFechamento).Take(2)
+                If (ultimosFechamentos.Any()) Then
+                    If (ultimosFechamentos.Any(Function(paE) paE.Situacao = "A")) Then
+                        dataRetorno = ultimosFechamentos.FirstOrDefault(Function(paE) paE.Situacao = "A").DataFechamento
+                        mensagem = ultimosFechamentos.FirstOrDefault(Function(paE) paE.Situacao = "A").Situacao
+                    Else
+                        dataRetorno = ultimosFechamentos.FirstOrDefault(Function(paE) paE.Situacao = "F").DataFechamento.AddDays(1)
+                        mensagem = "N"
+                    End If
+
+                Else
+                    Dim caixaBusiness As ICaixaBusiness = OperacaoBusinessFactory.CreateCaixa()
+                    Dim primeiroCaixa = caixaBusiness.Listar(Function(paE) paEstabelecimentosCodigo.Contains(paE.EstacaoVenda.Estabelecimento_Codigo) And paE.DataConsolidacao IsNot Nothing).OrderBy(Function(paB) paB.DataConsolidacao).FirstOrDefault()
+                    If (primeiroCaixa.DataConsolidacao.Value.AddDays(1) <> data) Then
+                        dataRetorno = primeiroCaixa.DataConsolidacao.Value.AddDays(1)
+                        mensagem = "N"
+                    Else
+                        dataRetorno = data
+                        mensagem = "N"
+                    End If
+                End If
+
+            End If
+            Return New With {.Mensagem = mensagem, .DataRetorno = dataRetorno.ToString("dd/MM/yyyy")}
+        End Function
+
+
+
+        Public Function ListarComplexos(ByVal paUsaurioCodigo As Integer) As System.Collections.Generic.List(Of ComplexoDTO) Implements IFechamentoFacade.ListarComplexos
+            ''
+            Dim vaRetorno As New List(Of ComplexoDTO)
+
+            Dim vaComplexoCodigo As New List(Of Integer)
+
+            Dim vaEstabelecimento As New List(Of Estabelecimento)
+
+            Dim vaComplexoBusiness As IComplexoBusiness = AmbienteBusinessFactory.CreateComplexo()
+
+            Dim vaEstabelecimentoBusiness As IEstabelecimentoBusiness = AmbienteBusinessFactory.CreateEstabelecimento()
+
+            Dim vaUsuarioBusiness As IUsuarioBusiness = AutenticacaoAutorizacaoBusinessFactory.CreateUsuario()
+
+            Dim vaUsuario As Usuario = vaUsuarioBusiness.Listar(Function(paE) paE.Codigo = paUsaurioCodigo, {"UsuarioEstabelecimento"}).FirstOrDefault
+
+            Dim vaUsuarioEstabelecimentoCodigo As List(Of Integer) = (From oo In vaUsuario.UsuarioEstabelecimento Select oo.Estabelecimento_Codigo).ToList
+
+            If Not vaUsuario.AcessaTodosEstabelecimentos AndAlso vaUsuarioEstabelecimentoCodigo.Count > 0 Then
+
+                vaEstabelecimento = vaEstabelecimentoBusiness.Listar(Function(paE) vaUsuarioEstabelecimentoCodigo.Contains(paE.Codigo), Nothing, {"Complexo"})
+
+                vaComplexoCodigo = (From oo In vaEstabelecimento Select oo.Complexo.Codigo).ToList
+
+            ElseIf vaUsuario.AcessaTodosEstabelecimentos Then
+
+                vaEstabelecimento = vaEstabelecimentoBusiness.Listar(Nothing, Nothing, {"Complexo"})
+
+                vaComplexoCodigo = (From oo In vaEstabelecimento Select oo.Complexo.Codigo).ToList
+
+            End If
+
+            vaRetorno = (From oo In vaComplexoBusiness.Listar(Function(paE) vaComplexoCodigo.Contains(paE.Codigo), Nothing, {"Estabelecimento"})
+                         Select New ComplexoDTO With {
+                             .Codigo = oo.Codigo,
+                             .Nome = oo.Nome,
+                             .FechamentoPorEstabelecimento = oo.FechamentoPorEstabelecimento,
+                             .Estabelecimento = ObeterEstablecimentoPorComplexo(oo.FechamentoPorEstabelecimento, vaUsuarioEstabelecimentoCodigo, oo.Estabelecimento)
+                         }).ToList
+
+
+            Return vaRetorno
+            ''
+        End Function
+
+        Private Function ObeterEstablecimentoPorComplexo(ByVal paComplxoFechamentoPorEstablecimento As Boolean, ByVal paUsuarioEstabelecimentoCodigo As List(Of Integer), ByVal paEstabelecimento As List(Of Estabelecimento)) As List(Of ComplexoDTO.EstabelecimentoDTO)
+            ''
+            Dim vaRetorno As New List(Of ComplexoDTO.EstabelecimentoDTO)
+
+            If paEstabelecimento IsNot Nothing Then
+
+                If paComplxoFechamentoPorEstablecimento Then
+                    vaRetorno = (From oo2 In paEstabelecimento Where paUsuarioEstabelecimentoCodigo.Contains(oo2.Codigo) Select New ComplexoDTO.EstabelecimentoDTO With {
+                                                                                             .Codigo = oo2.Codigo,
+                                                                                             .Nome = oo2.Nome
+                                                                                         }).ToList
+                Else
+                    vaRetorno = (From oo2 In paEstabelecimento Select New ComplexoDTO.EstabelecimentoDTO With {
+                                                                                             .Codigo = oo2.Codigo,
+                                                                                             .Nome = oo2.Nome
+                                                                                         }).ToList
+                End If
+
+            End If
+
+            Return vaRetorno
+            ''
+        End Function
+
+    End Class
+
+End Namespace
+

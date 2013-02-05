@@ -1,0 +1,35 @@
+Imports System.Linq.Expressions
+Imports Ingresso.Central.ConfigMov.Entities
+Imports Ingresso.Central.ConfigMov.Business.Validation
+Imports Ingresso.Central.ConfigMov.Dalc
+Imports Ingresso.FrameWork.Factory
+Imports Ingresso.Dados
+
+Namespace Implementacao
+
+    ''' <history>
+    '''    ING-2012.05.07 [rodrigo.goncalo]
+    ''' </history>
+    Friend Class RemarcacaoPrecoCalendarioBusiness
+        Implements IRemarcacaoPrecoCalendarioBusiness
+
+        Public Function Listar(pCondicao As Expression(Of System.Func(Of RemarcacaoPrecoCalendario, Boolean)), Optional ByVal incluirPropriedades() As String = Nothing) As IEnumerable(Of RemarcacaoPrecoCalendario) Implements IRemarcacaoPrecoCalendarioBusiness.Listar
+            Dim _Repository = ConfigMovRepositoryFactory.CreateRemarcacaoPrecoCalendarioRepository()
+            Return _Repository.Listar(pCondicao)
+        End Function
+
+        Public Function Existe(Optional ByVal paCondicao As Expression(Of Func(Of RemarcacaoPrecoCalendario, Boolean)) = Nothing, Optional ByVal paIgnorarPermissaoAcessoDado As Boolean = True) As Boolean Implements IRemarcacaoPrecoCalendarioBusiness.Existe
+
+
+            ''
+            Using vaRemarcacaoPrecoCalendarioRepository As IRemarcacaoPrecoCalendarioRepository = ConfigMovRepositoryFactory.CreateRemarcacaoPrecoCalendarioRepository()
+                Return vaRemarcacaoPrecoCalendarioRepository.Existe(paCondicao)
+            End Using
+            ''
+        End Function
+
+    End Class
+   
+End Namespace
+
+

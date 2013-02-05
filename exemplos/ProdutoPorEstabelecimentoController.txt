@@ -1,0 +1,188 @@
+ProdutoPorEstabelecimentoController
+
+ Public Function Listar(ByVal EstabelecimentoCodigo As Nullable(Of Integer), _
+                                ByVal page As Integer, _
+                                ByVal rows As Integer, _
+                                ByVal search As String, _
+                                ByVal sidx As String, _
+                                ByVal sord As String, _
+                                ByVal _search As Boolean, ByVal searchField As String, ByVal searchString As String) As ActionResult
+
+            Dim vaLista As List(Of Facade.DTO.ProdutoPorEstabelecimentoDTO) = Nothing
+            Dim vaRetorno As New RetornoOperacao
+            Dim vaQtdRegistros As Integer = 0
+            Dim vaSearchField As String() : Dim vaSearch As String
+
+
+            If _search Then
+                vaSearch = searchString
+
+                vaSearchField = New String() {searchField}
+            Else
+                vaSearch = ""
+                vaSearchField = New String() {"Estabelecimento", "Departamento", "Categoria", "Grupo", "Classificacao", "Produto"}
+            End If
+
+            If IsNothing(EstabelecimentoCodigo) Then
+                vaLista = New List(Of Facade.DTO.ProdutoPorEstabelecimentoDTO)
+            Else
+                vaLista = _Fachada.ListarPorCodigoEstabelecimento(EstabelecimentoCodigo, page, rows, vaQtdRegistros)
+            End If
+
+            ''Lista com apenas um registro de cada produto
+            Dim vaListaCombo = (From ta In vaLista.AsQueryable() _
+                                   Where (ta.Classificacao.Sigla = "I" Or ta.Classificacao.Sigla = "U") AndAlso ta.Fifo = True
+                                   Select _
+                                    ProdutoCodigo = 0, _
+                                    Fifo = ta.Fifo, _
+                                    AssociaProdutosSimilaresAoEstabelecimento = ta.AssociaProdutosSimilaresAoEstabelecimento, _
+                                    EstabCodigo = ta.Estabelecimento.Codigo, _
+                                    EstabNome = ta.Estabelecimento.Nome, _
+                                    DepartamentoNome = ta.Departamento.Nome, _
+                                    CategoriaNome = ta.Categoria.Nome, _
+                                    GrupoNome = ta.Grupo.Nome, _
+                                    GrupoCodigo = ta.Grupo.Codigo, _
+                                    ClassificacaoSigla = ta.Classificacao.Sigla, _
+                                    ComposicaoSigla = ta.Composicao.Sigla,
+                                    Estoque = "").Distinct()
+
+
+            Dim vaListaNornal = (From ta In vaLista.AsQueryable() _
+                                   Where (ta.Classificacao.Sigla <> "I" AndAlso (ta.Classificacao.Sigla <> "U" AndAlso ta.Fifo = True)) Or _
+                                   (ta.Classificacao.Sigla <> "I" AndAlso ta.Fifo = False) Or _
+                                   (ta.Classificacao.Sigla <> "U" AndAlso ta.Fifo = False) _
+                                   Select _
+                                    ProdutoCodigo = ta.Produto.Codigo, _
+                                    Fifo = ta.Fifo, _
+                                    AssociaProdutosSimilaresAoEstabelecimento = ta.AssociaProdutosSimilaresAoEstabelecimento, _
+                                    EstabCodigo = ta.Estabelecimento.Codigo, _
+                                    EstabNome = ta.Estabelecimento.Nome, _
+                                    DepartamentoNome = ta.Departamento.Nome, _
+                                    CategoriaNome = ta.Categoria.Nome, _
+                                    GrupoNome = ta.Grupo.Nome, _
+                                    GrupoCodigo = ta.Grupo.Codigo, _
+                                    ClassificacaoSigla = ta.Classificacao.Sigla, _
+                                    ComposicaoSigla = ta.Composicao.Sigla,
+                                    Estoque = If(ta.Estoque.HasValue, ta.Estoque.Value.ToString("#,##0.######") + " ", "") +
+                                                  If(Not String.IsNullOrEmpty(ta.UnidadeMedida_Sigla), ta.UnidadeMedida_Sigla, "")
+                                    ).Distinct()
+
+            Dim vaListaFinal = vaListaCombo.Union(vaListaNornal)
+
+            ''Adiciona os dados do produto (combo ou um simples print)
+            Dim vaModel = (From vaEntidade In vaListaFinal.AsQueryable() _
+                         Select New ProdutoPorEstabelecimentoDTO.ProdutoPorEstabelecimentoGridDTO With { _
+                                  .EstabelecimentoCodigo = vaEntidade.EstabCodigo, _
+                                  .Estabelecimento = vaEntidade.EstabNome, _
+                                  .Departamento = vaEntidade.DepartamentoNome, _
+                                  .Categoria = vaEntidade.CategoriaNome, _
+                                  .Grupo = vaEntidade.GrupoNome, _
+                                  .Classificacao = vaEntidade.ClassificacaoSigla, _
+                                  .Composicao = vaEntidade.ComposicaoSigla, _
+                                  .ProdutoCodigo = vaEntidade.ProdutoCodigo, _
+                                  .Produto = GerarEditorProduto(vaEntidade.ProdutoCodigo, vaEntidade.ClassificacaoSigla, vaEntidade.GrupoCodigo, vaEntidade.Fifo, vaEntidade.AssociaProdutosSimilaresAoEstabelecimento, vaLista),
+                                  .Estoque = vaEntidade.Estoque
+                                 })
+
+            ''Adiciona os dados do produto (combo ou um simples print)
+            Dim vaModel = (From vaEntidade In vaListaFinal.AsQueryable() _
+                         Select New ProdutoPorEstabelecimentoDTO.ProdutoPorEstabelecimentoGridDTO With { _
+                                  .EstabelecimentoCodigo = vaEntidade.EstabCodigo, _
+                                  .Estabelecimento = vaEntidade.EstabNome, _
+                                  .Departamento = vaEntidade.DepartamentoNome, _
+                                  .Categoria = vaEntidade.CategoriaNome, _
+                                  .Grupo = vaEntidade.GrupoNome, _
+                                  .Classificacao = vaEntidade.ClassificacaoSigla, _
+                                  .Composicao = vaEntidade.ComposicaoSigla, _
+                                  .ProdutoCodigo = vaEntidade.ProdutoCodigo, _
+                                  .Produto = GerarEditorProduto(vaEntidade.ProdutoCodigo, vaEntidade.ClassificacaoSigla, vaEntidade.GrupoCodigo, vaEntidade.Fifo, vaEntidade.AssociaProdutosSimilaresAoEstabelecimento, vaLista),
+                                  .Estoque = vaEntidade.Estoque
+                                 }).ToList()
+
+            Dim vaListaRetorno = vaModel
+            If Not IsNothing(vaSearchField) Then
+                vaListaRetorno = FiltrarProdutoPorEstabelecimentoGridDTO(vaModel, vaSearch, vaSearchField)
+            End If
+
+            Dim pageIndex As Integer = Convert.ToInt32(page) - 1
+            Dim pageSize As Integer = rows
+            Dim totalRecords As Integer = If(IsNothing(vaListaRetorno), 0, vaListaRetorno.Count())
+            Dim totalPages As Integer = CInt(Math.Truncate(Math.Ceiling(CSng(totalRecords) / CSng(pageSize))))
+
+            Dim jsonData = New With { _
+             Key .Total = totalPages, _
+             Key .Page = page, _
+             Key .Records = totalRecords, _
+             Key .Rows = (From vaEntidade In vaListaRetorno.AsQueryable()
+                         Select New With { _
+                         Key .EstabelecimentoCodigo = vaEntidade.EstabelecimentoCodigo, _
+                         Key .Estabelecimento = vaEntidade.Estabelecimento, _
+                         Key .Categoria = vaEntidade.Categoria, _
+                         Key .Departamento = vaEntidade.Departamento, _
+                         Key .Grupo = vaEntidade.Grupo, _
+                         Key .Classificacao = vaEntidade.Classificacao, _
+                         Key .Composicao = vaEntidade.Composicao.ToString(), _
+                         Key .ProdutoCodigo = vaEntidade.ProdutoCodigo.ToString(), _
+                         Key .Produto = vaEntidade.Produto.ToString(), _
+                         Key .Estoque = vaEntidade.Estoque.ToString() _
+                                                }).ToArray(), _
+             Key .UserData = Nothing _
+                                }
+
+            Return Json(jsonData, JsonRequestBehavior.AllowGet)
+            'Return Json((vaModel.ToList).AsQueryable.ToJqGridData(page, rows, String.Concat(sidx, " ", sord), vaSearch, vaSearchField), JsonRequestBehavior.AllowGet)
+
+        End Function
+
+        Public Function FiltrarProdutoPorEstabelecimentoGridDTO(ByVal paLista As List(Of Facade.DTO.ProdutoPorEstabelecimentoDTO.ProdutoPorEstabelecimentoGridDTO), _
+                                                                ByVal paSearch As String, _
+                                                                ByVal paSearchField As String()) As List(Of Facade.DTO.ProdutoPorEstabelecimentoDTO.ProdutoPorEstabelecimentoGridDTO)
+
+            Dim vaLista = New List(Of ProdutoPorEstabelecimentoDTO.ProdutoPorEstabelecimentoGridDTO)
+            For Each item In paSearchField
+                Select Case item
+                    Case "Produto"
+                        vaLista = (From vaListaRetorno In paLista.AsQueryable()
+                                     Where vaListaRetorno.Produto.ToUpper().Contains(paSearch.ToUpper())
+                                     Select vaListaRetorno).OrderByDescending(Function(vaE) vaE.Produto).ToList()
+                        Exit Select
+                    Case "Grupo"
+                        vaLista = (From vaListaRetorno In paLista.AsQueryable()
+                                     Where vaListaRetorno.Grupo.ToUpper().Contains(paSearch.ToUpper())
+                                     Select vaListaRetorno).OrderByDescending(Function(vaE) vaE.Grupo).ToList()
+                        Exit Select
+                    Case "Categoria"
+                        vaLista = (From vaListaRetorno In paLista.AsQueryable()
+                                     Where vaListaRetorno.Categoria.ToUpper().Contains(paSearch.ToUpper())
+                                     Select vaListaRetorno).OrderByDescending(Function(vaE) vaE.Categoria).ToList()
+                        Exit Select
+                    Case "Departamento"
+                        vaLista = (From vaListaRetorno In paLista.AsQueryable()
+                                     Where vaListaRetorno.Departamento.ToUpper().Contains(paSearch.ToUpper())
+                                     Select vaListaRetorno).OrderByDescending(Function(vaE) vaE.Departamento).ToList()
+                        Exit Select
+
+                End Select
+            Next
+            Return vaLista
+        End Function
+
+        Public Function TratarCaracterEspecial(ByVal searchString As String) As String
+            Dim vaSearh As StringBuilder = New StringBuilder
+            Dim vaSearchArray As Array = searchString.Split(",")
+
+            For Each item As String In vaSearchArray
+                Select Case item
+                    Case "0026"
+                        vaSearh.Append("&")
+                        Exit Select
+                    Case "002b"
+                        vaSearh.Append("+")
+                        Exit Select
+                    Case Else
+                        vaSearh.Append(item)
+                End Select
+
+            Next
+
+            Return vaSearh.ToString()
